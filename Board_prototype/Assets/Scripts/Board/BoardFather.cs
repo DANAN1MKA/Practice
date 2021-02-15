@@ -1,0 +1,28 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class BoardFather : MonoBehaviour, IBoard
+{
+    [SerializeField] public int width;
+    [SerializeField] public int heigth;
+
+    [SerializeField] public Transform _thisTransform;
+
+    public virtual Element getElementFromPoint(int x, int y)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public virtual bool swipeElements(Element element1, Element element2)
+    {
+        throw new System.NotImplementedException();
+    }
+}
+
+public interface IBoard
+{
+    Element getElementFromPoint(int x, int y);
+
+    bool swipeElements(Element element1, Element element2);
+}
