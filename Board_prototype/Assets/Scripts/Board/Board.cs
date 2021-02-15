@@ -88,6 +88,61 @@ public class Board : BoardFather
         return isMatch;
     }
 
+    private bool isItMatch(Element element)
+    {
+        List<Element> matchElementsX = new List<Element>();
+        List<Element> matchElementsY = new List<Element>();
+        matchElementsX.Add(element);
+        matchElementsY.Add(element);
+
+        //смотрим матчи по горизонтали
+        Element neighbourLeft = element;  bool leftIsDone = false;
+        Element neighbourRight = element; bool rightIsDone = false;
+
+        do
+        {
+            if (neighbourLeft.posX > 0) neighbourLeft = allElements[neighbourLeft.posX - 1, neighbourLeft.posY];
+            else leftIsDone = true;
+
+            if (neighbourRight.posX < width - 1) neighbourRight = allElements[neighbourRight.posX + 1, neighbourRight.posY];
+            else rightIsDone = true;
+            //else break;
+
+            if (!leftIsDone && neighbourLeft.type == element.type) matchElementsX.Add(neighbourLeft); else leftIsDone = true;
+            if (!rightIsDone && neighbourRight.type == element.type) matchElementsX.Add(neighbourRight); else rightIsDone = true;
+        }
+        while (!leftIsDone || !rightIsDone);
+
+        //смотрим матчи по вертикали
+        Element neighbourDown = element; bool DownIsDone = false;
+        Element neighbourUp = element; bool UpIsDone = false;
+
+        do
+        {
+            if (neighbourDown.posY > 0) neighbourDown = allElements[neighbourDown.posX, neighbourDown.posY - 1];
+            else DownIsDone = true;
+
+            if (neighbourUp.posY < heigth - 1) neighbourUp = allElements[neighbourUp.posX, neighbourUp.posY + 1];
+            else UpIsDone = true;
+            //else break;
+
+            if (!DownIsDone && neighbourDown.type == element.type) matchElementsY.Add(neighbourDown); else DownIsDone = true;
+            if (!UpIsDone && neighbourUp.type == element.type) matchElementsY.Add(neighbourUp); else UpIsDone = true;
+        }
+        while (!UpIsDone || !DownIsDone);
+
+        //Если найдены матчи возвращаем правду иначе ложь
+        if (matchElementsX.Count > 2 || matchElementsY.Count > 2)
+        {
+            if (matchElementsX.Count > 2) Debug.Log("Horizontal Match -> " + matchElementsX.Count);
+            else Debug.Log("Vertical Match -> " + matchElementsY.Count);
+
+
+            return true;
+        }
+        else return false;
+    }
+
     public override Element getElementFromPoint(int x, int y)
     {
         return allElements[x, y];
@@ -95,11 +150,24 @@ public class Board : BoardFather
 
     public override bool swipeElements(Element element1, Element element2)
     {
+        swipe(element1, element2);
+
+        if (isItMatch(element1) || isItMatch(element2))
+        {
+            return true;
+        }
+        else
+        {
+            swipe(element1, element2);
+            return false;
+        }
+    }
+
+    private void swipe(Element element1, Element element2)
+    {
         Element tmp = element1.getElement();
         element1.setElement(element2);
         element2.setElement(tmp);
-
-        // ЗАГЛУШКА
-        return true;
     }
+
 }
