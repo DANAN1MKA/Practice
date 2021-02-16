@@ -11,9 +11,17 @@ public class Board : BoardFather
 
     private Element[,] allElements;
 
+
+
+    private List<Element> foundMatches;
+
+
+
     void Start()
     {
         initBoard();
+
+        foundMatches = new List<Element>();
     }
 
     public void initBoard()
@@ -134,13 +142,33 @@ public class Board : BoardFather
         //Если найдены матчи возвращаем правду иначе ложь
         if (matchElementsX.Count > 2 || matchElementsY.Count > 2)
         {
-            if (matchElementsX.Count > 2) Debug.Log("Horizontal Match -> " + matchElementsX.Count);
-            else Debug.Log("Vertical Match -> " + matchElementsY.Count);
+            //Запоминем найденные матчи
+            if (matchElementsX.Count > 2) addNewElementsTo(foundMatches, matchElementsX);
+            if (matchElementsY.Count > 2) addNewElementsTo(foundMatches, matchElementsY);
 
 
             return true;
         }
         else return false;
+    }
+
+    private void addNewElementsTo(List<Element> _to, List<Element> _from)
+    {
+        foreach(Element elem in _from)
+        {
+            if (!_to.Contains(elem))
+            {
+
+                _to.Add(elem);
+
+                //блокируем добавляемые элементы
+                elem.isBlocked = true;
+
+                //tmp
+                elem.spriteRenderer.color = new Color(1, 1, 1,255);
+                //tmp
+            }
+        }
     }
 
     public override Element getElementFromPoint(int x, int y)
@@ -150,17 +178,24 @@ public class Board : BoardFather
 
     public override bool swipeElements(Element element1, Element element2)
     {
-        swipe(element1, element2);
-
-        if (isItMatch(element1) || isItMatch(element2))
-        {
-            return true;
-        }
-        else
+        if (!element1.isBlocked && !element2.isBlocked)
         {
             swipe(element1, element2);
-            return false;
+
+            bool match1 = isItMatch(element1);
+            bool match2 = isItMatch(element2);
+
+            if (match1 || match2)
+            {
+                return true;
+            }
+            else
+            {
+                swipe(element1, element2);
+                return false;
+            }
         }
+        return false;
     }
 
     private void swipe(Element element1, Element element2)

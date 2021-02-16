@@ -13,7 +13,7 @@ public class Element //: MonoBehaviour
     public int posX { get; set; }
     public int posY { get; set; }
 
-    public int isBlocked { get; set; } // элемент не должен двигаться если попал в матч 
+    public bool isBlocked { get; set; } // элемент не должен двигаться если попал в матч 
 
 
     public GameObject piece;

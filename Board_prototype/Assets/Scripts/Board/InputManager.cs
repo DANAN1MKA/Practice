@@ -49,7 +49,7 @@ public class InputManager : MonoBehaviour
                         foreach (MovingElements current in movingElemenets)
                         {
                             //если мы уже двигали этот элемент получаем его
-                            if (current.elem.posX == posX && current.elem.posY == posY)
+                            if (current.elem.posX == posX && current.elem.posY == posY && !current.elem.isBlocked)
                             {
                                 currentElemenet = current.elem;
                                 currentElemenetBeganPositon = current.endPosition;
@@ -58,6 +58,8 @@ public class InputManager : MonoBehaviour
 
                                 movingElemenets.Remove(current);
                                 isExistCurrElem = true;
+
+                                currentElemenet.spriteRenderer.sortingOrder += 1;
                                 break;
                             }
                         }
@@ -66,13 +68,19 @@ public class InputManager : MonoBehaviour
                         if (!isExistCurrElem)
                         {
                             currentElemenet = board.getElementFromPoint(posX, posY);
-                            currentElemenetBeganPositon = new Vector2(board._thisTransform.position.x + posX, board._thisTransform.position.y + posY);
-                            currentElemenetEndPositon = currentElemenetBeganPositon;
-                            SwipeStartPosition = currentElemenetEndPositon;
-                            isExistCurrElem = true;
+                            if (!currentElemenet.isBlocked)
+                            {
+                                currentElemenetBeganPositon = new Vector2(board._thisTransform.position.x + posX, board._thisTransform.position.y + posY);
+                                currentElemenetEndPositon = currentElemenetBeganPositon;
+                                SwipeStartPosition = currentElemenetEndPositon;
+                                isExistCurrElem = true;
+
+                                currentElemenet.spriteRenderer.sortingOrder += 1;
+                            }
+                            else currentElemenet = null;
                         }
 
-                        currentElemenet.spriteRenderer.sortingOrder += 1;
+
                     }
                 break;
 
