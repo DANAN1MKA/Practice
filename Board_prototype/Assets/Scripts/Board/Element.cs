@@ -8,6 +8,7 @@ public class Element //: MonoBehaviour
                                   //                         1 - меч
                                   //                         2 - лук
                                   //                         3 - зелье итд.
+                                  //                        -1 - уничтожен
 
     //позиция элемента на доске
     public int posX { get; set; }

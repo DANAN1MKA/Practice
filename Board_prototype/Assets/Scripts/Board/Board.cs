@@ -6,6 +6,11 @@ using Zenject;
 public class Board : BoardFather
 {
     [Inject] private Itimer timer;
+    [SerializeField] float time;
+    [SerializeField] float additionalTime;
+
+    private bool crutch = false; //проверка на первый матч
+
 
     [Inject] private IPieceGenerator pieceGenerator;
 
@@ -22,6 +27,8 @@ public class Board : BoardFather
         initBoard();
 
         foundMatches = new List<Element>();
+
+        //timer.setTimer(time);
     }
 
     public void initBoard()
@@ -51,6 +58,7 @@ public class Board : BoardFather
         }
 
     }
+
     private bool isItInitMatch(Element _elem)
     {
         bool isMatch = false;
@@ -187,6 +195,15 @@ public class Board : BoardFather
 
             if (match1 || match2)
             {
+
+                if (!crutch) 
+                { 
+                    timer.setTimer(time);
+                    crutch = true;
+                }
+                else timer.setTimer(additionalTime);
+
+
                 return true;
             }
             else

@@ -8,17 +8,19 @@ public class Timer : ITickable, Itimer
     private bool isActive = false;
     private float time;
 
+    [Inject] private IProgressBar progressUI;
+
     public void Tick()
-    {
-        
+    {       
         if (isActive)
         {
             if(time < Time.time)
-            {
-                Debug.Log("Timer alert!");
+            {               
                 isActive = false;
+                progressUI.dropProgress();
             }
 
+            progressUI.updateProgress(time - Time.time);
         }
     }
 
@@ -32,7 +34,6 @@ public class Timer : ITickable, Itimer
         {
             isActive = true;
             time = _time + Time.time;
-            Debug.Log("Timer start!");
         }      
     }
 }
