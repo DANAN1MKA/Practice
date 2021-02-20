@@ -47,7 +47,12 @@ public class Element //: MonoBehaviour
 
     public void MoveElementTo(Vector2 move)
     {
-        piece.transform.position = Vector2.Lerp(piece.transform.position, move, Time.deltaTime * 21f);
+        piece.transform.position = Vector2.Lerp(piece.transform.position, move, Time.deltaTime * 10f);
+    }
+
+    public void hardMoveElementTo(Vector2 move)
+    {
+        piece.transform.position = Vector2.MoveTowards(piece.transform.position, move, Time.deltaTime * 2f);
     }
 
     //Создает и возвращает копию себя

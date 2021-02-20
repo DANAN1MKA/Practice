@@ -6,30 +6,15 @@ public class MoveManager : MonoBehaviour, IMoveManager
 {
     private List<MovingElements> movingElemenets;
 
-    private bool addElementFlag = false;
-    private MovingElements newElement;
     public void addElement(MovingElements _newElement)
     {
-        addElementFlag = true;
-        newElement = _newElement;
+        movingElemenets.Add(_newElement);
     }
-    public void addElementHandler(MovingElements newElement)
+
+    public void addElement(MovingElements newElement1, MovingElements newElement2)
     {
-        if (movingElemenets.Contains(newElement))
-        {
-            foreach (MovingElements elem in movingElemenets)
-            {
-                if (elem.Equals(newElement))
-                {
-                    elem.endPosition = newElement.endPosition;
-                    break;
-                }
-            }
-        }
-        else
-        {
-            movingElemenets.Add(newElement);
-        }
+        movingElemenets.Add(newElement1);
+        movingElemenets.Add(newElement2);
     }
 
 
@@ -51,18 +36,25 @@ public class MoveManager : MonoBehaviour, IMoveManager
 
     private bool removeElementFlag = false;
     private Element element;
+    //public void removeElement(Element _element)
+    //{
+    //    removeElementFlag = true;
+    //    element = _element;
+    //}
     public void removeElement(Element _element)
-    {
-        removeElementFlag = true;
-        element = _element;
-    }
-    public void removeElementHandler(Element element)
     {
         foreach (MovingElements elem in movingElemenets)
         {
-            if (elem.elem.Equals(element))
+            if (elem.elem.Equals(_element))
             {
                 movingElemenets.Remove(elem);
+
+
+                //TODO: Че за?
+                //removeElementFlag = false;
+                //element = null;
+
+
                 break;
             }
         }
@@ -81,7 +73,8 @@ public class MoveManager : MonoBehaviour, IMoveManager
         {
             for (int i = 0; i < movingElemenets.Count; i++)
             {
-                movingElemenets[i].elem.MoveElementTo(movingElemenets[i].endPosition);
+                movingElemenets[i].elem.hardMoveElementTo(movingElemenets[i].endPosition);
+
                 //if reached target position - remove element
                 if (movingElemenets[i].elem.piece.transform.position.x == movingElemenets[i].endPosition.x &&
                     movingElemenets[i].elem.piece.transform.position.y == movingElemenets[i].endPosition.y)
@@ -92,22 +85,19 @@ public class MoveManager : MonoBehaviour, IMoveManager
     //Так сказать синхронизация
     private void LateUpdate()
     {
-        if (addElementFlag)
-        {
-            addElementHandler(newElement);
-            addElementFlag = false;
-        }
         if (dropElementsFlag)
         {
             dropElementsHandler(newList);
             dropElementsFlag = false;
         }
-        if (removeElementFlag)
-        {
-            removeElementHandler(element);
-            removeElementFlag = false;
-        }
+        //if (removeElementFlag)
+        //{
+        //    removeElementHandler(element);
+        //    removeElementFlag = false;
+        //    element = null;
+        //}
     }
+
 }
  
 public interface IMoveManager 
@@ -115,6 +105,9 @@ public interface IMoveManager
     void dropElements(List<MovingElements> newList);
 
     void addElement(MovingElements newElement);
+
+    void addElement(MovingElements newElement1, MovingElements newElement2);
+
 
     void removeElement(Element element);
 }

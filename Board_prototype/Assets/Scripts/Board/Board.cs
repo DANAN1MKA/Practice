@@ -293,8 +293,8 @@ public class Board : BoardFather
                         allElements[j, i].isBlocked = false;
                         //allElements[j, i].piece.transform.position = new Vector2(allElements[j, i].piece.transform.position.x, _thisTransform.position.y + allElements[j, i].posY);
 
-                        allElements[j, count].isBlocked = true;
-                        allElements[j, count].piece.transform.position = new Vector2(allElements[j, i].piece.transform.position.x, _thisTransform.position.y + heigth + countForColumn[j]);
+                        allElements[j, count].isBlocked = true;                                                                                                                           //TODO: сдеть красивше
+                        //allElements[j, count].piece.transform.position = new Vector2(allElements[j, i].piece.transform.position.x, _thisTransform.position.y + heigth + countForColumn[j] - 1);
 
                     }
                     //else
@@ -317,9 +317,10 @@ public class Board : BoardFather
 
                 if(allElements[j, i].isBlocked)
                 {
-                    countForColumn[j]++;
-                    allElements[j, i].piece.transform.position = new Vector2(allElements[j, i].piece.transform.position.x, _thisTransform.position.y + heigth + countForColumn[j]);
+                    allElements[j, i].piece.transform.position = new Vector2(_thisTransform.position.x + allElements[j, i].posX, _thisTransform.position.y + heigth + countForColumn[j]);
                     allElements[j, i].isBlocked = false;
+                    countForColumn[j]++;
+
                 }
             }
         }

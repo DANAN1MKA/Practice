@@ -21,7 +21,7 @@ MonoBehaviour:
   m_ShowMode: 4
   m_Title: 
   m_RootView: {fileID: 6}
-  m_MinSize: {x: 875, y: 300}
+  m_MinSize: {x: 875, y: 392}
   m_MaxSize: {x: 10000, y: 10000}
   m_Maximized: 1
 --- !u!114 &2
@@ -45,10 +45,10 @@ MonoBehaviour:
     y: 30
     width: 1920
     height: 957
-  m_MinSize: {x: 679, y: 342}
-  m_MaxSize: {x: 12004, y: 8042}
+  m_MinSize: {x: 678, y: 342}
+  m_MaxSize: {x: 12003, y: 8042}
   vertical: 0
-  controlID: 56
+  controlID: 81
 --- !u!114 &3
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -68,8 +68,8 @@ MonoBehaviour:
     y: 0
     width: 390
     height: 957
-  m_MinSize: {x: 276, y: 71}
-  m_MaxSize: {x: 4001, y: 4021}
+  m_MinSize: {x: 275, y: 50}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 13}
   m_Panes:
   - {fileID: 13}
@@ -219,7 +219,7 @@ MonoBehaviour:
   m_MinSize: {x: 403, y: 342}
   m_MaxSize: {x: 8003, y: 8042}
   vertical: 1
-  controlID: 57
+  controlID: 82
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -311,20 +311,20 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts/Board
+    - Assets/Sprits
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Scripts/Board
+  - Assets/Sprits
   m_LastFoldersGridSize: -1
   m_LastProjectPath: D:\Game_dev\Projects\Dawg\Prototypes\Git\Practice\Board_prototype
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: aa4c0000
-    m_LastClickedID: 19626
-    m_ExpandedIDs: 00000000103f0000
+    m_SelectedIDs: 203f0000
+    m_LastClickedID: 16160
+    m_ExpandedIDs: 00000000103f00001e3f000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -377,8 +377,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: b24c0000
-    m_LastClickedInstanceID: 19634
+    m_SelectedInstanceIDs: fe450000
+    m_LastClickedInstanceID: 17918
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c6230000
     m_RenameOverlay:
@@ -477,7 +477,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 06f9ffff1ef9ffff96faffff64fbffff
+      m_ExpandedIDs: 1883ffff3083ffffa884ffff3af6ffff52f6ffffcaf7ffff64fbffffd2450000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -537,9 +537,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 4.9256825, y: 4.4786353, z: -10391.332}
+    m_Target: {x: 11.790354, y: -1.868003, z: -10404.633}
     speed: 2
-    m_Value: {x: 4.9256825, y: 4.4786353, z: -10391.332}
+    m_Value: {x: 11.790354, y: -1.868003, z: -10404.633}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -589,9 +589,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 13.323725
+    m_Target: 35.588577
     speed: 2
-    m_Value: 13.323725
+    m_Value: 35.588577
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -685,23 +685,23 @@ MonoBehaviour:
     m_DrawArea:
       serializedVersion: 2
       x: 0
-      y: 0
+      y: 21
       width: 1149
-      height: 586
-    m_Scale: {x: 0.30520833, y: 0.30520833}
-    m_Translation: {x: 574.5, y: 293}
+      height: 565
+    m_Scale: {x: 0.29427084, y: 0.29427084}
+    m_Translation: {x: 574.5, y: 282.49997}
     m_MarginLeft: 0
     m_MarginRight: 0
     m_MarginTop: 0
     m_MarginBottom: 0
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
-      x: -1882.3209
-      y: -960
-      width: 3764.6418
-      height: 1920
+      x: -1952.2831
+      y: -959.9999
+      width: 3904.5662
+      height: 1919.9999
     m_MinimalGUI: 1
-  m_defaultScale: 0.30520833
+  m_defaultScale: 0.29427084
   m_LastWindowPixelSize: {x: 1149, y: 586}
   m_ClearInEditMode: 1
   m_NoCameraWarning: 1

@@ -11,6 +11,8 @@ ScriptsOnlyBuild:
     - UnityEditor.U2D.Animation.BoneGizmo
     Unity.2D.Tilemap.Editor.dll:
     - UnityEditor.Tilemaps.GridPaintingState
+    - UnityEditor.Tilemaps.GridPaletteBrushes
+    - UnityEditor.Tilemaps.GridPalettes
     - UnityEditor.Tilemaps.SceneViewGridManager
     - UnityEditor.Tilemaps.TileDragAndDropManager
     Unity.Rider.Editor.dll:
@@ -295,7 +297,7 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 15658}
     - Class: 114
-      Script: {instanceID: 16950}
+      Script: {instanceID: 17762}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 124
