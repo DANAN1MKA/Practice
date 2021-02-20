@@ -29,7 +29,8 @@ public class InputManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.touchCount > 0)
+                                    // TODO: надо переделать способ блокировки элементов
+        if (Input.touchCount > 0 && !board.isBoardBlocked)
         {
             Touch touch = Input.GetTouch(0);
 
@@ -155,6 +156,8 @@ public class InputManager : MonoBehaviour
             }
         }
 
+
+        //TODO: вынести анимацию в отдельный объект
         // Двигание элементов
         if (movingElemenets.Count > 0)
         {
@@ -181,6 +184,7 @@ public class InputManager : MonoBehaviour
         posX = posX < 0 ? posX * -1 : posX;
         posY = posY < 0 ? posY * -1 : posY;
     }
+
     public Vector2 NormalizeDirection(Vector2 direction)
     {
         Vector2 dir = new Vector2(0, 0);

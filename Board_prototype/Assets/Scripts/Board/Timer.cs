@@ -9,6 +9,7 @@ public class Timer : ITickable, Itimer
     private float time;
 
     [Inject] private IProgressBar progressUI;
+    [Inject] private IBoardTimer board;
 
     public void Tick()
     {       
@@ -18,6 +19,7 @@ public class Timer : ITickable, Itimer
             {               
                 isActive = false;
                 progressUI.dropProgress();
+                board.timerHandler();
             }
 
             progressUI.updateProgress(time - Time.time);
@@ -36,9 +38,16 @@ public class Timer : ITickable, Itimer
             time = _time + Time.time;
         }      
     }
+
+    public void setConfigProgresBar(float _time)
+    {
+        progressUI.setConfig(_time);
+    }
 }
 
 public interface Itimer
 {
     void setTimer(float _time);
+
+    void setConfigProgresBar(float _time);
 }

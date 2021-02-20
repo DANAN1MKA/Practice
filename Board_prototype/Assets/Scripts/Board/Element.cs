@@ -20,16 +20,21 @@ public class Element //: MonoBehaviour
     public GameObject piece;
     public SpriteRenderer spriteRenderer;
 
-    public Element(GameObject _element)
+    public Element(GameObject _piece)
     {
-        piece = _element;
-        spriteRenderer = piece.GetComponent<SpriteRenderer>();
+        setPiece(_piece);
     }
 
     private Element(GameObject _element, SpriteRenderer _spriteRenderer)
     {
         piece = _element;
         spriteRenderer = _spriteRenderer;
+    }
+
+    public void setPiece(GameObject _piece)
+    {
+        piece = _piece;
+        spriteRenderer = piece.GetComponent<SpriteRenderer>();
     }
 
     public void setElement(Element elem)

@@ -6,28 +6,29 @@ using UnityEngine.UI;
 public class ProgresBar : MonoBehaviour, IProgressBar
 {
     private Slider slider;
+    private float configTime;
 
-    [SerializeField]public float fillSpeed; //0,75f
-    private float targetProgress = 1;
+    [SerializeField]public float fillSpeed;
 
     private void Awake()
     {
         slider = gameObject.GetComponent<Slider>();
     }
 
-    private void incrementProgress(float newProgress)
-    {
-        slider.value += newProgress;
-    }
-
     public void updateProgress(float newProgress)
-    {                       //Алерт!!!!! Залупа Алерт!!!!!
-        slider.value = 1 - (newProgress / 5); // <- такого не должно быть (про пятерку идет речь)
+    {                
+        slider.value = 1 - (newProgress / configTime); 
     }
 
     public void dropProgress()
     {
+        // TODO: Выяснить почему не работает
         slider.value = 0.1f;
+    }
+
+    public void setConfig(float _time)
+    {
+        configTime = _time;
     }
 }
 
@@ -36,5 +37,7 @@ public interface IProgressBar
     void updateProgress(float newProgress);
 
     void dropProgress();
+
+    void setConfig(float _time);
 }
 

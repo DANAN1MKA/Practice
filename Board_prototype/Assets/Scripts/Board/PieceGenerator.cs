@@ -28,6 +28,13 @@ public class PieceGenerator : MonoBehaviour, IPieceGenerator
     {
         return null;
     }
+
+    public void setNewPiece(Element element)
+    {
+        //Destroy(element.piece);
+        //GameObject newPiece = Instantiate(elementPrefab);
+
+    }
 }
 
 public interface IPieceGenerator
@@ -37,4 +44,6 @@ public interface IPieceGenerator
     void changeType(Element element);
 
     Element generateSpecialPiece();
+
+    void setNewPiece(Element element);
 }

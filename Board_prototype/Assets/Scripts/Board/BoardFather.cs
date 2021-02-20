@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoardFather : MonoBehaviour, IBoard
+public class BoardFather : MonoBehaviour, IBoard, IBoardTimer
 {
     [SerializeField] public int width;
     [SerializeField] public int heigth;
 
     [SerializeField] public Transform _thisTransform;
+    public bool isBoardBlocked { get; set; }
+
 
     public virtual Element getElementFromPoint(int x, int y)
     {
@@ -18,6 +20,11 @@ public class BoardFather : MonoBehaviour, IBoard
     {
         throw new System.NotImplementedException();
     }
+
+    public virtual void timerHandler()
+    {
+        throw new System.NotImplementedException();
+    }
 }
 
 public interface IBoard
@@ -25,4 +32,9 @@ public interface IBoard
     Element getElementFromPoint(int x, int y);
 
     bool swipeElements(Element element1, Element element2);
+}
+
+public interface IBoardTimer
+{
+    void timerHandler();
 }

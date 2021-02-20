@@ -9,8 +9,9 @@ public class Board : BoardFather
     [SerializeField] float time;
     [SerializeField] float additionalTime;
 
-    private bool crutch = false; //проверка на первый матч
+    private bool isItFirstMatch = false; //проверка на первый матч
 
+    [Inject] private IMoveManager moveManager;
 
     [Inject] private IPieceGenerator pieceGenerator;
 
@@ -27,6 +28,9 @@ public class Board : BoardFather
         initBoard();
 
         foundMatches = new List<Element>();
+
+        //сообщаем прогрес бару сколько секунд мы отсчитываем 
+        timer.setConfigProgresBar(time);
 
         //timer.setTimer(time);
     }
@@ -151,9 +155,33 @@ public class Board : BoardFather
         if (matchElementsX.Count > 2 || matchElementsY.Count > 2)
         {
             //Запоминем найденные матчи
-            if (matchElementsX.Count > 2) addNewElementsTo(foundMatches, matchElementsX);
-            if (matchElementsY.Count > 2) addNewElementsTo(foundMatches, matchElementsY);
+            if (matchElementsX.Count > 2) 
+            { 
+                addNewElementsTo(foundMatches, matchElementsX);
 
+                // TODO: Костыль
+                if (!isItFirstMatch)
+                {
+
+                    timer.setTimer(time);
+                    isItFirstMatch = true;
+                }
+                else timer.setTimer(additionalTime);
+
+            }
+            if (matchElementsY.Count > 2)
+            {
+                addNewElementsTo(foundMatches, matchElementsY);
+
+                // TODO: Костыль
+                if (!isItFirstMatch)
+                {
+
+                    timer.setTimer(time);
+                    isItFirstMatch = true;
+                }
+                else timer.setTimer(additionalTime);
+            }
 
             return true;
         }
@@ -172,7 +200,7 @@ public class Board : BoardFather
                 //блокируем добавляемые элементы
                 elem.isBlocked = true;
 
-                //tmp
+                // TODO: почему не работает?
                 elem.spriteRenderer.color = new Color(1, 1, 1,255);
                 //tmp
             }
@@ -195,13 +223,14 @@ public class Board : BoardFather
 
             if (match1 || match2)
             {
-
-                if (!crutch) 
-                { 
-                    timer.setTimer(time);
-                    crutch = true;
-                }
-                else timer.setTimer(additionalTime);
+                // TODO: Мб перенести в метод поиска матчей?
+                //if (!crutch) 
+                //{ 
+                    
+                //    timer.setTimer(time);
+                //    crutch = true;
+                //}
+                //else timer.setTimer(additionalTime);
 
 
                 return true;
@@ -220,6 +249,97 @@ public class Board : BoardFather
         Element tmp = element1.getElement();
         element1.setElement(element2);
         element2.setElement(tmp);
+    }
+
+
+
+    // TODO: нужно переписать нормально
+    public override void timerHandler()
+    {
+        //isBoardBlocked = true;
+        isItFirstMatch = false;
+
+        // TODO: список элементов что находятся в матче спорное решение?
+        foundMatches.Clear();
+
+
+        //список элементов что должны упасть вниз
+        List<MovingElements> fallingElements = new List<MovingElements>();
+
+        //количество позиций на которое должен упасть элемент СКОРЕЕ всего спорное решение
+        int[] countForColumn = new int[width];
+
+
+        for (int i = 0; i < heigth; i++)
+        {
+            for (int j = 0; j < width; j++)
+            {
+                //если элемент в матче 
+                if(allElements[j, i].isBlocked)
+                {
+
+                    pieceGenerator.changeType(allElements[j, i]);
+                    countForColumn[j]++;
+
+
+                    int count = allElements[j,i].posY;
+
+                    while (count < heigth - 1 && allElements[j, count].isBlocked) count++;
+
+                    if (!allElements[j, count].isBlocked)
+                    {
+                        swipe(allElements[j, i], allElements[j, count]);
+
+                        allElements[j, i].isBlocked = false;
+                        //allElements[j, i].piece.transform.position = new Vector2(allElements[j, i].piece.transform.position.x, _thisTransform.position.y + allElements[j, i].posY);
+
+                        allElements[j, count].isBlocked = true;
+                        allElements[j, count].piece.transform.position = new Vector2(allElements[j, i].piece.transform.position.x, _thisTransform.position.y + heigth + countForColumn[j]);
+
+                    }
+                    //else
+                    //allElements[j, i].piece.transform.position = new Vector2(allElements[j, i].piece.transform.position.x, _thisTransform.position.y + heigth + countForColumn[j]);
+
+                }
+            }
+        }
+
+        countForColumn = new int[width];
+
+        for (int i = 0; i < heigth; i++)
+        {
+            for (int j = 0; j < width; j++)
+            {
+                fallingElements.Add(new MovingElements(
+                    allElements[j, i],
+                    new Vector2(_thisTransform.position.x + allElements[j, i].posX, 
+                                _thisTransform.position.y + allElements[j, i].posY)));
+
+                if(allElements[j, i].isBlocked)
+                {
+                    countForColumn[j]++;
+                    allElements[j, i].piece.transform.position = new Vector2(allElements[j, i].piece.transform.position.x, _thisTransform.position.y + heigth + countForColumn[j]);
+                    allElements[j, i].isBlocked = false;
+                }
+            }
+        }
+
+
+        moveManager.dropElements(fallingElements);
+                //ustroyDestroy();
+                //initBoard();
+                //isBoardBlocked = false;
+                // TODO: Add logic
+    }
+
+    private void ustroyDestroy()
+    {
+        for (int i = 0; i < width; i++)
+            for (int j = 0; j < heigth; j++)
+            {
+                Destroy(allElements[i, j].piece);
+                allElements[i, j] = null;
+            }
     }
 
 }
