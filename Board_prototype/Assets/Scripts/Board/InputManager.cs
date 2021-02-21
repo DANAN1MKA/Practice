@@ -130,31 +130,24 @@ public class InputManager : MonoBehaviour
     {
         Vector2 dir = new Vector2(0, 0);
 
-        // if we left the borders of the element
         if (direction.x > elementBorders || direction.y > elementBorders ||
             direction.x < -elementBorders || direction.y < -elementBorders)
         {
-            float angle = Vector2.Angle(direction, new Vector2(1, 0));
+            dir = direction / direction.magnitude;
 
-            if (angle <= 22) { dir.x = 1; dir.y = 0; } // right
-            else
-            if (angle > 22 && angle < 67) { dir.x = 1; dir.y = 1; } // top-right
-            else
-            if (angle >= 67 && angle < 112) { dir.x = 0; dir.y = 1; } // top
-            else
-            if (angle >= 112 && angle < 157) { dir.x = -1; dir.y = 1; } // top-left
-            else
-            if (angle >= 157) { dir.x = -1; dir.y = 0; } // left
+            dir.x = dir.x > 0.5f ? 1 : 
+                    dir.x < -0.5f ? -1 : 0;
 
-            dir.y = direction.y < 0 ? dir.y * -1 : dir.y; // if we swiped down
+            dir.y = dir.y > 0.5f ? 1 :
+                    dir.y < -0.5f ? -1 : 0;
+
+            // Normolize if we left the borders of the board
+            dir.x = (posX + dir.x >= board.width || posX + dir.x < 0) ? 0 : dir.x;
+            dir.y = (posY + dir.y >= board.heigth || posY + dir.y < 0) ? 0 : dir.y;
         }
-
-        // Normolize if we left the borders of the board
-        dir.x = (posX + dir.x >= board.width || posX + dir.x < 0) ? 0 : dir.x;
-        dir.y = (posY + dir.y >= board.heigth || posY + dir.y < 0) ? 0 : dir.y;
-
         return dir;
     }
+
 }
 
 public class MovingElements
