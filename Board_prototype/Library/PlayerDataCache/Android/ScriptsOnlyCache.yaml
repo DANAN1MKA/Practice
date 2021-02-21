@@ -297,7 +297,7 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 15658}
     - Class: 114
-      Script: {instanceID: 17762}
+      Script: {instanceID: 17974}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 124
@@ -405,7 +405,7 @@ ScriptsOnlyBuild:
     className: Asteroid
   - hash:
       serializedVersion: 2
-      Hash: 09c44a25f65878b616e7338bd505df1c
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: InputManager

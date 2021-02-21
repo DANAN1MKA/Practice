@@ -34,8 +34,8 @@ public class MoveManager : MonoBehaviour, IMoveManager
 
 
 
-    private bool removeElementFlag = false;
-    private Element element;
+    //private bool removeElementFlag = false;
+    //private Element element;
     //public void removeElement(Element _element)
     //{
     //    removeElementFlag = true;

@@ -5,32 +5,25 @@ using Zenject;
 
 public class InputManager : MonoBehaviour
 {
-    public Vector2 SwipeStartPosition;
-    public Vector2 SwipeDirection;
+    private Vector2 SwipeStartPosition;
+    private Vector2 SwipeDirection;
 
-    [Inject] BoardFather board;
-    [Inject] IMoveManager moveManager;
+    [Inject] private BoardFather board;
+    [Inject] private IMoveManager moveManager;
 
-    private List<MovingElements> movingElemenets;
+    private Element currentElemenet;
+    private Vector2 currentElemenetBeganPositon;
+    private Vector2 currentElemenetEndPositon;
+    private Vector2 currentDirection;
 
-    Element currentElemenet;
-    Vector2 currentElemenetBeganPositon;
-    Vector2 currentElemenetEndPositon;
-    public Vector2 currentDirection;
-
-    int posX;
-    int posY;
-    public float elementBorders = 0.7f;
-    bool isExistCurrElem = false;
-
-    void Start()
-    {
-        movingElemenets = new List<MovingElements>();
-    }
+    private int posX;
+    private int posY;
+    private float elementBorders = 0.7f;
+    private bool isExistCurrElem = false;
 
     void Update()
     {
-                                    // TODO: надо переделать способ блокировки элементов
+                                    // TODO: надо переделать способ блокировки элементов    P.S. Не надо
         if (Input.touchCount > 0 && !board.isBoardBlocked)
         {
             Touch touch = Input.GetTouch(0);
@@ -48,44 +41,21 @@ public class InputManager : MonoBehaviour
                     if (posX < board.width && posX >= 0 &&
                         posY < board.heigth && posX >= 0)
                     {
-                        //foreach (MovingElements current in movingElemenets)
-                        //{
-                        //    //если мы уже двигали этот элемент получаем его
-                        //    if (current.elem.posX == posX && current.elem.posY == posY && !current.elem.isBlocked)
-                        //    {
-                        //        currentElemenet = current.elem;
-                        //        currentElemenetBeganPositon = current.endPosition;
-                        //        currentElemenetEndPositon = currentElemenetBeganPositon;
-                        //        SwipeStartPosition = currentElemenetBeganPositon;
 
-                        //        movingElemenets.Remove(current);
-                        //        isExistCurrElem = true;
-
-                        //        currentElemenet.spriteRenderer.sortingOrder += 1;
-                        //        break;
-                        //    }
-                        //}
-
-                        ////если среди двигаемых не нашли, получаем элемент с доски
-                        //if (!isExistCurrElem)
-                        //{
-                            currentElemenet = board.getElementFromPoint(posX, posY);
-                            if (!currentElemenet.isBlocked)
-                            {
-                                currentElemenetBeganPositon = new Vector2(board._thisTransform.position.x + posX, board._thisTransform.position.y + posY);
-                                currentElemenetEndPositon = currentElemenetBeganPositon;
-                                SwipeStartPosition = currentElemenetEndPositon;
-                                isExistCurrElem = true;
-
-                            //test
+                        currentElemenet = board.getElementFromPoint(posX, posY);
+                        if (!currentElemenet.isBlocked)
+                        {
+                            currentElemenetBeganPositon = new Vector2(board._thisTransform.position.x + posX, board._thisTransform.position.y + posY);
+                            currentElemenetEndPositon = currentElemenetBeganPositon;
+                            SwipeStartPosition = currentElemenetEndPositon;
+                            isExistCurrElem = true;
+                           
                             moveManager.removeElement(currentElemenet);
 
-                                currentElemenet.spriteRenderer.sortingOrder += 1;
-                            }
-                            else currentElemenet = null;
-                        //}
+                            currentElemenet.spriteRenderer.sortingOrder += 1;
+                        }
 
-
+                        else currentElemenet = null;
                     }
                 break;
 
@@ -96,12 +66,8 @@ public class InputManager : MonoBehaviour
                     if (isExistCurrElem)
                     {
                         SwipeDirection = SwipeDirection = (Vector2)Camera.main.ScreenToWorldPoint(touch.position) - SwipeStartPosition;
-
                         currentDirection = NormalizeDirection(SwipeDirection);
-
                         currentElemenetEndPositon = currentElemenetBeganPositon + (currentDirection / 2);
-                        //currentElemenetEndPositon.x = currentElemenetBeganPositon.x + (currentDirection.x / 2);
-                        //currentElemenetEndPositon.y = currentElemenetBeganPositon.y + (currentDirection.y / 2);
                     }
                 break;
 
@@ -112,70 +78,30 @@ public class InputManager : MonoBehaviour
                     if (isExistCurrElem)
                     {
                         currentElemenet.spriteRenderer.sortingOrder -= 1;
+
                         if (currentDirection.x != 0 || currentDirection.y != 0)
                         {
                             //получаем второй элемент
                             Element elementTwo = null;
                             Vector2 elementTwoEndPosition = new Vector2();
 
-                            //bool findElementTwo = false;
-
-                            //test
                             elementTwo = board.getElementFromPoint(currentElemenet.posX + (int)currentDirection.x, currentElemenet.posY + (int)currentDirection.y);
-                            elementTwoEndPosition = new Vector2(board._thisTransform.position.x + elementTwo.posX, board._thisTransform.position.y + elementTwo.posY);
-
                             moveManager.removeElement(elementTwo);
 
-
+                            elementTwoEndPosition = new Vector2(board._thisTransform.position.x + elementTwo.posX, board._thisTransform.position.y + elementTwo.posY);
                             currentElemenetEndPositon = new Vector2(board._thisTransform.position.x + currentElemenet.posX, board._thisTransform.position.y + currentElemenet.posY);
 
                             if (board.swipeElements(currentElemenet, elementTwo))
                             {
                                 moveManager.addElement(new MovingElements(currentElemenet, currentElemenetEndPositon), 
                                                        new MovingElements(elementTwo, elementTwoEndPosition));
-
-
-                                //elementTwo.piece.transform.position = elementTwoEndPosition;
-                                //currentElemenet.piece.transform.position = currentElemenetEndPositon;
-
                             }
                             else
                             {
                                 moveManager.addElement(new MovingElements(currentElemenet, currentElemenetBeganPositon));
                             }
-
-                            ////если мы уже двигали этот элемент получаем его
-                            //foreach (MovingElements current in movingElemenets)
-                            //{
-                            //    if (current.elem.posX == currentElemenet.posX + currentDirection.x && current.elem.posY == currentElemenet.posY + currentDirection.y)
-                            //    {
-                            //        elementTwo = current.elem;
-                            //        elementTwoEndPosition = current.endPosition;
-
-                            //        movingElemenets.Remove(current);
-                            //        findElementTwo = true;
-                            //        break;
-                            //    }
-                            //}
-                            //if (!findElementTwo)
-                            //{
-                            //    elementTwo = board.getElementFromPoint(currentElemenet.posX + (int)currentDirection.x, currentElemenet.posY + (int)currentDirection.y);
-                            //    elementTwoEndPosition = new Vector2(board._thisTransform.position.x + elementTwo.posX, board._thisTransform.position.y + elementTwo.posY);
-                            //}
-
-                            //currentElemenetEndPositon = new Vector2(board._thisTransform.position.x + currentElemenet.posX, board._thisTransform.position.y + currentElemenet.posY);
-
-                            ////Если будет матч - будет свайп а пока ЗАГЛУШКА
-                            //if (board.swipeElements(currentElemenet, elementTwo))
-                            //{
-                            //    movingElemenets.Add(new MovingElements(currentElemenet, currentElemenetEndPositon));
-                            //    movingElemenets.Add(new MovingElements(elementTwo, elementTwoEndPosition));
-                            //}
-                            //else
-                            //{
-                            //    movingElemenets.Add(new MovingElements(currentElemenet, currentElemenetBeganPositon));
-                            //}
                         }
+                        else moveManager.addElement(new MovingElements(currentElemenet, currentElemenetBeganPositon));
                     }
                     currentElemenet = null;
                     currentDirection = new Vector2();
@@ -184,20 +110,7 @@ public class InputManager : MonoBehaviour
             }
         }
 
-
-        ////TODO: вынести анимацию в отдельный объект
-        //// Двигание элементов
-        //if (movingElemenets.Count > 0)
-        //{
-        //    for (int i = 0; i < movingElemenets.Count; i++)
-        //    {
-        //        movingElemenets[i].elem.MoveElementTo(movingElemenets[i].endPosition);
-        //        //if reached target position - remove element
-        //        if (movingElemenets[i].elem.piece.transform.position.x == movingElemenets[i].endPosition.x &&
-        //            movingElemenets[i].elem.piece.transform.position.y == movingElemenets[i].endPosition.y)
-        //            movingElemenets.Remove(movingElemenets[i]);
-        //    }
-        //}
+        //Двигаем текущий элемент
         if (isExistCurrElem)
         {
             currentElemenet.MoveElementTo(currentElemenetEndPositon);
