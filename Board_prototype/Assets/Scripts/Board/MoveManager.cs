@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 public class MoveManager : MonoBehaviour, IMoveManager
 {
+    [Inject] IBoardUIEvents boardUIEvents;
+
     private List<MovingElements> movingElemenets;
 
     public void addElement(MovingElements _newElement)
@@ -16,7 +19,6 @@ public class MoveManager : MonoBehaviour, IMoveManager
         movingElemenets.Add(newElement1);
         movingElemenets.Add(newElement2);
     }
-
 
 
     private bool dropElementsFlag = false;
@@ -32,15 +34,6 @@ public class MoveManager : MonoBehaviour, IMoveManager
         movingElemenets.AddRange(newList);
     }
 
-
-
-    //private bool removeElementFlag = false;
-    //private Element element;
-    //public void removeElement(Element _element)
-    //{
-    //    removeElementFlag = true;
-    //    element = _element;
-    //}
     public void removeElement(Element _element)
     {
         foreach (MovingElements elem in movingElemenets)
@@ -48,12 +41,6 @@ public class MoveManager : MonoBehaviour, IMoveManager
             if (elem.elem.Equals(_element))
             {
                 movingElemenets.Remove(elem);
-
-
-                //TODO: Че за?
-                //removeElementFlag = false;
-                //element = null;
-
 
                 break;
             }
@@ -80,6 +67,7 @@ public class MoveManager : MonoBehaviour, IMoveManager
                     movingElemenets[i].elem.piece.transform.position.y == movingElemenets[i].endPosition.y)
                     movingElemenets.Remove(movingElemenets[i]);
             }
+            if(movingElemenets.Count == 0) boardUIEvents.dropIsOver();
         }
     }
     //Так сказать синхронизация
@@ -90,12 +78,6 @@ public class MoveManager : MonoBehaviour, IMoveManager
             dropElementsHandler(newList);
             dropElementsFlag = false;
         }
-        //if (removeElementFlag)
-        //{
-        //    removeElementHandler(element);
-        //    removeElementFlag = false;
-        //    element = null;
-        //}
     }
 
 }

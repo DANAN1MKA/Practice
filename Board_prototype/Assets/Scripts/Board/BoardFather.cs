@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoardFather : MonoBehaviour, IBoard, IBoardTimer
+public class BoardFather : MonoBehaviour, IBoard, IBoardTimer, IBoardUIEvents
 {
     [SerializeField] public int width;
     [SerializeField] public int heigth;
@@ -10,6 +10,10 @@ public class BoardFather : MonoBehaviour, IBoard, IBoardTimer
     [SerializeField] public Transform _thisTransform;
     public bool isBoardBlocked { get; set; }
 
+    public virtual void dropIsOver()
+    {
+        throw new System.NotImplementedException();
+    }
 
     public virtual Element getElementFromPoint(int x, int y)
     {
@@ -37,4 +41,9 @@ public interface IBoard
 public interface IBoardTimer
 {
     void timerHandler();
+}
+
+public interface IBoardUIEvents
+{
+    void dropIsOver();
 }

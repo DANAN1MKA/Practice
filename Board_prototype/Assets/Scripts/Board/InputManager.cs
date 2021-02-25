@@ -91,15 +91,10 @@ public class InputManager : MonoBehaviour
                             elementTwoEndPosition = new Vector2(board._thisTransform.position.x + elementTwo.posX, board._thisTransform.position.y + elementTwo.posY);
                             currentElemenetEndPositon = new Vector2(board._thisTransform.position.x + currentElemenet.posX, board._thisTransform.position.y + currentElemenet.posY);
 
-                            if (board.swipeElements(currentElemenet, elementTwo))
-                            {
-                                moveManager.addElement(new MovingElements(currentElemenet, currentElemenetEndPositon), 
-                                                       new MovingElements(elementTwo, elementTwoEndPosition));
-                            }
-                            else
-                            {
-                                moveManager.addElement(new MovingElements(currentElemenet, currentElemenetBeganPositon));
-                            }
+                            board.swipeElements(currentElemenet, elementTwo); 
+
+                            moveManager.addElement(new MovingElements(currentElemenet, currentElemenetEndPositon),
+                                                   new MovingElements(elementTwo, elementTwoEndPosition));
                         }
                         else moveManager.addElement(new MovingElements(currentElemenet, currentElemenetBeganPositon));
                     }

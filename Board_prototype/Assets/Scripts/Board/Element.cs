@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Element //: MonoBehaviour
 {
+    private float speed = 1f;
+
     public int type { get; set; } //определяет тип элемента: 0 - топор
                                   //                         1 - меч
                                   //                         2 - лук
@@ -47,12 +49,12 @@ public class Element //: MonoBehaviour
 
     public void MoveElementTo(Vector2 move)
     {
-        piece.transform.position = Vector2.Lerp(piece.transform.position, move, Time.deltaTime * 7f);
+        piece.transform.position = Vector2.Lerp(piece.transform.position, move, Time.deltaTime * speed);
     }
 
     public void hardMoveElementTo(Vector2 move)
     {
-        piece.transform.position = Vector2.MoveTowards(piece.transform.position, move, Time.deltaTime * 7f);
+        piece.transform.position = Vector2.MoveTowards(piece.transform.position, move, Time.deltaTime * speed);
     }
 
     //Создает и возвращает копию себя

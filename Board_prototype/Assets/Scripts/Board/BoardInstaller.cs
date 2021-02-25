@@ -10,6 +10,8 @@ public class BoardInstaller : MonoInstaller
         Container.Bind<IPieceGenerator>().FromComponentInHierarchy().AsSingle().NonLazy();
         Container.Bind<IProgressBar>().FromComponentInHierarchy().AsSingle().NonLazy();
         Container.Bind<IBoardTimer>().FromComponentInHierarchy().AsSingle().NonLazy();
+        Container.Bind<IBoardUIEvents>().FromComponentInHierarchy().AsSingle().NonLazy();
+
 
         //эксперимент
         Container.Bind<IMoveManager>().FromComponentInHierarchy().AsSingle().NonLazy();

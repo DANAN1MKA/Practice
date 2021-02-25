@@ -256,10 +256,10 @@ public class Board : BoardFather
     // TODO: нужно переписать нормально
     public override void timerHandler()
     {
-        //isBoardBlocked = true;
+        isBoardBlocked = true;
         isItFirstMatch = false;
 
-        // TODO: список элементов что находятся в матче спорное решение?
+        // TODO: список элементов что находятся в матче //// спорное решение?
         foundMatches.Clear();
 
 
@@ -291,15 +291,10 @@ public class Board : BoardFather
                         swipe(allElements[j, i], allElements[j, count]);
 
                         allElements[j, i].isBlocked = false;
-                        //allElements[j, i].piece.transform.position = new Vector2(allElements[j, i].piece.transform.position.x, _thisTransform.position.y + allElements[j, i].posY);
 
-                        allElements[j, count].isBlocked = true;                                                                                                                           //TODO: сдеть красивше
-                        //allElements[j, count].piece.transform.position = new Vector2(allElements[j, i].piece.transform.position.x, _thisTransform.position.y + heigth + countForColumn[j] - 1);
+                        allElements[j, count].isBlocked = true;                
 
                     }
-                    //else
-                    //allElements[j, i].piece.transform.position = new Vector2(allElements[j, i].piece.transform.position.x, _thisTransform.position.y + heigth + countForColumn[j]);
-
                 }
             }
         }
@@ -327,10 +322,11 @@ public class Board : BoardFather
 
 
         moveManager.dropElements(fallingElements);
-                //ustroyDestroy();
-                //initBoard();
-                //isBoardBlocked = false;
-                // TODO: Add logic
+    }
+
+    public override void dropIsOver()
+    {
+        isBoardBlocked = false;
     }
 
     private void ustroyDestroy()
