@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Element //: MonoBehaviour
 {
-    private float speed = 1f;
+    private float speed = 5f;
 
     public int type { get; set; } //определяет тип элемента: 0 - топор
                                   //                         1 - меч

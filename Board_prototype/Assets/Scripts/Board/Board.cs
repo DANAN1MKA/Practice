@@ -160,27 +160,19 @@ public class Board : BoardFather
                 addNewElementsTo(foundMatches, matchElementsX);
 
                 // TODO: Костыль
-                if (!isItFirstMatch)
-                {
-
-                    timer.setTimer(time);
-                    isItFirstMatch = true;
-                }
-                else timer.setTimer(additionalTime);
-
             }
             if (matchElementsY.Count > 2)
             {
                 addNewElementsTo(foundMatches, matchElementsY);
 
-                // TODO: Костыль
-                if (!isItFirstMatch)
-                {
+                //// TODO: Костыль
+                //if (!isItFirstMatch)
+                //{
 
-                    timer.setTimer(time);
-                    isItFirstMatch = true;
-                }
-                else timer.setTimer(additionalTime);
+                //    timer.setTimer(time);
+                //    isItFirstMatch = true;
+                //}
+                //else timer.setTimer(additionalTime);
             }
 
             return true;
@@ -223,14 +215,13 @@ public class Board : BoardFather
 
             if (match1 || match2)
             {
-                // TODO: Мб перенести в метод поиска матчей?
-                //if (!crutch) 
-                //{ 
-                    
-                //    timer.setTimer(time);
-                //    crutch = true;
-                //}
-                //else timer.setTimer(additionalTime);
+                if (!isItFirstMatch)
+                {
+
+                    timer.setTimer(time);
+                    isItFirstMatch = true;
+                }
+                else timer.setTimer(additionalTime);
 
 
                 return true;
@@ -324,9 +315,105 @@ public class Board : BoardFather
         moveManager.dropElements(fallingElements);
     }
 
+    private void matchCascad()
+    {
+
+        /*
+         на поле проверяем только элементы помеченые единицой
+         * 1 * * 1 * *
+         1 * * 1 * * 1
+         * * 1 * * 1 *
+         * 1 * * 1 * *
+         1 * * 1 * * 1
+         * * 1 * * 1 *
+         * 1 * * 1 * *
+         1 * * 1 * * 1
+         */
+        int shiftCounter = 0;
+        for (int j = 0; j < heigth; j++)
+        {
+            for (int i = shiftCounter; i < width; i += 3)
+            {
+                //TODO: отладка
+                //Debug.Log("x=" + i + " y=" + j);
+
+                isItMatch(allElements[i, j]);
+            }
+            shiftCounter = shiftCounter < 2 ? shiftCounter + 1 : 0;
+        }
+    }
+
     public override void dropIsOver()
     {
-        isBoardBlocked = false;
+        if (isBoardBlocked)
+        {
+            matchCascad();
+            if (foundMatches.Count > 0)
+            {
+                // TODO: список элементов что находятся в матче //// спорное решение?
+                foundMatches.Clear();
+
+                //список элементов что должны упасть вниз
+                List<MovingElements> fallingElements = new List<MovingElements>();
+
+                //количество позиций на которое должен упасть элемент СКОРЕЕ всего спорное решение
+                int[] countForColumn = new int[width];
+
+
+                for (int i = 0; i < heigth; i++)
+                {
+                    for (int j = 0; j < width; j++)
+                    {
+                        //если элемент в матче 
+                        if (allElements[j, i].isBlocked)
+                        {
+
+                            pieceGenerator.changeType(allElements[j, i]);
+                            countForColumn[j]++;
+
+
+                            int count = allElements[j, i].posY;
+
+                            while (count < heigth - 1 && allElements[j, count].isBlocked) count++;
+
+                            if (!allElements[j, count].isBlocked)
+                            {
+                                swipe(allElements[j, i], allElements[j, count]);
+
+                                allElements[j, i].isBlocked = false;
+
+                                allElements[j, count].isBlocked = true;
+
+                            }
+                        }
+                    }
+                }
+
+                countForColumn = new int[width];
+
+                for (int i = 0; i < heigth; i++)
+                {
+                    for (int j = 0; j < width; j++)
+                    {
+                        fallingElements.Add(new MovingElements(
+                            allElements[j, i],
+                            new Vector2(_thisTransform.position.x + allElements[j, i].posX,
+                                        _thisTransform.position.y + allElements[j, i].posY)));
+
+                        if (allElements[j, i].isBlocked)
+                        {
+                            allElements[j, i].piece.transform.position = new Vector2(_thisTransform.position.x + allElements[j, i].posX, _thisTransform.position.y + heigth + countForColumn[j]);
+                            allElements[j, i].isBlocked = false;
+                            countForColumn[j]++;
+
+                        }
+                    }
+                }
+
+                moveManager.dropElements(fallingElements);
+            }
+            else isBoardBlocked = false;
+        }
     }
 
     private void ustroyDestroy()
