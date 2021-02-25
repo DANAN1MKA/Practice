@@ -104,6 +104,17 @@ public class InputManager : MonoBehaviour
                     break;
             }
         }
+        else
+        {
+            if (isExistCurrElem)
+            {
+                moveManager.addElement(new MovingElements(currentElemenet, currentElemenetBeganPositon));
+                currentElemenet = null;
+                currentDirection = new Vector2();
+                isExistCurrElem = false;
+            }
+
+        }
 
         //Двигаем текущий элемент
         if (isExistCurrElem)
