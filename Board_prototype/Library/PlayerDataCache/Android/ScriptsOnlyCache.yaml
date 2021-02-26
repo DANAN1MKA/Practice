@@ -6,6 +6,7 @@ ScriptsOnlyBuild:
     - InputManager
     - MoveManager
     - PieceGenerator
+    - PieceGenerator_v2
     - ProgresBar
     Unity.2D.Animation.Editor.dll:
     - UnityEditor.U2D.Animation.BoneGizmo
@@ -125,6 +126,8 @@ ScriptsOnlyBuild:
     - Class: 64
       Script: {instanceID: 0}
     - Class: 65
+      Script: {instanceID: 0}
+    - Class: 74
       Script: {instanceID: 0}
     - Class: 81
       Script: {instanceID: 0}
@@ -285,8 +288,6 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 15496}
     - Class: 114
-      Script: {instanceID: 15500}
-    - Class: 114
       Script: {instanceID: 15558}
     - Class: 114
       Script: {instanceID: 15584}
@@ -297,7 +298,9 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 15658}
     - Class: 114
-      Script: {instanceID: 16964}
+      Script: {instanceID: 23620}
+    - Class: 114
+      Script: {instanceID: 25570}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 124
@@ -1477,6 +1480,12 @@ ScriptsOnlyBuild:
     assemblyName: Zenject.dll
     namespaceName: Zenject
     className: ZenjectBinding
+  - hash:
+      serializedVersion: 2
+      Hash: d0537577889bcfc128729f651c18d676
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: PieceGenerator_v2
   platform: 13
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
