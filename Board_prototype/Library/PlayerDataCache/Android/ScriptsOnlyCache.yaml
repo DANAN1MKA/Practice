@@ -3,8 +3,8 @@ ScriptsOnlyBuild:
     Assembly-CSharp.dll:
     - Board
     - BoardInstaller
-    - InputManager
-    - MoveManager
+    - InputController
+    - MoveController
     - PieceGenerator
     - PieceGenerator_v2
     - ProgresBar
@@ -140,167 +140,167 @@ ScriptsOnlyBuild:
     - Class: 104
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 11278}
+      Script: {instanceID: 11286}
     - Class: 114
-      Script: {instanceID: 11294}
+      Script: {instanceID: 11302}
     - Class: 114
-      Script: {instanceID: 11306}
+      Script: {instanceID: 11314}
     - Class: 114
-      Script: {instanceID: 11416}
+      Script: {instanceID: 11424}
     - Class: 114
-      Script: {instanceID: 11466}
-    - Class: 114
-      Script: {instanceID: 11492}
+      Script: {instanceID: 11474}
     - Class: 114
       Script: {instanceID: 11500}
-    - Class: 114
-      Script: {instanceID: 11502}
-    - Class: 114
-      Script: {instanceID: 11506}
     - Class: 114
       Script: {instanceID: 11508}
     - Class: 114
       Script: {instanceID: 11510}
     - Class: 114
-      Script: {instanceID: 11536}
+      Script: {instanceID: 11514}
     - Class: 114
-      Script: {instanceID: 11572}
+      Script: {instanceID: 11516}
     - Class: 114
-      Script: {instanceID: 11578}
+      Script: {instanceID: 11518}
     - Class: 114
-      Script: {instanceID: 11626}
+      Script: {instanceID: 11544}
     - Class: 114
-      Script: {instanceID: 11720}
+      Script: {instanceID: 11580}
     - Class: 114
-      Script: {instanceID: 11780}
+      Script: {instanceID: 11586}
     - Class: 114
-      Script: {instanceID: 11818}
+      Script: {instanceID: 11634}
     - Class: 114
-      Script: {instanceID: 11892}
+      Script: {instanceID: 11728}
     - Class: 114
-      Script: {instanceID: 11902}
+      Script: {instanceID: 11788}
     - Class: 114
-      Script: {instanceID: 12014}
+      Script: {instanceID: 11826}
     - Class: 114
-      Script: {instanceID: 12036}
+      Script: {instanceID: 11900}
     - Class: 114
-      Script: {instanceID: 12396}
+      Script: {instanceID: 11910}
     - Class: 114
-      Script: {instanceID: 12652}
+      Script: {instanceID: 12022}
     - Class: 114
-      Script: {instanceID: 12672}
+      Script: {instanceID: 12044}
     - Class: 114
-      Script: {instanceID: 12694}
+      Script: {instanceID: 12404}
     - Class: 114
-      Script: {instanceID: 12748}
+      Script: {instanceID: 12660}
     - Class: 114
-      Script: {instanceID: 12780}
+      Script: {instanceID: 12680}
     - Class: 114
-      Script: {instanceID: 12826}
+      Script: {instanceID: 12702}
     - Class: 114
-      Script: {instanceID: 12854}
+      Script: {instanceID: 12756}
     - Class: 114
-      Script: {instanceID: 12886}
+      Script: {instanceID: 12788}
     - Class: 114
-      Script: {instanceID: 12938}
+      Script: {instanceID: 12834}
     - Class: 114
-      Script: {instanceID: 12960}
+      Script: {instanceID: 12862}
     - Class: 114
-      Script: {instanceID: 12970}
+      Script: {instanceID: 12894}
     - Class: 114
-      Script: {instanceID: 13048}
+      Script: {instanceID: 12946}
     - Class: 114
-      Script: {instanceID: 13070}
+      Script: {instanceID: 12968}
     - Class: 114
-      Script: {instanceID: 13096}
+      Script: {instanceID: 12978}
+    - Class: 114
+      Script: {instanceID: 13056}
+    - Class: 114
+      Script: {instanceID: 13078}
     - Class: 114
       Script: {instanceID: 13104}
     - Class: 114
-      Script: {instanceID: 13188}
+      Script: {instanceID: 13112}
     - Class: 114
-      Script: {instanceID: 13208}
+      Script: {instanceID: 13196}
     - Class: 114
-      Script: {instanceID: 13254}
+      Script: {instanceID: 13216}
     - Class: 114
-      Script: {instanceID: 13446}
+      Script: {instanceID: 13262}
     - Class: 114
-      Script: {instanceID: 13448}
-    - Class: 114
-      Script: {instanceID: 13452}
+      Script: {instanceID: 13454}
     - Class: 114
       Script: {instanceID: 13456}
     - Class: 114
-      Script: {instanceID: 13544}
+      Script: {instanceID: 13460}
     - Class: 114
-      Script: {instanceID: 13664}
+      Script: {instanceID: 13464}
     - Class: 114
-      Script: {instanceID: 13706}
+      Script: {instanceID: 13552}
     - Class: 114
-      Script: {instanceID: 13830}
+      Script: {instanceID: 13672}
     - Class: 114
-      Script: {instanceID: 13944}
+      Script: {instanceID: 13714}
     - Class: 114
-      Script: {instanceID: 14188}
+      Script: {instanceID: 13838}
     - Class: 114
-      Script: {instanceID: 14218}
+      Script: {instanceID: 13952}
     - Class: 114
-      Script: {instanceID: 14368}
+      Script: {instanceID: 14196}
     - Class: 114
-      Script: {instanceID: 14410}
+      Script: {instanceID: 14208}
+    - Class: 114
+      Script: {instanceID: 14228}
+    - Class: 114
+      Script: {instanceID: 14378}
     - Class: 114
       Script: {instanceID: 14420}
     - Class: 114
-      Script: {instanceID: 14456}
+      Script: {instanceID: 14430}
     - Class: 114
-      Script: {instanceID: 14458}
+      Script: {instanceID: 14466}
     - Class: 114
-      Script: {instanceID: 14474}
+      Script: {instanceID: 14468}
     - Class: 114
-      Script: {instanceID: 14540}
+      Script: {instanceID: 14484}
     - Class: 114
-      Script: {instanceID: 14660}
+      Script: {instanceID: 14550}
     - Class: 114
-      Script: {instanceID: 14818}
+      Script: {instanceID: 14670}
     - Class: 114
-      Script: {instanceID: 14860}
+      Script: {instanceID: 14828}
     - Class: 114
-      Script: {instanceID: 14894}
+      Script: {instanceID: 14870}
     - Class: 114
-      Script: {instanceID: 14934}
+      Script: {instanceID: 14904}
     - Class: 114
-      Script: {instanceID: 14954}
+      Script: {instanceID: 14944}
     - Class: 114
-      Script: {instanceID: 14958}
+      Script: {instanceID: 14964}
     - Class: 114
-      Script: {instanceID: 15154}
+      Script: {instanceID: 14968}
     - Class: 114
-      Script: {instanceID: 15214}
+      Script: {instanceID: 15164}
     - Class: 114
-      Script: {instanceID: 15262}
+      Script: {instanceID: 15224}
     - Class: 114
-      Script: {instanceID: 15290}
+      Script: {instanceID: 15272}
     - Class: 114
-      Script: {instanceID: 15340}
+      Script: {instanceID: 15300}
     - Class: 114
-      Script: {instanceID: 15422}
+      Script: {instanceID: 15350}
     - Class: 114
-      Script: {instanceID: 15450}
+      Script: {instanceID: 15432}
     - Class: 114
-      Script: {instanceID: 15496}
+      Script: {instanceID: 15460}
     - Class: 114
-      Script: {instanceID: 15558}
+      Script: {instanceID: 15506}
     - Class: 114
-      Script: {instanceID: 15584}
+      Script: {instanceID: 15568}
     - Class: 114
-      Script: {instanceID: 15610}
+      Script: {instanceID: 15594}
     - Class: 114
-      Script: {instanceID: 15622}
+      Script: {instanceID: 15620}
     - Class: 114
-      Script: {instanceID: 15658}
+      Script: {instanceID: 15632}
     - Class: 114
-      Script: {instanceID: 23620}
+      Script: {instanceID: 15668}
     - Class: 114
-      Script: {instanceID: 25570}
+      Script: {instanceID: 19654}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 124
@@ -411,7 +411,7 @@ ScriptsOnlyBuild:
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
-    className: InputManager
+    className: InputController
   - hash:
       serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
@@ -981,7 +981,7 @@ ScriptsOnlyBuild:
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
-    className: MoveManager
+    className: MoveController
   - hash:
       serializedVersion: 2
       Hash: f84d945e5e1ca985698660fc26e9657f
@@ -1126,6 +1126,12 @@ ScriptsOnlyBuild:
     assemblyName: Zenject-IntegrationTests.dll
     namespaceName: Zenject.Tests.Bindings.FromPrefabResource
     className: Norf
+  - hash:
+      serializedVersion: 2
+      Hash: d0537577889bcfc128729f651c18d676
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: PieceGenerator_v2
   - hash:
       serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
@@ -1480,12 +1486,6 @@ ScriptsOnlyBuild:
     assemblyName: Zenject.dll
     namespaceName: Zenject
     className: ZenjectBinding
-  - hash:
-      serializedVersion: 2
-      Hash: d0537577889bcfc128729f651c18d676
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: PieceGenerator_v2
   platform: 13
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
