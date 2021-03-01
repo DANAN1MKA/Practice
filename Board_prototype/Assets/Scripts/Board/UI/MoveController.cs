@@ -34,7 +34,16 @@ public class MoveController : MonoBehaviour, IMoveManager
         movingElemenets.AddRange(newList);
     }
 
+
+    private bool removeElementFlag = false;
+    private Element element;
     public void removeElement(Element _element)
+    {
+        removeElementFlag = true;
+        element = _element;
+    }
+
+    public void removeElementHandler(Element _element)
     {
         foreach (MovingElements elem in movingElemenets)
         {

@@ -30,7 +30,6 @@ public class InputController: MonoBehaviour
             switch (touch.phase)
             {
 
-
                 case TouchPhase.Began:
                     SwipeStartPosition = Camera.main.ScreenToWorldPoint(touch.position);
 
@@ -42,6 +41,7 @@ public class InputController: MonoBehaviour
                     {
 
                         currentElemenet = board.getElementFromPoint(posX, posY);
+
                         if (!currentElemenet.isBlocked)
                         {
                             currentElemenetBeganPositon = new Vector2(board._thisTransform.position.x + posX, board._thisTransform.position.y + posY);
