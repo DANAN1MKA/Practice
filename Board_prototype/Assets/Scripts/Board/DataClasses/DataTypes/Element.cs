@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Element //: MonoBehaviour
+public class Element
 {
     private float speed = 5f;
 
@@ -16,14 +16,11 @@ public class Element //: MonoBehaviour
     public int posX { get; set; }
     public int posY { get; set; }
 
-    public bool isBlocked { get; set; } // элемент не должен двигаться если попал в матч 
-
+    private bool isBlocked { get; set; } // элемент не должен двигаться если попал в матч 
 
     public GameObject piece;
     public SpriteRenderer spriteRenderer;
-
-    //TODO: animator;
-    //public Animation animation;
+    //TODO: animator obj
     public Animator animator;
 
     public Element(GameObject _piece)
@@ -31,10 +28,11 @@ public class Element //: MonoBehaviour
         setPiece(_piece);
     }
 
-    private Element(GameObject _element, SpriteRenderer _spriteRenderer)
+    private Element(GameObject _element, SpriteRenderer _spriteRenderer, Animator _animator)
     {
         piece = _element;
         spriteRenderer = _spriteRenderer;
+        animator = _animator;
     }
 
     public void setPiece(GameObject _piece)
@@ -47,27 +45,57 @@ public class Element //: MonoBehaviour
     public void setElement(Element elem)
     {
         piece = elem.piece;
-        type = (piece == null) ? 0 : elem.type;
-        if (piece == null) return;
+                //TODO: убрать если нет ошибок
+        type = /*(piece == null) ? 0 :*/ elem.type;
+        //if (piece == null) return;
         spriteRenderer = elem.spriteRenderer;
+
+        animator = elem.animator;
     }
 
-    public void MoveElementTo(Vector2 move)
+    public void moveSoft(Vector2 direction)
     {
-        piece.transform.position = Vector2.Lerp(piece.transform.position, move, Time.deltaTime * 15f);
+        piece.transform.position = Vector2.Lerp(piece.transform.position, direction, Time.deltaTime * 15f);
     }
 
-    public void hardMoveElementTo(Vector2 move)
+    public void moveHard(Vector2 move)
     {
         piece.transform.position = Vector2.MoveTowards(piece.transform.position, move, Time.deltaTime * 2f);
     }
 
-    //Создает и возвращает копию себя
+
+    //TODO: Создает и возвращает копию себя ?? Нужно ли ??
     public Element getElement()
     {
-        Element clone = new Element(this.piece, this.spriteRenderer);
+        Element clone = new Element(this.piece, this.spriteRenderer, this.animator);
         clone.type = this.type;
 
         return clone;
     }
+
+    public void block()
+    {
+        //TODO: останавливаем анимацию 
+        animator.StartPlayback();
+        animator.Play(0);
+        isBlocked = true;
+    }
+
+    public void unblock()
+    {
+        //TODO: запускаем анимацию
+        animator.StopPlayback();
+
+        isBlocked = false;
+    }
+
+    public bool getState() { return isBlocked; }
+
+    public void resetAnimanion()
+    {
+        //TODO: запускаем анимацию с начала
+        animator.StopPlayback();
+        animator.Play(0);
+    }
+
 }

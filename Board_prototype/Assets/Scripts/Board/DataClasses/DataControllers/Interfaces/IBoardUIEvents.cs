@@ -1,7 +1,5 @@
 ﻿
-
-
 public interface IBoardUIEvents
 {
-    void dropIsOver();
+    void animationCompleted();
 }
