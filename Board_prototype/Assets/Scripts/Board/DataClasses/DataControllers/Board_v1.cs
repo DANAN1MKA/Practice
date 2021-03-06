@@ -97,27 +97,13 @@ public class Board_v1 : BoardFather
             {
                 foundMatches.Add(elem);
 
-                //TODO: блокируем совпавшие элементы
                 elem.block();
             }
         }
     }
 
-    public override Element getElementFromPoint(int x, int y)
-    {
-        //board[x, y].block();
-        //TODO: переписать под новую логику InputController больше не двигает элементы
-        return board[x, y];
-    }
-
-
-
-
     public override bool grabElement(int _x, int _y)
     {
-        //TODO: Отладка
-        Debug.Log("Grab Element x- " + _x + 1 + " y- " + _y + 1 + " state = " + board[_x, _y].getState());
-
         if (!board[_x, _y].getState())
         {
             board[_x, _y].block();
@@ -128,12 +114,6 @@ public class Board_v1 : BoardFather
 
     public override void swipeElement(int _x, int _y, Vector2 _direction)
     {
-        //TODO: Отладка
-        Debug.Log("Swipe Element x- " + (int)(_x + 1) + " y- " + (int)(_y + 1) +
-                   "  To x- " + (int)(_x + 1 + _direction.x) + " y- " + (int)(_y + 1 + _direction.y) + " State- " + board[_x + (int)_direction.x, _y + (int)_direction.y].getState());
-
-
-
         if (_direction.x != 0 || _direction.y != 0)
         {
             if (!board[_x + (int)_direction.x, _y + (int)_direction.y].getState())
@@ -145,6 +125,11 @@ public class Board_v1 : BoardFather
 
                 if (match1 || match2)
                 {
+                    if (match1) board[_x, _y].block(); else board[_x, _y].unblock();
+
+                    if (match2) board[_x + (int)_direction.x, _y + (int)_direction.y].block(); 
+                    else board[_x + (int)_direction.x, _y + (int)_direction.y].unblock();
+
 
                     Vector2 element1 = new Vector2(_thisTransform.position.x + board[_x, _y].posX,
                                                    _thisTransform.position.y + board[_x, _y].posY);
@@ -152,7 +137,6 @@ public class Board_v1 : BoardFather
                     Vector2 element2 = new Vector2(_thisTransform.position.x + board[_x + (int)_direction.x, _y + (int)_direction.y].posX,
                                                    _thisTransform.position.y + board[_x + (int)_direction.x, _y + (int)_direction.y].posY);
 
-                    //TODO: отправляем на движение
                     moveController.addElement(new MovingElement(board[_x, _y], element1),
                                               new MovingElement(board[_x + (int)_direction.x, _y + (int)_direction.y], element2));
 
@@ -167,50 +151,15 @@ public class Board_v1 : BoardFather
                 else
                 {
                     board[_x, _y].unblock();
+                    board[_x + (int)_direction.x, _y + (int)_direction.y].unblock();
+
                     swipe(board[_x, _y], board[_x + (int)_direction.x, _y + (int)_direction.y]);
                 }
             }
+            else board[_x, _y].unblock();
         }
         else board[_x, _y].unblock();
     }
-
-
-
-
-
-
-
-    //TODO: удалить кода починю проект
-    public override bool swipeElements(Element element1, Element element2)
-    {
-        if (element1.getState() && element2.getState())
-        {
-            swipe(element1, element2);
-
-            bool match1 = isItMatch(element1);
-            bool match2 = isItMatch(element2);
-
-            if (match1 || match2)
-            {
-                //if (!isItFirstMatch)
-                //{
-                //    timer.setTimer(time);
-                //    isItFirstMatch = true;
-                //}
-                //else timer.setTimer(additionalTime);
-
-                return true;
-            }
-            else
-            {
-                swipe(element1, element2);
-                return false;
-            }
-        }
-        return false;
-    }
-
-
 
     private void swipe(Element element1, Element element2)
     {
@@ -219,8 +168,6 @@ public class Board_v1 : BoardFather
         element2.setElement(tmp);
     }
 
-
-    // TODO: нужно переписать нормально
     public override void timerHandler()
     {
         isBlocked = true;
@@ -268,15 +215,11 @@ public class Board_v1 : BoardFather
 
     private void foundMatchesHandler()
     {
-        // TODO: список элементов что находятся в матче //// спорное решение?
         foundMatches.Clear();
 
-        //список элементов что должны упасть вниз
         List<MovingElement> fallingElements = new List<MovingElement>();
 
-        //количество позиций на которое должен упасть элемент СКОРЕЕ всего спорное решение
         int[] countForColumn = new int[width];
-
 
         for (int i = 0; i < heigth; i++)
         {
@@ -298,9 +241,7 @@ public class Board_v1 : BoardFather
                     {
                         swipe(board[j, i], board[j, count]);
 
-                        //TODO: свайпнули заблокированный элемент снизу и свободный сверху
                         board[j, i].unblock();
-
                         board[j, count].block();
 
                     }
@@ -323,20 +264,16 @@ public class Board_v1 : BoardFather
                 {
                     board[j, i].piece.transform.position = new Vector2(_thisTransform.position.x + board[j, i].posX, _thisTransform.position.y + heigth + countForColumn[j]);
 
-                    //TODO: все заблокированные элементы разблокируются
                     board[j, i].unblock();
                     countForColumn[j]++;
                 }
 
-                //TODO: на всех элементах сбрасывается анимация
                 board[j, i].resetAnimanion();
             }
         }
 
-        //TODO: отпрака в аниматор
         moveController.dropElements(fallingElements);
 
-        //пока проигрывается анимация сразу ищем возможные матчи
         matchCascad();
     }
 

@@ -36,7 +36,6 @@ public class BoardTimeController : ITickable, IBoardTimeController
             if (time < Time.time)
             {
                 isActive = false;
-                progressUI.dropProgress();
                 board.timerHandler();
             }
 

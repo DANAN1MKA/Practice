@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-public class InputController : MonoBehaviour
+public class InputHandler : MonoBehaviour
 {
     private Vector2 SwipeStartPosition;
     private Vector2 SwipeDirection;
@@ -43,7 +43,7 @@ public class InputController : MonoBehaviour
                     if (isExistCurrElem)
                     {
                         SwipeDirection = SwipeDirection = (Vector2)Camera.main.ScreenToWorldPoint(touch.position) - SwipeStartPosition;
-                        currentDirection = NormalizeDirection(SwipeDirection);
+                        currentDirection = normalizeDirection(SwipeDirection);
                     }
                     break;
 
@@ -56,7 +56,6 @@ public class InputController : MonoBehaviour
                     currentDirection = new Vector2();
                     isExistCurrElem = false;
                     break;
-
             }
         }
 
@@ -71,7 +70,7 @@ public class InputController : MonoBehaviour
         posY = posY < 0 ? posY * -1 : posY;
     }
 
-    public Vector2 NormalizeDirection(Vector2 direction)
+    public Vector2 normalizeDirection(Vector2 direction)
     {
         Vector2 dir = new Vector2(0, 0);
 

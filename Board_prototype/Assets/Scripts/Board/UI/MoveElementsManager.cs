@@ -8,18 +8,8 @@ public class MoveElementsManager : MonoBehaviour, IMoveElementsManager
 
     private List<MovingElement> movingElemenets;
 
-
-    //TODO: рудимент в нашем новом мире
-    public void addElement(MovingElement _newElement)
-    {
-        removeElement(_newElement.elem);
-        movingElemenets.Add(_newElement);
-    }
-
     public void addElement(MovingElement newElement1, MovingElement newElement2)
     {
-        Debug.Log("Добавлен элемент");
-
         removeElement(newElement1.elem);
         removeElement(newElement2.elem);
         movingElemenets.Add(newElement1);
@@ -32,8 +22,7 @@ public class MoveElementsManager : MonoBehaviour, IMoveElementsManager
         movingElemenets.AddRange(newList);
     }
 
-    //TODO: не нужна как интерфейс
-    public void removeElement(Element _element)
+    private void removeElement(Element _element)
     {
         foreach (MovingElement elem in movingElemenets)
         {
@@ -45,7 +34,6 @@ public class MoveElementsManager : MonoBehaviour, IMoveElementsManager
             }
         }
     }
-
 
     void Start()
     {

@@ -16,12 +16,6 @@ public class TimerProgressBar : MonoBehaviour, ITimerProgressBar
         slider.value = 1 - (newProgress / configTime);
     }
 
-    public void dropProgress()
-    {
-        // TODO: Выяснить почему не работает
-        slider.value = 0.1f;
-    }
-
     public void setConfig(float _time)
     {
         configTime = _time;

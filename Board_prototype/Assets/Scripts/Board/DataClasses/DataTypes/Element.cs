@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Element
 {
-    private float speed = 5f;
+    private float speed = 6f;
 
     public int type { get; set; } //определяет тип элемента: 0 - топор
                                   //                         1 - меч
@@ -20,7 +20,6 @@ public class Element
 
     public GameObject piece;
     public SpriteRenderer spriteRenderer;
-    //TODO: animator obj
     public Animator animator;
 
     public Element(GameObject _piece)
@@ -45,9 +44,7 @@ public class Element
     public void setElement(Element elem)
     {
         piece = elem.piece;
-                //TODO: убрать если нет ошибок
-        type = /*(piece == null) ? 0 :*/ elem.type;
-        //if (piece == null) return;
+        type = elem.type;
         spriteRenderer = elem.spriteRenderer;
 
         animator = elem.animator;
@@ -55,16 +52,14 @@ public class Element
 
     public void moveSoft(Vector2 direction)
     {
-        piece.transform.position = Vector2.Lerp(piece.transform.position, direction, Time.deltaTime * 15f);
+        piece.transform.position = Vector2.Lerp(piece.transform.position, direction, Time.deltaTime * speed);
     }
 
     public void moveHard(Vector2 move)
     {
-        piece.transform.position = Vector2.MoveTowards(piece.transform.position, move, Time.deltaTime * 2f);
+        piece.transform.position = Vector2.MoveTowards(piece.transform.position, move, Time.deltaTime * speed);
     }
 
-
-    //TODO: Создает и возвращает копию себя ?? Нужно ли ??
     public Element getElement()
     {
         Element clone = new Element(this.piece, this.spriteRenderer, this.animator);
@@ -75,7 +70,6 @@ public class Element
 
     public void block()
     {
-        //TODO: останавливаем анимацию 
         animator.StartPlayback();
         animator.Play(0);
         isBlocked = true;
@@ -83,7 +77,6 @@ public class Element
 
     public void unblock()
     {
-        //TODO: запускаем анимацию
         animator.StopPlayback();
 
         isBlocked = false;
@@ -93,7 +86,6 @@ public class Element
 
     public void resetAnimanion()
     {
-        //TODO: запускаем анимацию с начала
         animator.StopPlayback();
         animator.Play(0);
     }
