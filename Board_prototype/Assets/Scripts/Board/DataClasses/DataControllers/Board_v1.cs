@@ -4,6 +4,11 @@ using Zenject;
 
 public class Board_v1 : BoardFather
 {
+    [Inject] private SignalBus signalBus;
+
+
+
+
     [Inject] private IBoardTimeController timer;
     [SerializeField] float time;
     [SerializeField] float additionalTime;
@@ -11,7 +16,6 @@ public class Board_v1 : BoardFather
     private bool isItFirstMatch = false; //проверка на первый матч
 
     [Inject] private IMoveElementsManager moveController;
-
     [Inject] private IElementGenerator elementGenerator;
 
     private Element[,] board;
@@ -20,6 +24,15 @@ public class Board_v1 : BoardFather
 
     void Start()
     {
+        signalBus.Subscribe<GrabElemetnSignal>(grabElement);
+        signalBus.Subscribe<SwipeElementSignal>(swipeElement);
+
+
+        width = config.width;
+        heigth = config.height;
+        time = config.time;
+        additionalTime = config.additionalTime;
+
         board = elementGenerator.generateBoard(width, heigth, _thisTransform);
 
         foundMatches = new List<Element>();
@@ -101,6 +114,92 @@ public class Board_v1 : BoardFather
             }
         }
     }
+
+
+
+
+    //TODO: обработчик сигнала
+    public void grabElement(GrabElemetnSignal _grabElemetnSignal)
+    {
+        if (!board[_grabElemetnSignal.posX, _grabElemetnSignal.posY].getState())
+        {
+            board[_grabElemetnSignal.posX, _grabElemetnSignal.posY].block();
+        }
+    }
+
+    public void swipeElement(SwipeElementSignal swipeElementSignal)
+    {
+        if (swipeElementSignal.direction.x != 0 || swipeElementSignal.direction.y != 0)
+        {
+            if (!board[swipeElementSignal.posX + (int)swipeElementSignal.direction.x, 
+                       swipeElementSignal.posY + (int)swipeElementSignal.direction.y].getState())
+            {
+                swipe(board[swipeElementSignal.posX, swipeElementSignal.posY], 
+                      board[swipeElementSignal.posX + (int)swipeElementSignal.direction.x,
+                            swipeElementSignal.posY + (int)swipeElementSignal.direction.y]);
+
+                bool match1 = isItMatch(board[swipeElementSignal.posX, swipeElementSignal.posY]);
+                bool match2 = isItMatch(board[swipeElementSignal.posX + (int)swipeElementSignal.direction.x,
+                                              swipeElementSignal.posY + (int)swipeElementSignal.direction.y]);
+
+                if (match1 || match2)
+                {
+                    if (match1) board[swipeElementSignal.posX, swipeElementSignal.posY].block(); 
+                    else board[swipeElementSignal.posX, swipeElementSignal.posY].unblock();
+
+                    if (match2) board[swipeElementSignal.posX + (int)swipeElementSignal.direction.x,
+                                      swipeElementSignal.posY + (int)swipeElementSignal.direction.y].block();
+                    else board[swipeElementSignal.posX + (int)swipeElementSignal.direction.x,
+                               swipeElementSignal.posY + (int)swipeElementSignal.direction.y].unblock();
+
+
+                    Vector2 element1 = new Vector2(_thisTransform.position.x + board[swipeElementSignal.posX,
+                                                                                     swipeElementSignal.posY].posX,
+                                                   _thisTransform.position.y + board[swipeElementSignal.posX,
+                                                                                     swipeElementSignal.posY].posY);
+
+                    Vector2 element2 = new Vector2(_thisTransform.position.x + board[swipeElementSignal.posX + (int)swipeElementSignal.direction.x,
+                                                                                     swipeElementSignal.posY + (int)swipeElementSignal.direction.y].posX,
+                                                   _thisTransform.position.y + board[swipeElementSignal.posX + (int)swipeElementSignal.direction.x,
+                                                                                     swipeElementSignal.posY + (int)swipeElementSignal.direction.y].posY);
+
+                    moveController.addElement(new MovingElement(board[swipeElementSignal.posX, swipeElementSignal.posY], element1),
+                                              new MovingElement(board[swipeElementSignal.posX + (int)swipeElementSignal.direction.x,
+                                                                      swipeElementSignal.posY + (int)swipeElementSignal.direction.y], element2));
+
+                    if (!isItFirstMatch)
+                    {
+                        timer.setTimer(time);
+                        isItFirstMatch = true;
+                    }
+                    else timer.setTimer(additionalTime);
+
+                }
+                else
+                {
+                    board[swipeElementSignal.posX, swipeElementSignal.posY].unblock();
+                    board[swipeElementSignal.posX + (int)swipeElementSignal.direction.x,
+                          swipeElementSignal.posY + (int)swipeElementSignal.direction.y].unblock();
+
+                    swipe(board[swipeElementSignal.posX, swipeElementSignal.posY], 
+                          board[swipeElementSignal.posX + (int)swipeElementSignal.direction.x,
+                                swipeElementSignal.posY + (int)swipeElementSignal.direction.y]);
+                }
+            }
+            else board[swipeElementSignal.posX, swipeElementSignal.posY].unblock();
+        }
+        else board[swipeElementSignal.posX, swipeElementSignal.posY].unblock();
+    }
+
+
+
+
+
+
+
+
+
+
 
     public override bool grabElement(int _x, int _y)
     {

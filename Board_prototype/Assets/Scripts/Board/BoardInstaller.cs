@@ -5,6 +5,12 @@ public class BoardInstaller : MonoInstaller
 {
     public override void InstallBindings()
     {
+        SignalBusInstaller.Install(Container);
+        Container.DeclareSignal<GrabElemetnSignal>();
+        Container.DeclareSignal<SwipeElementSignal>();
+
+
+
         Container.Bind<BoardFather>().FromComponentInHierarchy().AsSingle().NonLazy();
         Container.BindInterfacesAndSelfTo<BoardTimeController>().AsSingle().NonLazy();
         Container.Bind<IBoardTimerEvents>().FromComponentInHierarchy().AsSingle().NonLazy();

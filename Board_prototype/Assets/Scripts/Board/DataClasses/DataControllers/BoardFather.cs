@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class BoardFather : MonoBehaviour, IBoardElements, IBoardTimerEvents, IBoardUIEvents
 {
-    [SerializeField] public int width;
-    [SerializeField] public int heigth;
+    [SerializeField] protected int width;
+    [SerializeField] protected int heigth;
 
     [SerializeField] public Transform _thisTransform;
+
+    [SerializeField] public BoardConfig config;
 
     protected bool isBlocked { get; set; }
     public bool getState() { return isBlocked; }

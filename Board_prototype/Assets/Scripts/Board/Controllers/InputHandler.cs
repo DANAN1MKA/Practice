@@ -8,13 +8,28 @@ public class InputHandler : MonoBehaviour
     private Vector2 SwipeStartPosition;
     private Vector2 SwipeDirection;
 
+
+    [Inject] private SignalBus signalBus;
+
+
     [Inject] private BoardFather board;
     private Vector2 currentDirection;
+
+
+    public BoardConfig config;
+    private int width;
+    private int heigth;
 
     private int posX;
     private int posY;
     private float elementBorders = 0.7f;
     private bool isExistCurrElem = false;
+
+    private void Start()
+    {
+        width = config.width;
+        heigth = config.height;
+    }
 
     void Update()
     {
@@ -31,10 +46,12 @@ public class InputHandler : MonoBehaviour
                     convertToElementPosition(SwipeStartPosition);
 
                     // если попали в доску
-                    if (posX < board.width && posX >= 0 &&
-                        posY < board.heigth && posX >= 0)
+                    if (posX < width && posX >= 0 &&
+                        posY < heigth && posX >= 0)
                     {
-                        isExistCurrElem = board.grabElement(posX, posY);
+                        signalBus.Fire<GrabElemetnSignal>(new GrabElemetnSignal(posX, posY));
+                        isExistCurrElem = true;
+                        //isExistCurrElem = board.grabElement(posX, posY);
                     }
                     break;
 
@@ -51,7 +68,8 @@ public class InputHandler : MonoBehaviour
                 case TouchPhase.Ended:
                     if (isExistCurrElem)
                     {
-                        board.swipeElement(posX, posY, currentDirection);
+                        signalBus.Fire<SwipeElementSignal>(new SwipeElementSignal(posX, posY, currentDirection));
+                        //board.swipeElement(posX, posY, currentDirection);
                     }
                     currentDirection = new Vector2();
                     isExistCurrElem = false;
@@ -86,8 +104,8 @@ public class InputHandler : MonoBehaviour
                     dir.y < -0.5f ? -1 : 0;
 
             // Normolize if we left the borders of the board
-            dir.x = (posX + dir.x >= board.width || posX + dir.x < 0) ? 0 : dir.x;
-            dir.y = (posY + dir.y >= board.heigth || posY + dir.y < 0) ? 0 : dir.y;
+            dir.x = (posX + dir.x >= width || posX + dir.x < 0) ? 0 : dir.x;
+            dir.y = (posY + dir.y >= heigth || posY + dir.y < 0) ? 0 : dir.y;
         }
         return dir;
     }
