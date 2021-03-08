@@ -1,22 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Element
 {
     private float speed = 6f;
 
-    public int type { get; set; } //определяет тип элемента: 0 - топор
-                                  //                         1 - меч
-                                  //                         2 - лук
-                                  //                         3 - зелье итд.
-                                  //                        -1 - уничтожен
 
-    //позиция элемента на доске
+    //TODO: переписать так чтобы можно было читать и нельзя изменять
+    public int type { get; set; } 
+  
     public int posX { get; set; }
     public int posY { get; set; }
 
-    private bool isBlocked { get; set; } // элемент не должен двигаться если попал в матч 
+    private bool isBlocked { get; set; }
 
     public GameObject piece;
     public SpriteRenderer spriteRenderer;
@@ -46,13 +41,7 @@ public class Element
         piece = elem.piece;
         type = elem.type;
         spriteRenderer = elem.spriteRenderer;
-
         animator = elem.animator;
-    }
-
-    public void moveSoft(Vector2 direction)
-    {
-        piece.transform.position = Vector2.Lerp(piece.transform.position, direction, Time.deltaTime * speed);
     }
 
     public void moveHard(Vector2 move)

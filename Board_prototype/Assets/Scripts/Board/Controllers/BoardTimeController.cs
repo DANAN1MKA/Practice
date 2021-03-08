@@ -8,7 +8,6 @@ public class BoardTimeController : ITickable, IInitializable, IBoardTimeControll
 
     [Inject] private SignalBus signalBus;
 
-    //TODO: удалить
     [Inject] private ITimerProgressBar progressUI;
 
     public void Initialize()

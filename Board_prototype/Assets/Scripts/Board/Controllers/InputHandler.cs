@@ -1,13 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Zenject;
 
 public class InputHandler : MonoBehaviour
 {
     private Vector2 SwipeStartPosition;
     private Vector2 SwipeDirection;
-
 
     [Inject] private SignalBus signalBus;
 
@@ -46,23 +43,19 @@ public class InputHandler : MonoBehaviour
                     // если попали в доску
                     if (posX < width && posX >= 0 &&
                         posY < heigth && posX >= 0)
-                    {
-                        signalBus.Fire<GrabElemetnSignal>(new GrabElemetnSignal(posX, posY));
-                        isExistCurrElem = true;
-                        //isExistCurrElem = board.grabElement(posX, posY);
-                    }
+                    { isExistCurrElem = true; }
                     break;
 
 
                 case TouchPhase.Moved:
                     if (isExistCurrElem)
                     {
-                        SwipeDirection = SwipeDirection = (Vector2)Camera.main.ScreenToWorldPoint(touch.position) - SwipeStartPosition;
+                        SwipeDirection = (Vector2)Camera.main.ScreenToWorldPoint(touch.position) - SwipeStartPosition;
                         currentDirection = normalizeDirection(SwipeDirection);
 
                         if(currentDirection.x != 0 || currentDirection.y  != 0)
                         {
-                            signalBus.Fire<SwipeElementSignal>(new SwipeElementSignal(posX, posY, currentDirection));
+                            signalBus.Fire(new SwipeElementSignal(posX, posY, currentDirection));
                             currentDirection = new Vector2();
                             isExistCurrElem = false;
 
@@ -73,11 +66,6 @@ public class InputHandler : MonoBehaviour
 
 
                 case TouchPhase.Ended:
-                    if (isExistCurrElem)
-                    {
-                        signalBus.Fire<SwipeElementSignal>(new SwipeElementSignal(posX, posY, currentDirection));
-                        //board.swipeElement(posX, posY, currentDirection);
-                    }
                     currentDirection = new Vector2();
                     isExistCurrElem = false;
                     break;

@@ -8,18 +8,18 @@ public class MoveElementsManager : MonoBehaviour, IMoveElementsManager
 
     private List<MovingElement> movingElemenets;
 
-    public void addElement(MovingElement newElement1, MovingElement newElement2)
+    public void addElement(MoveManagerAddSignal _data)
     {
-        removeElement(newElement1.elem);
-        removeElement(newElement2.elem);
-        movingElemenets.Add(newElement1);
-        movingElemenets.Add(newElement2);
+        removeElement(_data.element1.elem);
+        removeElement(_data.element2.elem);
+        movingElemenets.Add(_data.element1);
+        movingElemenets.Add(_data.element2);
     }
 
-    public void dropElements(List<MovingElement> newList)
+    public void dropElements(MoveManagerDropSignal newList)
     {
         movingElemenets.Clear();
-        movingElemenets.AddRange(newList);
+        movingElemenets.AddRange(newList.board);
     }
 
     private void removeElement(Element _element)
@@ -37,6 +37,9 @@ public class MoveElementsManager : MonoBehaviour, IMoveElementsManager
 
     void Start()
     {
+        signalBus.Subscribe<MoveManagerAddSignal>(addElement);
+        signalBus.Subscribe<MoveManagerDropSignal>(dropElements);
+
         movingElemenets = new List<MovingElement>();
     }
 

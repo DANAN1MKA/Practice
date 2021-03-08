@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-
+﻿
 public interface IMoveElementsManager
 {
-    void dropElements(List<MovingElement> newList);
+    void dropElements(MoveManagerDropSignal _newList);
 
-    void addElement(MovingElement newElement1, MovingElement newElement2);
+    void addElement(MoveManagerAddSignal _data);
 }
 
