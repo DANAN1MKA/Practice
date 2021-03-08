@@ -9,4 +9,5 @@ public class BoardConfig : ScriptableObject
     public int height;
     public float time;
     public float additionalTime;
+    public Vector2 boardPosition;
 }

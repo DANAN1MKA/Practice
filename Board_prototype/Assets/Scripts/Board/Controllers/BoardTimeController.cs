@@ -1,31 +1,31 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Zenject;
 
-public class BoardTimeController : ITickable, IBoardTimeController
+public class BoardTimeController : ITickable, IInitializable, IBoardTimeController
 {
     private bool isActive = false;
     private float time;
 
-    [Inject] private ITimerProgressBar progressUI;
-    [Inject] private IBoardTimerEvents board;
+    [Inject] private SignalBus signalBus;
 
-    public void setConfigProgresBar(float _time)
+    //TODO: удалить
+    [Inject] private ITimerProgressBar progressUI;
+
+    public void Initialize()
     {
-        progressUI.setConfig(_time);
+        signalBus.Subscribe<SetTimerSignal>(setTimer);
     }
 
-    public void setTimer(float _time)
+    public void setTimer(SetTimerSignal _time)
     {
         if (isActive)
         {
-            time += _time;
+            time += _time.time;
         }
         else
         {
             isActive = true;
-            time = _time + Time.time;
+            time = _time.time + Time.time;
         }
     }
 
@@ -36,7 +36,7 @@ public class BoardTimeController : ITickable, IBoardTimeController
             if (time < Time.time)
             {
                 isActive = false;
-                board.timerHandler();
+                signalBus.Fire<TimerHandlerSignal>();
             }
 
             progressUI.updateProgress(time - Time.time);

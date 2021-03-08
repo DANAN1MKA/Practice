@@ -4,7 +4,7 @@ using Zenject;
 
 public class MoveElementsManager : MonoBehaviour, IMoveElementsManager
 {
-    [Inject] IBoardUIEvents boardUIEvents;
+    [Inject] private SignalBus signalBus;
 
     private List<MovingElement> movingElemenets;
 
@@ -46,14 +46,16 @@ public class MoveElementsManager : MonoBehaviour, IMoveElementsManager
         {
             for (int i = 0; i < movingElemenets.Count; i++)
             {
-                movingElemenets[i].elem.moveHard(movingElemenets[i].endPosition);
+                movingElemenets[i].elem.moveHard(movingElemenets[i].endPosition[0]);
 
                 //if reached target position - remove element
-                if (movingElemenets[i].elem.piece.transform.position.x == movingElemenets[i].endPosition.x &&
-                    movingElemenets[i].elem.piece.transform.position.y == movingElemenets[i].endPosition.y)
-                    movingElemenets.Remove(movingElemenets[i]);
+                if (movingElemenets[i].elem.piece.transform.position.x == movingElemenets[i].endPosition[0].x &&
+                    movingElemenets[i].elem.piece.transform.position.y == movingElemenets[i].endPosition[0].y)
+
+                    if (movingElemenets[i].endPosition.Count > 1) movingElemenets[i].endPosition.RemoveAt(0);
+                    else movingElemenets.Remove(movingElemenets[i]);
             }
-            if (movingElemenets.Count == 0) boardUIEvents.animationCompleted();
+            if (movingElemenets.Count == 0) signalBus.Fire<AnimationCompletedSignal>();
         }
     }
 

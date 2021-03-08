@@ -4,30 +4,11 @@ using UnityEngine;
 
 public class BoardFather : MonoBehaviour, IBoardElements, IBoardTimerEvents, IBoardUIEvents
 {
-    [SerializeField] protected int width;
-    [SerializeField] protected int heigth;
+    [SerializeField] protected Transform _thisTransform;
 
-    [SerializeField] public Transform _thisTransform;
-
-    [SerializeField] public BoardConfig config;
-
-    protected bool isBlocked { get; set; }
-    public bool getState() { return isBlocked; }
+    [SerializeField] protected BoardConfig config;
 
     public virtual void animationCompleted()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    //TDOD: выпилить если одобрят
-    public virtual Element getElementFromPoint(int x, int y)
-    {
-        throw new System.NotImplementedException();
-    }
-
-
-    //TDOD: выпилить если одобрят
-    public virtual bool swipeElements(Element element1, Element element2)
     {
         throw new System.NotImplementedException();
     }
@@ -37,12 +18,12 @@ public class BoardFather : MonoBehaviour, IBoardElements, IBoardTimerEvents, IBo
         throw new System.NotImplementedException();
     }
     
-    public virtual bool grabElement(int _x, int _y)
+    public virtual void grabElement(GrabElemetnSignal _grabElemetnSignal)
     {
         throw new System.NotImplementedException();
     }
 
-    public virtual void swipeElement(int _x, int _y, Vector2 _direction)
+    public virtual void swipeElement(SwipeElementSignal swipeElementSignal)
     {
         throw new System.NotImplementedException();
     }

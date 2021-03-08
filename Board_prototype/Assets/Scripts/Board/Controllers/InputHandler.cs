@@ -11,17 +11,14 @@ public class InputHandler : MonoBehaviour
 
     [Inject] private SignalBus signalBus;
 
-
-    [Inject] private BoardFather board;
-    private Vector2 currentDirection;
-
-
     public BoardConfig config;
+    private Vector2 boardPosition;
     private int width;
     private int heigth;
 
     private int posX;
     private int posY;
+    private Vector2 currentDirection;
     private float elementBorders = 0.7f;
     private bool isExistCurrElem = false;
 
@@ -29,11 +26,12 @@ public class InputHandler : MonoBehaviour
     {
         width = config.width;
         heigth = config.height;
+        boardPosition = config.boardPosition;
     }
 
     void Update()
     {
-        if (Input.touchCount > 0 && !board.getState())
+        if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
 
@@ -61,6 +59,15 @@ public class InputHandler : MonoBehaviour
                     {
                         SwipeDirection = SwipeDirection = (Vector2)Camera.main.ScreenToWorldPoint(touch.position) - SwipeStartPosition;
                         currentDirection = normalizeDirection(SwipeDirection);
+
+                        if(currentDirection.x != 0 || currentDirection.y  != 0)
+                        {
+                            signalBus.Fire<SwipeElementSignal>(new SwipeElementSignal(posX, posY, currentDirection));
+                            currentDirection = new Vector2();
+                            isExistCurrElem = false;
+
+                        }
+
                     }
                     break;
 
@@ -81,8 +88,8 @@ public class InputHandler : MonoBehaviour
 
     private void convertToElementPosition(Vector2 position)
     {
-        posX = Mathf.RoundToInt(board._thisTransform.position.x - position.x);
-        posY = Mathf.RoundToInt(board._thisTransform.position.y - position.y);
+        posX = Mathf.RoundToInt(boardPosition.x - position.x);
+        posY = Mathf.RoundToInt(boardPosition.y - position.y);
 
         posX = posX < 0 ? posX * -1 : posX;
         posY = posY < 0 ? posY * -1 : posY;

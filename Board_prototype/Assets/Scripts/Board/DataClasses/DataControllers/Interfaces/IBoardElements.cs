@@ -1,8 +1,7 @@
-﻿using UnityEngine;
-
+﻿
 public interface IBoardElements
 {
-    bool grabElement(int _x, int _y);
+    void grabElement(GrabElemetnSignal _grabElemetnSignal);
 
-    void swipeElement(int _x, int _y, Vector2 _direction);
+    void swipeElement(SwipeElementSignal swipeElementSignal);
 }

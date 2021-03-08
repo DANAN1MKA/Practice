@@ -8,6 +8,9 @@ public class BoardInstaller : MonoInstaller
         SignalBusInstaller.Install(Container);
         Container.DeclareSignal<GrabElemetnSignal>();
         Container.DeclareSignal<SwipeElementSignal>();
+        Container.DeclareSignal<SetTimerSignal>();
+        Container.DeclareSignal<TimerHandlerSignal>();
+        Container.DeclareSignal<AnimationCompletedSignal>();
 
 
 

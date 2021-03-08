@@ -6,26 +6,26 @@ public class Board_v1 : BoardFather
 {
     [Inject] private SignalBus signalBus;
 
-
-
-
-    [Inject] private IBoardTimeController timer;
-    [SerializeField] float time;
-    [SerializeField] float additionalTime;
-
-    private bool isItFirstMatch = false; //проверка на первый матч
-
+    //TODO: убрать когда доделаю ивенты
     [Inject] private IMoveElementsManager moveController;
     [Inject] private IElementGenerator elementGenerator;
 
-    private Element[,] board;
+    private int width;
+    private int heigth;
+    private float time;
+    private float additionalTime;
+    private bool isBlocked;
+    private bool isItFirstMatch = false;
 
+    private Element[,] board;
     private List<Element> foundMatches;
 
     void Start()
     {
         signalBus.Subscribe<GrabElemetnSignal>(grabElement);
         signalBus.Subscribe<SwipeElementSignal>(swipeElement);
+        signalBus.Subscribe<TimerHandlerSignal>(timerHandler);
+        signalBus.Subscribe<AnimationCompletedSignal>(animationCompleted);
 
 
         width = config.width;
@@ -34,11 +34,7 @@ public class Board_v1 : BoardFather
         additionalTime = config.additionalTime;
 
         board = elementGenerator.generateBoard(width, heigth, _thisTransform);
-
         foundMatches = new List<Element>();
-
-        //сообщаем прогрес бару сколько секунд мы отсчитываем
-        timer.setConfigProgresBar(time);
     }
 
     private bool isItMatch(Element element)
@@ -115,150 +111,100 @@ public class Board_v1 : BoardFather
         }
     }
 
-
-
-
-    //TODO: обработчик сигнала
-    public void grabElement(GrabElemetnSignal _grabElemetnSignal)
+    public override void grabElement(GrabElemetnSignal _grabElemetnSignal)
     {
-        if (!board[_grabElemetnSignal.posX, _grabElemetnSignal.posY].getState())
-        {
-            board[_grabElemetnSignal.posX, _grabElemetnSignal.posY].block();
-        }
+        if(!isBlocked)
+            if (!board[_grabElemetnSignal.posX, _grabElemetnSignal.posY].getState())
+            {
+                board[_grabElemetnSignal.posX, _grabElemetnSignal.posY].block();
+            }
     }
 
-    public void swipeElement(SwipeElementSignal swipeElementSignal)
+    public override void swipeElement(SwipeElementSignal swipeElementSignal)
     {
-        if (swipeElementSignal.direction.x != 0 || swipeElementSignal.direction.y != 0)
-        {
-            if (!board[swipeElementSignal.posX + (int)swipeElementSignal.direction.x, 
-                       swipeElementSignal.posY + (int)swipeElementSignal.direction.y].getState())
-            {
-                swipe(board[swipeElementSignal.posX, swipeElementSignal.posY], 
-                      board[swipeElementSignal.posX + (int)swipeElementSignal.direction.x,
-                            swipeElementSignal.posY + (int)swipeElementSignal.direction.y]);
+        int posX = swipeElementSignal.posX;
+        int posY = swipeElementSignal.posY;
+        int dirX = (int)swipeElementSignal.direction.x;
+        int dirY = (int)swipeElementSignal.direction.y;
 
-                bool match1 = isItMatch(board[swipeElementSignal.posX, swipeElementSignal.posY]);
-                bool match2 = isItMatch(board[swipeElementSignal.posX + (int)swipeElementSignal.direction.x,
-                                              swipeElementSignal.posY + (int)swipeElementSignal.direction.y]);
+        if (!isBlocked && (dirX != 0 || dirY != 0))
+        {
+            if (!board[posX + dirX, 
+                       posY + dirY].getState())
+            {
+                swipe(board[posX, posY], 
+                      board[posX + dirX, posY + dirY]);
+
+                bool match1 = isItMatch(board[posX, posY]);
+                bool match2 = isItMatch(board[posX + dirX, posY + dirY]);
 
                 if (match1 || match2)
                 {
-                    if (match1) board[swipeElementSignal.posX, swipeElementSignal.posY].block(); 
-                    else board[swipeElementSignal.posX, swipeElementSignal.posY].unblock();
+                    if (match1) board[posX, posY].block(); 
+                    else board[posX, posY].unblock();
 
-                    if (match2) board[swipeElementSignal.posX + (int)swipeElementSignal.direction.x,
-                                      swipeElementSignal.posY + (int)swipeElementSignal.direction.y].block();
-                    else board[swipeElementSignal.posX + (int)swipeElementSignal.direction.x,
-                               swipeElementSignal.posY + (int)swipeElementSignal.direction.y].unblock();
+                    if (match2) board[posX + dirX, posY + dirY].block();
+                    else board[posX + dirX, posY + dirY].unblock();
 
+                    List<Vector2> position1 = new List<Vector2>();
+                    List<Vector2> position2 = new List<Vector2>();
 
-                    Vector2 element1 = new Vector2(_thisTransform.position.x + board[swipeElementSignal.posX,
-                                                                                     swipeElementSignal.posY].posX,
-                                                   _thisTransform.position.y + board[swipeElementSignal.posX,
-                                                                                     swipeElementSignal.posY].posY);
+                    Vector2 targetPosition1 = calculateTargetPosition(posX, posY);
+                    Vector2 targetPosition2 = calculateTargetPosition(posX + dirX, posY + dirY);
 
-                    Vector2 element2 = new Vector2(_thisTransform.position.x + board[swipeElementSignal.posX + (int)swipeElementSignal.direction.x,
-                                                                                     swipeElementSignal.posY + (int)swipeElementSignal.direction.y].posX,
-                                                   _thisTransform.position.y + board[swipeElementSignal.posX + (int)swipeElementSignal.direction.x,
-                                                                                     swipeElementSignal.posY + (int)swipeElementSignal.direction.y].posY);
+                    position1.Add(targetPosition1);
+                    position2.Add(targetPosition2);
 
-                    moveController.addElement(new MovingElement(board[swipeElementSignal.posX, swipeElementSignal.posY], element1),
-                                              new MovingElement(board[swipeElementSignal.posX + (int)swipeElementSignal.direction.x,
-                                                                      swipeElementSignal.posY + (int)swipeElementSignal.direction.y], element2));
+                    moveController.addElement(new MovingElement(board[posX, posY], position1),
+                                              new MovingElement(board[posX + dirX, posY + dirY], position2));
 
                     if (!isItFirstMatch)
                     {
-                        timer.setTimer(time);
+                        signalBus.Fire(new SetTimerSignal(time));
                         isItFirstMatch = true;
                     }
-                    else timer.setTimer(additionalTime);
+                    else signalBus.Fire(new SetTimerSignal(additionalTime));
 
                 }
                 else
                 {
-                    board[swipeElementSignal.posX, swipeElementSignal.posY].unblock();
-                    board[swipeElementSignal.posX + (int)swipeElementSignal.direction.x,
-                          swipeElementSignal.posY + (int)swipeElementSignal.direction.y].unblock();
 
-                    swipe(board[swipeElementSignal.posX, swipeElementSignal.posY], 
-                          board[swipeElementSignal.posX + (int)swipeElementSignal.direction.x,
-                                swipeElementSignal.posY + (int)swipeElementSignal.direction.y]);
+                    List<Vector2> position1 = new List<Vector2>();
+                    List<Vector2> position2 = new List<Vector2>();
+
+                    Vector2 targetPosition1 = calculateTargetPosition(posX, posY);
+                    Vector2 targetPosition2 = calculateTargetPosition(posX + dirX, posY + dirY);
+
+                    position1.Add(targetPosition2);
+                    position1.Add(targetPosition1);
+
+                    position2.Add(targetPosition1);
+                    position2.Add(targetPosition2);
+
+                    moveController.addElement(new MovingElement(board[posX, posY], position1),
+                                              new MovingElement(board[posX + dirX, posY + dirY], position2));
+
+                    board[posX, posY].unblock();
+                    board[posX + dirX, posY + dirY].unblock();
+
+                    swipe(board[posX, posY], 
+                          board[posX + dirX, posY + dirY]);
                 }
             }
-            else board[swipeElementSignal.posX, swipeElementSignal.posY].unblock();
+            else board[posX, posY].unblock();
         }
-        else board[swipeElementSignal.posX, swipeElementSignal.posY].unblock();
+        else board[posX, posY].unblock();
     }
 
 
-
-
-
-
-
-
-
-
-
-    public override bool grabElement(int _x, int _y)
+    public Vector2 calculateTargetPosition(int _posX, int _posY)
     {
-        if (!board[_x, _y].getState())
-        {
-            board[_x, _y].block();
-            return true;
-        }
-        else return false;
+        Vector2 position = new Vector2(_thisTransform.position.x + _posX,
+                                       _thisTransform.position.y + _posY);
+
+        return position;
     }
 
-    public override void swipeElement(int _x, int _y, Vector2 _direction)
-    {
-        if (_direction.x != 0 || _direction.y != 0)
-        {
-            if (!board[_x + (int)_direction.x, _y + (int)_direction.y].getState())
-            {
-                swipe(board[_x, _y], board[_x + (int)_direction.x, _y + (int)_direction.y]);
-
-                bool match1 = isItMatch(board[_x, _y]);
-                bool match2 = isItMatch(board[_x + (int)_direction.x, _y + (int)_direction.y]);
-
-                if (match1 || match2)
-                {
-                    if (match1) board[_x, _y].block(); else board[_x, _y].unblock();
-
-                    if (match2) board[_x + (int)_direction.x, _y + (int)_direction.y].block(); 
-                    else board[_x + (int)_direction.x, _y + (int)_direction.y].unblock();
-
-
-                    Vector2 element1 = new Vector2(_thisTransform.position.x + board[_x, _y].posX,
-                                                   _thisTransform.position.y + board[_x, _y].posY);
-
-                    Vector2 element2 = new Vector2(_thisTransform.position.x + board[_x + (int)_direction.x, _y + (int)_direction.y].posX,
-                                                   _thisTransform.position.y + board[_x + (int)_direction.x, _y + (int)_direction.y].posY);
-
-                    moveController.addElement(new MovingElement(board[_x, _y], element1),
-                                              new MovingElement(board[_x + (int)_direction.x, _y + (int)_direction.y], element2));
-
-                    if (!isItFirstMatch)
-                    {
-                        timer.setTimer(time);
-                        isItFirstMatch = true;
-                    }
-                    else timer.setTimer(additionalTime);
-
-                }
-                else
-                {
-                    board[_x, _y].unblock();
-                    board[_x + (int)_direction.x, _y + (int)_direction.y].unblock();
-
-                    swipe(board[_x, _y], board[_x + (int)_direction.x, _y + (int)_direction.y]);
-                }
-            }
-            else board[_x, _y].unblock();
-        }
-        else board[_x, _y].unblock();
-    }
 
     private void swipe(Element element1, Element element2)
     {
@@ -354,10 +300,11 @@ public class Board_v1 : BoardFather
         {
             for (int j = 0; j < width; j++)
             {
-                fallingElements.Add(new MovingElement(
-                    board[j, i],
-                    new Vector2(_thisTransform.position.x + board[j, i].posX,
-                                _thisTransform.position.y + board[j, i].posY)));
+                List<Vector2> endPosition = new List<Vector2>();
+                endPosition.Add(new Vector2(_thisTransform.position.x + board[j, i].posX,
+                                            _thisTransform.position.y + board[j, i].posY));
+
+                fallingElements.Add(new MovingElement(board[j, i], endPosition));
 
                 if (board[j, i].getState())
                 {
@@ -377,3 +324,25 @@ public class Board_v1 : BoardFather
     }
 
 }
+
+
+
+
+
+
+//TODO: на случай если новая система не будет работать правильно
+//Vector2 element1 = new Vector2(_thisTransform.position.x + board[swipeElementSignal.posX,
+//                                                                 swipeElementSignal.posY].posX,
+//                               _thisTransform.position.y + board[swipeElementSignal.posX,
+//                                                                 swipeElementSignal.posY].posY);
+//List<Vector2> elementEndPos1 = new List<Vector2>();
+//elementEndPos1.Add(element1);
+
+
+//Vector2 element2 = new Vector2(_thisTransform.position.x + board[swipeElementSignal.posX + (int)swipeElementSignal.direction.x,
+//                                                                 swipeElementSignal.posY + (int)swipeElementSignal.direction.y].posX,
+//                               _thisTransform.position.y + board[swipeElementSignal.posX + (int)swipeElementSignal.direction.x,
+//                                                                 swipeElementSignal.posY + (int)swipeElementSignal.direction.y].posY);
+//List<Vector2> elementEndPos2 = new List<Vector2>();
+//elementEndPos2.Add(element2);
+
