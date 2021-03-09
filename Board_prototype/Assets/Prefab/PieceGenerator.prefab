@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3799216836511153412}
-  - component: {fileID: 3799216836511153415}
+  - component: {fileID: 7736646889608393145}
   m_Layer: 0
   m_Name: PieceGenerator
   m_TagString: Untagged
@@ -31,7 +31,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3799216836511153415
+--- !u!114 &7736646889608393145
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -40,13 +40,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 3799216836511153413}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8928e4f1dbc9fb4085e044a37354560, type: 3}
+  m_Script: {fileID: 11500000, guid: 5cc4d7b8ad5716e40951a0896278c74b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  elementPrefab: {fileID: 7590214036441349308, guid: 5af6143c773d2a541a63272852da92d2,
+  elementPrefab: {fileID: 7590214036441349308, guid: 8500179b5f323a242a72649d1df3e2fb,
     type: 3}
   pool:
-  - {fileID: 21300000, guid: 970c00a73d358bd48b2a6ad98ad51eee, type: 3}
-  - {fileID: 21300000, guid: 285011180800d5a40ad95cb74d62c1e4, type: 3}
-  - {fileID: 21300000, guid: 25488ca848a41654b8b839d17633a29b, type: 3}
-  - {fileID: 21300000, guid: 7d61e68a73ed92149bab3d8f51ca45b5, type: 3}
+  - {fileID: 2100000, guid: 19a4519f3d7f225439edb998c5f981dd, type: 2}
+  - {fileID: 2100000, guid: 42484ca4bdf291f4892c4c3cb5677a25, type: 2}
+  - {fileID: 2100000, guid: feb1ee9a919ea414fbff23828154a1d0, type: 2}
+  - {fileID: 2100000, guid: 819be4848eaecf64aab79e65a4b88f44, type: 2}
+  - {fileID: 2100000, guid: d22f3d7d5657ddb4d9203675cc029a9c, type: 2}
