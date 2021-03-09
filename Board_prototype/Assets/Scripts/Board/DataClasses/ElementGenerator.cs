@@ -2,14 +2,23 @@
 
 public class ElementGenerator : MonoBehaviour, IElementGenerator
 {
-    [SerializeField] public GameObject elementPrefab;
-    [SerializeField] public Material[] pool;
+    [SerializeField] public BoardConfig config;
 
+    private GameObject elementPrefab;
+    private Material[] pool;
+    private Vector2 boardPosition;
+
+    public void Awake()
+    {
+        elementPrefab = config.elementPrefab;
+        pool = config.pool;
+        boardPosition = config.boardPosition;
+    }
 
     public void changeTypeCommon(Element element)
     {
-        element.type = Random.Range(0, pool.Length);
-        element.spriteRenderer.material = pool[element.type];
+        int newType = Random.Range(0, pool.Length);
+        element.changeType(newType, pool[newType]);
     }
 
     public void changeTypeSpecial(Element element)
@@ -19,15 +28,17 @@ public class ElementGenerator : MonoBehaviour, IElementGenerator
 
     public Element createCommonPiece(int _posX, int _posY)
     {
+        Vector2 position = new Vector2(boardPosition.x + _posX,
+                                       boardPosition.y + _posY);
+
         GameObject newPiece = Instantiate(elementPrefab);
         Element newElement = new Element(newPiece);
 
-        newElement.type = Random.Range(0, pool.Length);
-        newElement.spriteRenderer.material = pool[newElement.type];
+        int type = Random.Range(0, pool.Length);
+        newElement.changeType(type, pool[type]);
 
         newElement.piece.name = "( " + _posX + "," + _posY + " )";
-        newElement.posX = _posX;
-        newElement.posY = _posY;
+        newElement.setPosition(_posX, _posY, position);
 
         return newElement;
     }
@@ -37,19 +48,15 @@ public class ElementGenerator : MonoBehaviour, IElementGenerator
         throw new System.NotImplementedException();
     }
 
-    public Element[,] generateBoard(int _width, int _heigth, Transform _startPosition)
+    public Element[,] generateBoard(int _width, int _heigth)
     {
         Element[,] board = new Element[_width, _heigth];
-
-        Vector2 curentPiecePosition = new Vector2(_startPosition.position.x, _startPosition.position.y);
 
         for (int i = 0; i < _width; i++)
         {
             for (int j = 0; j < _heigth; j++)
             {
                 Element newElement = createCommonPiece(i, j);
-                newElement.piece.transform.parent = _startPosition;
-                newElement.piece.transform.position = new Vector2(curentPiecePosition.x + i, curentPiecePosition.y + j);
 
                 do
                 {

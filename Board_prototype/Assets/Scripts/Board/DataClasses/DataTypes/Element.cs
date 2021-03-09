@@ -6,16 +6,18 @@ public class Element
 
 
     //TODO: переписать так чтобы можно было читать и нельзя изменять
-    public int type { get; set; } 
-  
-    public int posX { get; set; }
-    public int posY { get; set; }
+    public int type { get; private set; }
 
-    private bool isBlocked { get; set; }
+    public int posX { get; private set; }
+    public int posY { get; private set; }
 
-    public GameObject piece;
-    public SpriteRenderer spriteRenderer;
-    public Animator animator;
+    public Vector2 position { get; private set; }
+
+    private bool isBlocked;
+
+    public GameObject piece { get; private set; }
+    public SpriteRenderer spriteRenderer { get; private set; }
+    public Animator animator { get; private set; }
 
     public Element(GameObject _piece)
     {
@@ -27,6 +29,22 @@ public class Element
         piece = _element;
         spriteRenderer = _spriteRenderer;
         animator = _animator;
+    }
+
+    public void changeType(int _type, Material _material)
+    {
+        type = _type;
+        spriteRenderer.material = _material;
+    }
+
+    public void setPosition(int _posX, int _posY, Vector2 _position)
+    {
+        posX = _posX;
+        posY = _posY;
+        position = _position;
+
+        piece.transform.position = _position;
+
     }
 
     public void setPiece(GameObject _piece)

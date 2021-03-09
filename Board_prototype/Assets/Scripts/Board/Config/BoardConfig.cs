@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu(menuName = "Configuratins/BoardConfiruratin")]
 public class BoardConfig : ScriptableObject
@@ -10,4 +8,7 @@ public class BoardConfig : ScriptableObject
     public float time;
     public float additionalTime;
     public Vector2 boardPosition;
+
+    public GameObject elementPrefab;
+    public Material[] pool;
 }

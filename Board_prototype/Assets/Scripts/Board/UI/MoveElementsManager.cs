@@ -49,13 +49,13 @@ public class MoveElementsManager : MonoBehaviour, IMoveElementsManager
         {
             for (int i = 0; i < movingElemenets.Count; i++)
             {
-                movingElemenets[i].elem.moveHard(movingElemenets[i].endPosition[0]);
+                movingElemenets[i].elem.moveHard(movingElemenets[i].endPosition);
 
                 //if reached target position - remove element
-                if (movingElemenets[i].elem.piece.transform.position.x == movingElemenets[i].endPosition[0].x &&
-                    movingElemenets[i].elem.piece.transform.position.y == movingElemenets[i].endPosition[0].y)
+                if (movingElemenets[i].elem.piece.transform.position.x == movingElemenets[i].endPosition.x &&
+                    movingElemenets[i].elem.piece.transform.position.y == movingElemenets[i].endPosition.y)
 
-                    if (movingElemenets[i].endPosition.Count > 1) movingElemenets[i].endPosition.RemoveAt(0);
+                    if (movingElemenets[i].nextPosition != null) movingElemenets[i] = movingElemenets[i].nextPosition;
                     else movingElemenets.Remove(movingElemenets[i]);
             }
             if (movingElemenets.Count == 0) signalBus.Fire<AnimationCompletedSignal>();

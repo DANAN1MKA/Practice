@@ -8,11 +8,11 @@ public class Board_v1 : MonoBehaviour, IBoardElements, IBoardTimerEvents, IBoard
 
     [Inject] private IElementGenerator elementGenerator;
 
-    [SerializeField] private Transform _thisTransform;
     [SerializeField] private BoardConfig config;
 
     private int width;
     private int heigth;
+    private Vector2 boardPosition;
     private float time;
     private float additionalTime;
     private bool isBlocked;
@@ -21,18 +21,22 @@ public class Board_v1 : MonoBehaviour, IBoardElements, IBoardTimerEvents, IBoard
     private Element[,] board;
     private List<Element> foundMatches;
 
-    void Start()
+    public void Awake()
     {
-        signalBus.Subscribe<SwipeElementSignal>(swipeElement);
-        signalBus.Subscribe<TimerHandlerSignal>(timerHandler);
-        signalBus.Subscribe<AnimationCompletedSignal>(animationCompleted);
-
         width = config.width;
         heigth = config.height;
         time = config.time;
         additionalTime = config.additionalTime;
+        boardPosition = config.boardPosition;
 
-        board = elementGenerator.generateBoard(width, heigth, _thisTransform);
+        signalBus.Subscribe<SwipeElementSignal>(swipeElement);
+        signalBus.Subscribe<TimerHandlerSignal>(timerHandler);
+        signalBus.Subscribe<AnimationCompletedSignal>(animationCompleted);
+    }
+
+    void Start()
+    {
+        board = elementGenerator.generateBoard(width, heigth);
         foundMatches = new List<Element>();
     }
 
@@ -118,23 +122,18 @@ public class Board_v1 : MonoBehaviour, IBoardElements, IBoardTimerEvents, IBoard
                 swipe(board[posX, posY], 
                       board[posX + dirX, posY + dirY]);
 
-                List<Vector2> position1 = new List<Vector2>();
-                List<Vector2> position2 = new List<Vector2>();
-
-                Vector2 targetPosition1 = calculateTargetPosition(posX, posY);
-                Vector2 targetPosition2 = calculateTargetPosition(posX + dirX, posY + dirY);
-
+                Vector2 targetPosition1 = board[posX, posY].position;
+                Vector2 targetPosition2 = board[posX + dirX, posY + dirY].position;
 
                 bool match1 = isItMatch(board[posX, posY]);
                 bool match2 = isItMatch(board[posX + dirX, posY + dirY]);
 
                 if (match1 || match2)
                 {
-                    position1.Add(targetPosition1);
-                    position2.Add(targetPosition2);
+                    MovingElement elem1 = new MovingElement(board[posX, posY], targetPosition1, null);
+                    MovingElement elem2 = new MovingElement(board[posX + dirX, posY + dirY], targetPosition2, null);
 
-                    signalBus.Fire(new MoveManagerAddSignal(new MovingElement(board[posX, posY], position1),
-                                                            new MovingElement(board[posX + dirX, posY + dirY], position2)));
+                    signalBus.Fire(new MoveManagerAddSignal(elem1, elem2));
 
                     if (!isItFirstMatch)
                     {
@@ -146,28 +145,19 @@ public class Board_v1 : MonoBehaviour, IBoardElements, IBoardTimerEvents, IBoard
                 }
                 else
                 {
-                    position1.Add(targetPosition2);
-                    position1.Add(targetPosition1);
+                    MovingElement nextPositionElem1 = new MovingElement(board[posX, posY], targetPosition1, null);
+                    MovingElement elem1 = new MovingElement(board[posX, posY], targetPosition2, nextPositionElem1);
 
-                    position2.Add(targetPosition1);
-                    position2.Add(targetPosition2);
+                    MovingElement nextPositionElem2 = new MovingElement(board[posX, posY], targetPosition2, null);
+                    MovingElement elem2 = new MovingElement(board[posX, posY], targetPosition1, nextPositionElem2);
 
-                    signalBus.Fire(new MoveManagerAddSignal(new MovingElement(board[posX, posY], position1),
-                                                            new MovingElement(board[posX + dirX, posY + dirY], position2)));
+                    signalBus.Fire(new MoveManagerAddSignal(elem1, elem2));
 
                     swipe(board[posX, posY], 
                           board[posX + dirX, posY + dirY]);
                 }
             }
         }
-    }
-
-    public Vector2 calculateTargetPosition(int _posX, int _posY)
-    {
-        Vector2 position = new Vector2(_thisTransform.position.x + _posX,
-                                       _thisTransform.position.y + _posY);
-
-        return position;
     }
 
     private void swipe(Element element1, Element element2)
@@ -259,16 +249,14 @@ public class Board_v1 : MonoBehaviour, IBoardElements, IBoardTimerEvents, IBoard
         {
             for (int j = 0; j < width; j++)
             {
-                List<Vector2> endPosition = new List<Vector2>();
-                endPosition.Add(new Vector2(_thisTransform.position.x + board[j, i].posX,
-                                            _thisTransform.position.y + board[j, i].posY));
+                Vector2 endPosition = board[j, i].position;
 
-                fallingElements.Add(new MovingElement(board[j, i], endPosition));
+                fallingElements.Add(new MovingElement(board[j, i], endPosition, null));
 
                 if (board[j, i].getState())
                 {
-                    board[j, i].piece.transform.position = new Vector2(_thisTransform.position.x + board[j, i].posX, 
-                                                                       _thisTransform.position.y + heigth + countForColumn[j]);
+                    board[j, i].piece.transform.position = new Vector2(boardPosition.x + board[j, i].posX,
+                                                                       boardPosition.y + heigth + countForColumn[j]);
 
                     board[j, i].unblock();
                     countForColumn[j]++;
