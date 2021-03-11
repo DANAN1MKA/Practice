@@ -13,6 +13,7 @@ public class Board_v1 : MonoBehaviour, IBoardElements, IBoardTimerEvents, IBoard
     private int width;
     private int heigth;
     private Vector2 boardPosition;
+    private float scale;
     private float time;
     private float additionalTime;
     private bool isBlocked;
@@ -35,6 +36,7 @@ public class Board_v1 : MonoBehaviour, IBoardElements, IBoardTimerEvents, IBoard
         time = config.time;
         additionalTime = config.additionalTime;
         boardPosition = config.boardPositionFromResolution;
+        scale = config.scale;
 
         board = elementGenerator.generateBoard(width, heigth);
         foundMatches = new List<Element>();
@@ -255,8 +257,8 @@ public class Board_v1 : MonoBehaviour, IBoardElements, IBoardTimerEvents, IBoard
 
                 if (board[j, i].getState())
                 {
-                    board[j, i].piece.transform.position = new Vector2(boardPosition.x + board[j, i].posX,
-                                                                       boardPosition.y + heigth + countForColumn[j]);
+                    board[j, i].piece.transform.position = new Vector2(boardPosition.x + board[j, i].posX * scale,
+                                                                       boardPosition.y + (heigth + countForColumn[j]) * scale);
 
                     board[j, i].unblock();
                     countForColumn[j]++;
