@@ -23,7 +23,7 @@ public class InputHandler : MonoBehaviour
     {
         width = config.width;
         heigth = config.height;
-        boardPosition = config.boardPosition;
+        boardPosition = config.boardPositionFromResolution;
     }
 
     void Update()
@@ -76,8 +76,8 @@ public class InputHandler : MonoBehaviour
 
     private void convertToElementPosition(Vector2 position)
     {
-        posX = Mathf.RoundToInt(boardPosition.x - position.x);
-        posY = Mathf.RoundToInt(boardPosition.y - position.y);
+        posX = Mathf.RoundToInt((boardPosition.x - position.x));
+        posY = Mathf.RoundToInt((boardPosition.y - position.y));
 
         posX = posX < 0 ? posX * -1 : posX;
         posY = posY < 0 ? posY * -1 : posY;

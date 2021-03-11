@@ -23,12 +23,6 @@ public class Board_v1 : MonoBehaviour, IBoardElements, IBoardTimerEvents, IBoard
 
     public void Awake()
     {
-        width = config.width;
-        heigth = config.height;
-        time = config.time;
-        additionalTime = config.additionalTime;
-        boardPosition = config.boardPosition;
-
         signalBus.Subscribe<SwipeElementSignal>(swipeElement);
         signalBus.Subscribe<TimerHandlerSignal>(timerHandler);
         signalBus.Subscribe<AnimationCompletedSignal>(animationCompleted);
@@ -36,6 +30,14 @@ public class Board_v1 : MonoBehaviour, IBoardElements, IBoardTimerEvents, IBoard
 
     void Start()
     {
+        width = config.width;
+        heigth = config.height;
+        time = config.time;
+        additionalTime = config.additionalTime;
+        boardPosition = config.boardPositionFromResolution;
+
+
+
         board = elementGenerator.generateBoard(width, heigth);
         foundMatches = new List<Element>();
     }

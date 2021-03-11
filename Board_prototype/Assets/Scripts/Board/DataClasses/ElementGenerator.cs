@@ -8,11 +8,29 @@ public class ElementGenerator : MonoBehaviour, IElementGenerator
     private Material[] pool;
     private Vector2 boardPosition;
 
+
+    private float defoultScreenWidthInUnits = 7.875f;
+
+    private float elementScale;
+
     public void Awake()
     {
         elementPrefab = config.elementPrefab;
         pool = config.pool;
         boardPosition = config.boardPosition;
+
+        float screenHeightInUnits = Camera.main.orthographicSize * 2;
+        float screenWidthInUnits = screenHeightInUnits * Screen.width / Screen.height;
+
+        elementScale = 2 - (defoultScreenWidthInUnits / screenWidthInUnits);
+        boardPosition = boardPosition * elementScale;
+        config.boardPositionFromResolution = boardPosition;
+        config.scale = elementScale;
+
+        Debug.Log("screenHeight = " + screenHeightInUnits);
+        Debug.Log("screenWidth = " + screenWidthInUnits);
+        Debug.Log("elementScale = " + elementScale);
+
     }
 
     public void changeTypeCommon(Element element)
@@ -28,16 +46,23 @@ public class ElementGenerator : MonoBehaviour, IElementGenerator
 
     public Element createCommonPiece(int _posX, int _posY)
     {
-        Vector2 position = new Vector2(boardPosition.x + _posX,
-                                       boardPosition.y + _posY);
+        Vector2 position = new Vector2(boardPosition.x + _posX * elementScale,
+                                       boardPosition.y + _posY * elementScale);
 
         GameObject newPiece = Instantiate(elementPrefab);
+
+        Vector3 scale = new Vector3(elementScale, elementScale, elementScale);
+
+        newPiece.transform.localScale = scale;
+
         Element newElement = new Element(newPiece);
 
         int type = Random.Range(0, pool.Length);
         newElement.changeType(type, pool[type]);
 
         newElement.piece.name = "( " + _posX + "," + _posY + " )";
+
+
         newElement.setPosition(_posX, _posY, position);
 
         return newElement;

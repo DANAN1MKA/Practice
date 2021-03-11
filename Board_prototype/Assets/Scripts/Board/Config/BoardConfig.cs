@@ -8,7 +8,11 @@ public class BoardConfig : ScriptableObject
     public float time;
     public float additionalTime;
     public Vector2 boardPosition;
+    public Vector2 boardPositionFromResolution;
 
     public GameObject elementPrefab;
     public Material[] pool;
+
+
+    public float scale;
 }
