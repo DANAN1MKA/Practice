@@ -148,8 +148,8 @@ public class Board_v1 : MonoBehaviour, IBoardElements, IBoardTimerEvents, IBoard
                     MovingElement nextPositionElem1 = new MovingElement(board[posX, posY], targetPosition1, null);
                     MovingElement elem1 = new MovingElement(board[posX, posY], targetPosition2, nextPositionElem1);
 
-                    MovingElement nextPositionElem2 = new MovingElement(board[posX, posY], targetPosition2, null);
-                    MovingElement elem2 = new MovingElement(board[posX, posY], targetPosition1, nextPositionElem2);
+                    MovingElement nextPositionElem2 = new MovingElement(board[posX + dirX, posY + dirY], targetPosition2, null);
+                    MovingElement elem2 = new MovingElement(board[posX + dirX, posY + dirY], targetPosition1, nextPositionElem2);
 
                     signalBus.Fire(new MoveManagerAddSignal(elem1, elem2));
 

@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 7
   height: 8
-  time: 20
+  time: 5
   additionalTime: 1
   boardPosition: {x: -3, y: -5.5}
-  elementPrefab: {fileID: 3065730894439695763, guid: 0a61283b904b60a43acb555b3beb5339,
+  elementPrefab: {fileID: 3065730894439695763, guid: b32ba1d0f83baf84fa32a4c35424c68e,
     type: 3}
   pool:
   - {fileID: 2100000, guid: a515ba4ef0707c04f97fc2c135a0778e, type: 2}

@@ -56,7 +56,11 @@ public class MoveElementsManager : MonoBehaviour, IMoveElementsManager
                     movingElemenets[i].elem.piece.transform.position.y == movingElemenets[i].endPosition.y)
 
                     if (movingElemenets[i].nextPosition != null) movingElemenets[i] = movingElemenets[i].nextPosition;
-                    else movingElemenets.Remove(movingElemenets[i]);
+                    else
+                    { 
+                        movingElemenets.Remove(movingElemenets[i]);
+                        i--;
+                    }
             }
             if (movingElemenets.Count == 0) signalBus.Fire<AnimationCompletedSignal>();
         }
