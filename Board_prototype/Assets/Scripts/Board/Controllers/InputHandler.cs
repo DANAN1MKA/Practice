@@ -76,8 +76,8 @@ public class InputHandler : MonoBehaviour
 
     private void convertToElementPosition(Vector2 position)
     {
-        posX = Mathf.RoundToInt((boardPosition.x - position.x));
-        posY = Mathf.RoundToInt((boardPosition.y - position.y));
+        posX = Mathf.RoundToInt((position.x - boardPosition.x) / config.scale);
+        posY = Mathf.RoundToInt((position.y - boardPosition.y) / config.scale);
 
         posX = posX < 0 ? posX * -1 : posX;
         posY = posY < 0 ? posY * -1 : posY;

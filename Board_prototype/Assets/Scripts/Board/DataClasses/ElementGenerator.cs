@@ -26,11 +26,6 @@ public class ElementGenerator : MonoBehaviour, IElementGenerator
         boardPosition = boardPosition * elementScale;
         config.boardPositionFromResolution = boardPosition;
         config.scale = elementScale;
-
-        Debug.Log("screenHeight = " + screenHeightInUnits);
-        Debug.Log("screenWidth = " + screenWidthInUnits);
-        Debug.Log("elementScale = " + elementScale);
-
     }
 
     public void changeTypeCommon(Element element)
@@ -50,9 +45,7 @@ public class ElementGenerator : MonoBehaviour, IElementGenerator
                                        boardPosition.y + _posY * elementScale);
 
         GameObject newPiece = Instantiate(elementPrefab);
-
         Vector3 scale = new Vector3(elementScale, elementScale, elementScale);
-
         newPiece.transform.localScale = scale;
 
         Element newElement = new Element(newPiece);
@@ -61,7 +54,6 @@ public class ElementGenerator : MonoBehaviour, IElementGenerator
         newElement.changeType(type, pool[type]);
 
         newElement.piece.name = "( " + _posX + "," + _posY + " )";
-
 
         newElement.setPosition(_posX, _posY, position);
 

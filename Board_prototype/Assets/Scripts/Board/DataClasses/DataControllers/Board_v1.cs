@@ -36,8 +36,6 @@ public class Board_v1 : MonoBehaviour, IBoardElements, IBoardTimerEvents, IBoard
         additionalTime = config.additionalTime;
         boardPosition = config.boardPositionFromResolution;
 
-
-
         board = elementGenerator.generateBoard(width, heigth);
         foundMatches = new List<Element>();
     }
