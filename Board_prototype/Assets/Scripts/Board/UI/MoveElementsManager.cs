@@ -2,24 +2,24 @@
 using UnityEngine;
 using Zenject;
 
-public class MoveElementsManager : MonoBehaviour, IMoveElementsManager
+public class MoveElementsManager : MonoBehaviour
 {
     [Inject] private SignalBus signalBus;
 
     private List<MovingElement> movingElemenets;
 
-    public void addElement(MovingElement newElement1, MovingElement newElement2)
+    public void addElement(MoveManagerAddSignal _data)
     {
-        removeElement(newElement1.elem);
-        removeElement(newElement2.elem);
-        movingElemenets.Add(newElement1);
-        movingElemenets.Add(newElement2);
+        removeElement(_data.element1.elem);
+        removeElement(_data.element2.elem);
+        movingElemenets.Add(_data.element1);
+        movingElemenets.Add(_data.element2);
     }
 
-    public void dropElements(List<MovingElement> newList)
+    public void dropElements(MoveManagerDropSignal newList)
     {
         movingElemenets.Clear();
-        movingElemenets.AddRange(newList);
+        movingElemenets.AddRange(newList.board);
     }
 
     private void removeElement(Element _element)
@@ -37,6 +37,9 @@ public class MoveElementsManager : MonoBehaviour, IMoveElementsManager
 
     void Start()
     {
+        signalBus.Subscribe<MoveManagerAddSignal>(addElement);
+        signalBus.Subscribe<MoveManagerDropSignal>(dropElements);
+
         movingElemenets = new List<MovingElement>();
     }
 
@@ -46,17 +49,24 @@ public class MoveElementsManager : MonoBehaviour, IMoveElementsManager
         {
             for (int i = 0; i < movingElemenets.Count; i++)
             {
-                movingElemenets[i].elem.moveHard(movingElemenets[i].endPosition[0]);
+                movingElemenets[i].elem.moveHard(movingElemenets[i].endPosition);
 
-                //if reached target position - remove element
-                if (movingElemenets[i].elem.piece.transform.position.x == movingElemenets[i].endPosition[0].x &&
-                    movingElemenets[i].elem.piece.transform.position.y == movingElemenets[i].endPosition[0].y)
-
-                    if (movingElemenets[i].endPosition.Count > 1) movingElemenets[i].endPosition.RemoveAt(0);
-                    else movingElemenets.Remove(movingElemenets[i]);
+                if (isOnPosition(i))
+                    if (movingElemenets[i].nextPosition != null) movingElemenets[i] = movingElemenets[i].nextPosition;
+                    else
+                    { 
+                        movingElemenets.Remove(movingElemenets[i]);
+                        i--;
+                    }
             }
             if (movingElemenets.Count == 0) signalBus.Fire<AnimationCompletedSignal>();
         }
+    }
+
+    private bool isOnPosition(int count)
+    {
+        return (movingElemenets[count].elem.piece.transform.position.x == movingElemenets[count].endPosition.x &&
+                movingElemenets[count].elem.piece.transform.position.y == movingElemenets[count].endPosition.y);
     }
 
 }

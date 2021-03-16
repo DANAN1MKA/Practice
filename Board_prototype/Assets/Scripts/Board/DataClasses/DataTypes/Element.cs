@@ -1,26 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Element
 {
     private float speed = 6f;
 
-    public int type { get; set; } //определяет тип элемента: 0 - топор
-                                  //                         1 - меч
-                                  //                         2 - лук
-                                  //                         3 - зелье итд.
-                                  //                        -1 - уничтожен
+    public int type { get; private set; }
 
-    //позиция элемента на доске
-    public int posX { get; set; }
-    public int posY { get; set; }
+    public int posX { get; private set; }
+    public int posY { get; private set; }
 
-    private bool isBlocked { get; set; } // элемент не должен двигаться если попал в матч 
+    public Vector2 position { get; private set; }
 
-    public GameObject piece;
-    public SpriteRenderer spriteRenderer;
-    public Animator animator;
+    private bool isBlocked;
+
+    public GameObject piece { get; private set; }
+    public SpriteRenderer spriteRenderer { get; private set; }
+    public Animator animator { get; private set; }
 
     public Element(GameObject _piece)
     {
@@ -32,6 +27,22 @@ public class Element
         piece = _element;
         spriteRenderer = _spriteRenderer;
         animator = _animator;
+    }
+
+    public void changeType(int _type, Material _material)
+    {
+        type = _type;
+        spriteRenderer.material = _material;
+    }
+
+    public void setPosition(int _posX, int _posY, Vector2 _position)
+    {
+        posX = _posX;
+        posY = _posY;
+        position = _position;
+
+        piece.transform.position = _position;
+
     }
 
     public void setPiece(GameObject _piece)
@@ -46,13 +57,7 @@ public class Element
         piece = elem.piece;
         type = elem.type;
         spriteRenderer = elem.spriteRenderer;
-
         animator = elem.animator;
-    }
-
-    public void moveSoft(Vector2 direction)
-    {
-        piece.transform.position = Vector2.Lerp(piece.transform.position, direction, Time.deltaTime * speed);
     }
 
     public void moveHard(Vector2 move)

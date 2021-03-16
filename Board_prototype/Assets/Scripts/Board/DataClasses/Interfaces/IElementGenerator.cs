@@ -10,5 +10,5 @@ public interface IElementGenerator
 
     void changeTypeSpecial(Element element);
 
-    Element[,] generateBoard(int _width, int _heigth, Transform _startPosition);
+    Element[,] generateBoard(int _width, int _heigth);
 }

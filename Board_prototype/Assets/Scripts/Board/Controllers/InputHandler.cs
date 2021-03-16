@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Zenject;
 
 public class InputHandler : MonoBehaviour
@@ -8,10 +6,9 @@ public class InputHandler : MonoBehaviour
     private Vector2 SwipeStartPosition;
     private Vector2 SwipeDirection;
 
-
     [Inject] private SignalBus signalBus;
 
-    public BoardConfig config;
+    public BoardProperties config;
     private Vector2 boardPosition;
     private int width;
     private int heigth;
@@ -26,7 +23,7 @@ public class InputHandler : MonoBehaviour
     {
         width = config.width;
         heigth = config.height;
-        boardPosition = config.boardPosition;
+        boardPosition = config.boardPositionFromResolution;
     }
 
     void Update()
@@ -43,26 +40,19 @@ public class InputHandler : MonoBehaviour
 
                     convertToElementPosition(SwipeStartPosition);
 
-                    // если попали в доску
-                    if (posX < width && posX >= 0 &&
-                        posY < heigth && posX >= 0)
-                    {
-                        signalBus.Fire<GrabElemetnSignal>(new GrabElemetnSignal(posX, posY));
-                        isExistCurrElem = true;
-                        //isExistCurrElem = board.grabElement(posX, posY);
-                    }
+                    if (isOnBoard(posX, posY)) { isExistCurrElem = true; }
                     break;
 
 
                 case TouchPhase.Moved:
                     if (isExistCurrElem)
                     {
-                        SwipeDirection = SwipeDirection = (Vector2)Camera.main.ScreenToWorldPoint(touch.position) - SwipeStartPosition;
+                        SwipeDirection = (Vector2)Camera.main.ScreenToWorldPoint(touch.position) - SwipeStartPosition;
                         currentDirection = normalizeDirection(SwipeDirection);
 
                         if(currentDirection.x != 0 || currentDirection.y  != 0)
                         {
-                            signalBus.Fire<SwipeElementSignal>(new SwipeElementSignal(posX, posY, currentDirection));
+                            signalBus.Fire(new SwipeElementSignal(posX, posY, currentDirection));
                             currentDirection = new Vector2();
                             isExistCurrElem = false;
 
@@ -73,11 +63,6 @@ public class InputHandler : MonoBehaviour
 
 
                 case TouchPhase.Ended:
-                    if (isExistCurrElem)
-                    {
-                        signalBus.Fire<SwipeElementSignal>(new SwipeElementSignal(posX, posY, currentDirection));
-                        //board.swipeElement(posX, posY, currentDirection);
-                    }
                     currentDirection = new Vector2();
                     isExistCurrElem = false;
                     break;
@@ -86,16 +71,22 @@ public class InputHandler : MonoBehaviour
 
     }
 
+    private bool isOnBoard(int _posX, int _posY)
+    {
+        return (_posX < width && _posX >= 0 &&
+                _posY < heigth && _posY >= 0);
+    }
+
     private void convertToElementPosition(Vector2 position)
     {
-        posX = Mathf.RoundToInt(boardPosition.x - position.x);
-        posY = Mathf.RoundToInt(boardPosition.y - position.y);
+        posX = Mathf.RoundToInt((position.x - boardPosition.x) / config.scale);
+        posY = Mathf.RoundToInt((position.y - boardPosition.y) / config.scale);
 
         posX = posX < 0 ? posX * -1 : posX;
         posY = posY < 0 ? posY * -1 : posY;
     }
 
-    public Vector2 normalizeDirection(Vector2 direction)
+    private Vector2 normalizeDirection(Vector2 direction)
     {
         Vector2 dir = new Vector2(0, 0);
 
