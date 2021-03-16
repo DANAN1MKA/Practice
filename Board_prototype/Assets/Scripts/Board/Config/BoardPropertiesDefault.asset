@@ -9,21 +9,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9192f0486f49a544e8795dc150cfbace, type: 3}
-  m_Name: BoardConfigDefault
+  m_Script: {fileID: 11500000, guid: 3c41200529ab7444c996936152429408, type: 3}
+  m_Name: BoardPropertiesDefault
   m_EditorClassIdentifier: 
   width: 7
   height: 8
-  time: 5
+  time: 3
   additionalTime: 1
   boardPosition: {x: -3, y: -5.5}
-  boardPositionFromResolution: {x: -3.1875, y: -5.84375}
-  elementPrefab: {fileID: 3065730894439695763, guid: b32ba1d0f83baf84fa32a4c35424c68e,
+  boardPositionFromResolution: {x: -3, y: -5.5}
+  elementPrefab: {fileID: 7107015203056099543, guid: 3860131475175d4409ad509b9ea4d622,
     type: 3}
   pool:
-  - {fileID: 2100000, guid: a515ba4ef0707c04f97fc2c135a0778e, type: 2}
+  - {fileID: 2100000, guid: b56f55d7ba855904181b7626fc54bb04, type: 2}
   - {fileID: 2100000, guid: 1390e6374dac3e042a35827946e98418, type: 2}
   - {fileID: 2100000, guid: a9e9034cb2665304e9dbd01a6914bb72, type: 2}
+  - {fileID: 2100000, guid: b5cbfeb4de3343d4cab204dd57854a20, type: 2}
+  - {fileID: 2100000, guid: a515ba4ef0707c04f97fc2c135a0778e, type: 2}
   - {fileID: 2100000, guid: 566936c3e9fa3bc41bc6ff61dfb7722d, type: 2}
-  - {fileID: 2100000, guid: b56f55d7ba855904181b7626fc54bb04, type: 2}
-  scale: 1.0625
+  scale: 1
