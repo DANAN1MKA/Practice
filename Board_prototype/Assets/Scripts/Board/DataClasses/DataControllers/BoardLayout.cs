@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
-
-public class Board_v1 : MonoBehaviour, IBoardElements, IBoardTimerEvents, IBoardUIEvents
+public class BoardLayout : MonoBehaviour
 {
     [Inject] private SignalBus signalBus;
 
     [Inject] private IElementGenerator elementGenerator;
 
-    [SerializeField] private BoardConfig config;
+    [SerializeField] private BoardProperties config;
 
     private int width;
     private int heigth;
@@ -44,10 +43,23 @@ public class Board_v1 : MonoBehaviour, IBoardElements, IBoardTimerEvents, IBoard
 
     private bool isItMatch(Element element)
     {
+        List<Element> matchElementsX = findHorizontalMatch(element);
+        List<Element> matchElementsY = findVerticalMatch(element);
+
+        if (matchElementsX.Count > 2 || matchElementsY.Count > 2)
+        {
+            if (matchElementsX.Count > 2) addMatches(matchElementsX);
+            if (matchElementsY.Count > 2) addMatches(matchElementsY);
+
+            return true;
+        }
+        else return false;
+    }
+
+    private List<Element> findHorizontalMatch(Element element)
+    {
         List<Element> matchElementsX = new List<Element>();
-        List<Element> matchElementsY = new List<Element>();
         matchElementsX.Add(element);
-        matchElementsY.Add(element);
 
         Element neighbourLeft = element; bool leftIsDone = false;
         Element neighbourRight = element; bool rightIsDone = false;
@@ -65,6 +77,14 @@ public class Board_v1 : MonoBehaviour, IBoardElements, IBoardTimerEvents, IBoard
         }
         while (!leftIsDone || !rightIsDone);
 
+        return matchElementsX;
+    }
+
+    private List<Element> findVerticalMatch(Element element)
+    {
+        List<Element> matchElementsY = new List<Element>();
+        matchElementsY.Add(element);
+
         Element neighbourDown = element; bool DownIsDone = false;
         Element neighbourUp = element; bool UpIsDone = false;
 
@@ -81,20 +101,7 @@ public class Board_v1 : MonoBehaviour, IBoardElements, IBoardTimerEvents, IBoard
         }
         while (!UpIsDone || !DownIsDone);
 
-        if (matchElementsX.Count > 2 || matchElementsY.Count > 2)
-        {
-            if (matchElementsX.Count > 2)
-            {
-                addMatches(matchElementsX);
-            }
-            if (matchElementsY.Count > 2)
-            {
-                addMatches(matchElementsY);
-            }
-
-            return true;
-        }
-        else return false;
+        return matchElementsY;
     }
 
     private void addMatches(List<Element> _from)
@@ -112,6 +119,7 @@ public class Board_v1 : MonoBehaviour, IBoardElements, IBoardTimerEvents, IBoard
 
     public void swipeElement(SwipeElementSignal swipeElementSignal)
     {
+        //TODO: разбить на методы
         int posX = swipeElementSignal.posX;
         int posY = swipeElementSignal.posY;
         int dirX = (int)swipeElementSignal.direction.x;
@@ -127,39 +135,46 @@ public class Board_v1 : MonoBehaviour, IBoardElements, IBoardTimerEvents, IBoard
                 Vector2 targetPosition1 = board[posX, posY].position;
                 Vector2 targetPosition2 = board[posX + dirX, posY + dirY].position;
 
+                MovingElement elem1;
+                MovingElement elem2;
+
                 bool match1 = isItMatch(board[posX, posY]);
                 bool match2 = isItMatch(board[posX + dirX, posY + dirY]);
 
                 if (match1 || match2)
                 {
-                    MovingElement elem1 = new MovingElement(board[posX, posY], targetPosition1, null);
-                    MovingElement elem2 = new MovingElement(board[posX + dirX, posY + dirY], targetPosition2, null);
+                    elem1 = new MovingElement(board[posX, posY], targetPosition1, null);
+                    elem2 = new MovingElement(board[posX + dirX, posY + dirY], targetPosition2, null);
 
-                    signalBus.Fire(new MoveManagerAddSignal(elem1, elem2));
-
-                    if (!isItFirstMatch)
-                    {
-                        signalBus.Fire(new SetTimerSignal(time));
-                        isItFirstMatch = true;
-                    }
-                    else signalBus.Fire(new SetTimerSignal(additionalTime));
-
+                    timerSignalFire();
                 }
                 else
                 {
                     MovingElement nextPositionElem1 = new MovingElement(board[posX, posY], targetPosition1, null);
-                    MovingElement elem1 = new MovingElement(board[posX, posY], targetPosition2, nextPositionElem1);
+                    elem1 = new MovingElement(board[posX, posY], targetPosition2, nextPositionElem1);
 
                     MovingElement nextPositionElem2 = new MovingElement(board[posX + dirX, posY + dirY], targetPosition2, null);
-                    MovingElement elem2 = new MovingElement(board[posX + dirX, posY + dirY], targetPosition1, nextPositionElem2);
-
-                    signalBus.Fire(new MoveManagerAddSignal(elem1, elem2));
+                    elem2 = new MovingElement(board[posX + dirX, posY + dirY], targetPosition1, nextPositionElem2);
 
                     swipe(board[posX, posY], 
                           board[posX + dirX, posY + dirY]);
                 }
+
+
+                signalBus.Fire(new MoveManagerAddSignal(elem1, elem2));
+
             }
         }
+    }
+
+    private void timerSignalFire()
+    {
+        if (!isItFirstMatch)
+        {
+            signalBus.Fire(new SetTimerSignal(time));
+            isItFirstMatch = true;
+        }
+        else signalBus.Fire(new SetTimerSignal(additionalTime));
     }
 
     private void swipe(Element element1, Element element2)
@@ -215,16 +230,24 @@ public class Board_v1 : MonoBehaviour, IBoardElements, IBoardTimerEvents, IBoard
     }
 
     private void foundMatchesHandler()
-    {
+    {    
         foundMatches.Clear();
 
-        List<MovingElement> fallingElements = new List<MovingElement>();
+        handleBlockedElements();
 
+        List<MovingElement> fallingElements = moveBlockedElementsUp();
+
+        signalBus.Fire(new MoveManagerDropSignal(fallingElements));
+
+        matchCascad();
+    }
+
+    private void handleBlockedElements()
+    {
         for (int i = 0; i < heigth; i++)
         {
             for (int j = 0; j < width; j++)
             {
-                //если элемент в матче 
                 if (board[j, i].getState())
                 {
 
@@ -244,6 +267,11 @@ public class Board_v1 : MonoBehaviour, IBoardElements, IBoardTimerEvents, IBoard
                 }
             }
         }
+    }
+
+    private List<MovingElement> moveBlockedElementsUp()
+    {
+        List<MovingElement> fallingElements = new List<MovingElement>();
 
         int[] countForColumn = new int[width];
 
@@ -268,9 +296,8 @@ public class Board_v1 : MonoBehaviour, IBoardElements, IBoardTimerEvents, IBoard
             }
         }
 
-        signalBus.Fire(new MoveManagerDropSignal(fallingElements));
-
-        matchCascad();
+        return fallingElements;
     }
+
 
 }

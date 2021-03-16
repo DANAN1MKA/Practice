@@ -1,14 +1,15 @@
 ﻿using UnityEngine;
 using Zenject;
 
-public class BoardTimeController : ITickable, IInitializable, IBoardTimeController
+public class BoardTimeController : ITickable, IInitializable, ITimeController
 {
     private bool isActive = false;
     private float time;
 
     [Inject] private SignalBus signalBus;
 
-    [Inject] private ITimerProgressBar progressUI;
+    public delegate void UIDisplay(float _leftTime);
+    private UIDisplay display;
 
     public void Initialize()
     {
@@ -28,6 +29,11 @@ public class BoardTimeController : ITickable, IInitializable, IBoardTimeControll
         }
     }
 
+    public void setUIDisplay(UIDisplay callback)
+    {
+        display = callback;
+    }
+
     public void Tick()
     {
         if (isActive)
@@ -38,7 +44,7 @@ public class BoardTimeController : ITickable, IInitializable, IBoardTimeControll
                 signalBus.Fire<TimerHandlerSignal>();
             }
 
-            progressUI.updateProgress(time - Time.time);
+            display(time - Time.time); 
         }
     }
 }

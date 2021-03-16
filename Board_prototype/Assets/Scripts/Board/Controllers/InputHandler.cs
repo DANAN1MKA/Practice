@@ -8,7 +8,7 @@ public class InputHandler : MonoBehaviour
 
     [Inject] private SignalBus signalBus;
 
-    public BoardConfig config;
+    public BoardProperties config;
     private Vector2 boardPosition;
     private int width;
     private int heigth;
@@ -40,10 +40,7 @@ public class InputHandler : MonoBehaviour
 
                     convertToElementPosition(SwipeStartPosition);
 
-                    // если попали в доску
-                    if (posX < width && posX >= 0 &&
-                        posY < heigth && posX >= 0)
-                    { isExistCurrElem = true; }
+                    if (isOnBoard(posX, posY)) { isExistCurrElem = true; }
                     break;
 
 
@@ -74,6 +71,12 @@ public class InputHandler : MonoBehaviour
 
     }
 
+    private bool isOnBoard(int _posX, int _posY)
+    {
+        return (_posX < width && _posX >= 0 &&
+                _posY < heigth && _posY >= 0);
+    }
+
     private void convertToElementPosition(Vector2 position)
     {
         posX = Mathf.RoundToInt((position.x - boardPosition.x) / config.scale);
@@ -83,7 +86,7 @@ public class InputHandler : MonoBehaviour
         posY = posY < 0 ? posY * -1 : posY;
     }
 
-    public Vector2 normalizeDirection(Vector2 direction)
+    private Vector2 normalizeDirection(Vector2 direction)
     {
         Vector2 dir = new Vector2(0, 0);
 

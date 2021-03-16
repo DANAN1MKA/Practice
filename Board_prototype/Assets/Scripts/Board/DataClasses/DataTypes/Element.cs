@@ -4,8 +4,6 @@ public class Element
 {
     private float speed = 6f;
 
-
-    //TODO: переписать так чтобы можно было читать и нельзя изменять
     public int type { get; private set; }
 
     public int posX { get; private set; }

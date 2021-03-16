@@ -2,12 +2,11 @@
 
 public class ElementGenerator : MonoBehaviour, IElementGenerator
 {
-    [SerializeField] public BoardConfig config;
+    [SerializeField] public BoardProperties config;
 
     private GameObject elementPrefab;
     private Material[] pool;
     private Vector2 boardPosition;
-
 
     private float defoultScreenWidthInUnits = 7.875f;
 
@@ -93,41 +92,70 @@ public class ElementGenerator : MonoBehaviour, IElementGenerator
 
         if (_elem.posX > 1 && _elem.posY > 1)
         {
-            int i = 1;
-            do
-            {
-                if (allElements[_elem.posX - i, _elem.posY].type == _elem.type ||
-                    allElements[_elem.posX, _elem.posY - i].type == _elem.type)
-                    isMatch = true;
-
-
-                i++;
-            } while (isMatch && i < 3);
+            isMatch = foundMatchBothDirections(allElements, _elem);
         }
         else
         {
             if (_elem.posX > 1)
             {
-                int i = 1;
-                do
-                {
-                    if (allElements[_elem.posX - i, _elem.posY].type == _elem.type)
-                        isMatch = true;
-                    i++;
-                } while (isMatch && i < 3);
+                isMatch = foundMatchLeft(allElements, _elem);
             }
 
             if (_elem.posY > 1 && !isMatch)
             {
-                int i = 1;
-                do
-                {
-                    if (allElements[_elem.posX, _elem.posY - i].type == _elem.type)
-                        isMatch = true;
-                    i++;
-                } while (isMatch && i < 3);
+                isMatch = foundMatchDown(allElements, _elem);
             }
         }
+
+        return isMatch;
+    }
+
+    private bool foundMatchBothDirections(Element[,] allElements, Element _elem)
+    {
+        bool isMatch = false;
+        int i = 1;
+        do
+        {
+            if (allElements[_elem.posX - i, _elem.posY].type == _elem.type ||
+                allElements[_elem.posX, _elem.posY - i].type == _elem.type)
+                isMatch = true;
+            else isMatch = false;
+
+            i++;
+        } while (isMatch && i < 3);
+
+        return isMatch;
+    }
+
+    private bool foundMatchLeft(Element[,] allElements, Element _elem)
+    {
+        bool isMatch = false;
+
+        int i = 1;
+        do
+        {
+            if (allElements[_elem.posX - i, _elem.posY].type == _elem.type)
+                isMatch = true;
+            else isMatch = false;
+            i++;
+        } while (isMatch && i < 3);
+
+        return isMatch;
+    }
+
+    private bool foundMatchDown(Element[,] allElements, Element _elem)
+    {
+        bool isMatch = false;
+
+        int i = 1;
+        do
+        {
+            if (allElements[_elem.posX, _elem.posY - i].type == _elem.type)
+                isMatch = true;
+            else isMatch = false;
+            i++;
+        } while (isMatch && i < 3);
+
 
         return isMatch;
     }

@@ -2,7 +2,7 @@
 using UnityEngine;
 using Zenject;
 
-public class MoveElementsManager : MonoBehaviour, IMoveElementsManager
+public class MoveElementsManager : MonoBehaviour
 {
     [Inject] private SignalBus signalBus;
 
@@ -51,10 +51,7 @@ public class MoveElementsManager : MonoBehaviour, IMoveElementsManager
             {
                 movingElemenets[i].elem.moveHard(movingElemenets[i].endPosition);
 
-                //if reached target position - remove element
-                if (movingElemenets[i].elem.piece.transform.position.x == movingElemenets[i].endPosition.x &&
-                    movingElemenets[i].elem.piece.transform.position.y == movingElemenets[i].endPosition.y)
-
+                if (isOnPosition(i))
                     if (movingElemenets[i].nextPosition != null) movingElemenets[i] = movingElemenets[i].nextPosition;
                     else
                     { 
@@ -64,6 +61,12 @@ public class MoveElementsManager : MonoBehaviour, IMoveElementsManager
             }
             if (movingElemenets.Count == 0) signalBus.Fire<AnimationCompletedSignal>();
         }
+    }
+
+    private bool isOnPosition(int count)
+    {
+        return (movingElemenets[count].elem.piece.transform.position.x == movingElemenets[count].endPosition.x &&
+                movingElemenets[count].elem.piece.transform.position.y == movingElemenets[count].endPosition.y);
     }
 
 }

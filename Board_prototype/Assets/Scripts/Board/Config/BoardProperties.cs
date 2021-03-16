@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu(menuName = "Configuratins/BoardConfiruratin")]
-public class BoardConfig : ScriptableObject
+public class BoardProperties : ScriptableObject
 {
     public int width;
     public int height;
@@ -12,7 +12,6 @@ public class BoardConfig : ScriptableObject
 
     public GameObject elementPrefab;
     public Material[] pool;
-
 
     public float scale;
 }

@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
-public class TimerProgressBar : MonoBehaviour, ITimerProgressBar
+public class TimerProgressBar : MonoBehaviour
 {
-    public BoardConfig config;
+    [Inject] ITimeController timer;
+
+    public BoardProperties config;
 
     private Slider slider;
     private float configTime;
@@ -12,6 +15,11 @@ public class TimerProgressBar : MonoBehaviour, ITimerProgressBar
     {
         slider = gameObject.GetComponent<Slider>();
         configTime = config.time;
+    }
+
+    private void Start()
+    {
+        timer.setUIDisplay(updateProgress);
     }
 
     public void updateProgress(float newProgress)
