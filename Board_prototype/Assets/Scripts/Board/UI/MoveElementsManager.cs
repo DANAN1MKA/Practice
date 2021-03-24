@@ -8,7 +8,7 @@ public class MoveElementsManager : MonoBehaviour
 
     private List<MovingElement> movingElemenets;
 
-    public void addElement(MoveManagerAddSignal _data)
+    public void addElement(MoveManagerSwipeSignal _data)
     {
         removeElement(_data.element1.elem);
         removeElement(_data.element2.elem);
@@ -37,7 +37,7 @@ public class MoveElementsManager : MonoBehaviour
 
     void Start()
     {
-        signalBus.Subscribe<MoveManagerAddSignal>(addElement);
+        signalBus.Subscribe<MoveManagerSwipeSignal>(addElement);
         signalBus.Subscribe<MoveManagerDropSignal>(dropElements);
 
         movingElemenets = new List<MovingElement>();

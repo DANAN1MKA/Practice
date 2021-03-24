@@ -9,7 +9,7 @@ public class BoardInstaller : MonoInstaller
         Container.DeclareSignal<SetTimerSignal>();
         Container.DeclareSignal<TimerHandlerSignal>();
         Container.DeclareSignal<AnimationCompletedSignal>();
-        Container.DeclareSignal<MoveManagerAddSignal>();
+        Container.DeclareSignal<MoveManagerSwipeSignal>();
         Container.DeclareSignal<MoveManagerDropSignal>();
 
 

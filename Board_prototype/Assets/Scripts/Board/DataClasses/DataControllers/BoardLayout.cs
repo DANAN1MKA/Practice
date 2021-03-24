@@ -132,36 +132,36 @@ public class BoardLayout : MonoBehaviour
                 swipe(board[posX, posY], 
                       board[posX + dirX, posY + dirY]);
 
-                Vector2 targetPosition1 = board[posX, posY].position;
-                Vector2 targetPosition2 = board[posX + dirX, posY + dirY].position;
+                Vector2 targetPositionTouched = board[posX, posY].position;
+                Vector2 targetPositionNeighbour = board[posX + dirX, posY + dirY].position;
 
-                MovingElement elem1;
-                MovingElement elem2;
+                MovingElement elemTouched;
+                MovingElement elemNeighbour;
 
                 bool match1 = isItMatch(board[posX, posY]);
                 bool match2 = isItMatch(board[posX + dirX, posY + dirY]);
 
                 if (match1 || match2)
                 {
-                    elem1 = new MovingElement(board[posX, posY], targetPosition1, null);
-                    elem2 = new MovingElement(board[posX + dirX, posY + dirY], targetPosition2, null);
+                    elemTouched = new MovingElement(board[posX, posY], targetPositionTouched, null);
+                    elemNeighbour = new MovingElement(board[posX + dirX, posY + dirY], targetPositionNeighbour, null);
 
                     timerSignalFire();
                 }
                 else
                 {
-                    MovingElement nextPositionElem1 = new MovingElement(board[posX, posY], targetPosition1, null);
-                    elem1 = new MovingElement(board[posX, posY], targetPosition2, nextPositionElem1);
+                    MovingElement nextPositionElemTouched = new MovingElement(board[posX, posY], targetPositionTouched, null);
+                    elemTouched = new MovingElement(board[posX, posY], targetPositionNeighbour, nextPositionElemTouched);
 
-                    MovingElement nextPositionElem2 = new MovingElement(board[posX + dirX, posY + dirY], targetPosition2, null);
-                    elem2 = new MovingElement(board[posX + dirX, posY + dirY], targetPosition1, nextPositionElem2);
+                    MovingElement nextPositionElemNeighbour = new MovingElement(board[posX + dirX, posY + dirY], targetPositionNeighbour, null);
+                    elemNeighbour = new MovingElement(board[posX + dirX, posY + dirY], targetPositionTouched, nextPositionElemNeighbour);
 
                     swipe(board[posX, posY], 
                           board[posX + dirX, posY + dirY]);
                 }
 
 
-                signalBus.Fire(new MoveManagerAddSignal(elem1, elem2));
+                signalBus.Fire(new MoveManagerSwipeSignal(elemTouched, elemNeighbour));
 
             }
         }
