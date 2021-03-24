@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
+using Zenject;
 
 public class ElementGenerator : MonoBehaviour, IElementGenerator
 {
-    [SerializeField] public BoardProperties config;
+    [Inject] public BoardProperties config;
 
     private GameObject elementPrefab;
     private Material[] pool;

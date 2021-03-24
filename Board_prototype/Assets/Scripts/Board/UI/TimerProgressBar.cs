@@ -6,7 +6,7 @@ public class TimerProgressBar : MonoBehaviour
 {
     [Inject] ITimeController timer;
 
-    public BoardProperties config;
+    [Inject]private BoardProperties config;
 
     private Slider slider;
     private float configTime;

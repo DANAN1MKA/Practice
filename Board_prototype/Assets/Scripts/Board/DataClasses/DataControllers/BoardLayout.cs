@@ -7,7 +7,7 @@ public class BoardLayout : MonoBehaviour
 
     [Inject] private IElementGenerator elementGenerator;
 
-    [SerializeField] private BoardProperties config;
+    [Inject] private BoardProperties config;
 
     private int width;
     private int heigth;
@@ -48,6 +48,8 @@ public class BoardLayout : MonoBehaviour
 
         if (matchElementsX.Count > 2 || matchElementsY.Count > 2)
         {
+            renderLineSignalFire(element, matchElementsX, matchElementsY);
+
             if (matchElementsX.Count > 2) addMatches(matchElementsX);
             if (matchElementsY.Count > 2) addMatches(matchElementsY);
 
@@ -115,6 +117,49 @@ public class BoardLayout : MonoBehaviour
                 elem.block();
             }
         }
+    }
+
+    private void renderLineSignalFire(Element element, List<Element> _horizontalMatch, List<Element> _verticalMatch)
+    {
+        RenderLineSignal message = null;
+
+        if(_horizontalMatch.Count > 2)
+        {
+            Vector3[] points = findPositionsForLine(element, _horizontalMatch);
+            message = new RenderLineSignal(points, null);
+        }
+        if(_verticalMatch.Count > 2)
+        {
+            Vector3[] points = findPositionsForLine(element, _verticalMatch);
+            RenderLineSignal nextLine = message;
+            message = new RenderLineSignal(points, nextLine);
+        }
+
+        signalBus.Fire(message);
+    }
+
+    private Vector3[] findPositionsForLine(Element element, List<Element> match)
+    {
+        Vector2 startPoint = element.position;
+        Vector2 endPoint = element.position;
+
+        bool isHorizontal = match[0].posY == match[1].posY;
+
+        foreach(Element curr in match)
+        {
+            if(isHorizontal)
+            {
+                if (startPoint.x < curr.position.x) startPoint = curr.position;
+                if (startPoint.x > curr.position.x) endPoint = curr.position;
+            }
+            else
+            {
+                if (startPoint.y < curr.position.y) startPoint = curr.position;
+                if (startPoint.y > curr.position.y) endPoint = curr.position;
+            }
+        }
+
+        return new Vector3[] { startPoint, endPoint };
     }
 
     public void swipeElement(SwipeElementSignal swipeElementSignal)

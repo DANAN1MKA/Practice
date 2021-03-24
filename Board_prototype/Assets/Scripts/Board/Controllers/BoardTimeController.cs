@@ -3,6 +3,7 @@ using Zenject;
 
 public class BoardTimeController : ITickable, IInitializable, ITimeController
 {
+    [Inject]private BoardProperties config;
     private bool isActive = false;
     private float time;
 
@@ -20,7 +21,9 @@ public class BoardTimeController : ITickable, IInitializable, ITimeController
     {
         if (isActive)
         {
-            time += _time.time;
+            if (time + _time.time - Time.time < config.time)
+                time += _time.time;
+            else time = Time.time + config.time;
         }
         else
         {

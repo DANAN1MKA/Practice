@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(menuName = "Configuratins/BoardConfiruratin")]
+[CreateAssetMenu(menuName = "Configuratins/BoardProperties")]
 public class BoardProperties : ScriptableObject
 {
     public int width;
@@ -11,6 +11,7 @@ public class BoardProperties : ScriptableObject
     public Vector2 boardPositionFromResolution;
 
     public GameObject elementPrefab;
+    public GameObject linePrefab;
     public Material[] pool;
 
     public float scale;

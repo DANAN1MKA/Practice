@@ -15,10 +15,12 @@ MonoBehaviour:
   width: 7
   height: 8
   time: 3
-  additionalTime: 1
+  additionalTime: 1.5
   boardPosition: {x: -3, y: -5.5}
   boardPositionFromResolution: {x: -3, y: -5.5}
   elementPrefab: {fileID: 7107015203056099543, guid: 3860131475175d4409ad509b9ea4d622,
+    type: 3}
+  linePrefab: {fileID: 3515915314537621480, guid: 9482c319346b556468657538f7fd5812,
     type: 3}
   pool:
   - {fileID: 2100000, guid: b56f55d7ba855904181b7626fc54bb04, type: 2}

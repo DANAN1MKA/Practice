@@ -8,7 +8,7 @@ public class InputHandler : MonoBehaviour
 
     [Inject] private SignalBus signalBus;
 
-    public BoardProperties config;
+    [Inject]private BoardProperties config;
     private Vector2 boardPosition;
     private int width;
     private int heigth;
