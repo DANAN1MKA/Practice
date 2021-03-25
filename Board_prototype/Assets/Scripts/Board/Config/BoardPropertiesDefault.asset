@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BoardPropertiesDefault
   m_EditorClassIdentifier: 
   width: 7
-  height: 8
+  height: 7
   time: 3
   additionalTime: 1
   boardPosition: {x: -3, y: -5.5}

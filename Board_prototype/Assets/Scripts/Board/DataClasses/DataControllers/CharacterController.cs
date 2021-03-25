@@ -14,6 +14,14 @@ public class CharacterController : MonoBehaviour
 
         crutch.setSignalBus(signalBus);
 
-        character.transform.position = config.characterPosition;
+    }
+
+    public void Start()
+    {
+        Vector2 newPosition = new Vector2(config.characterPosition.x * config.scale, 
+                                          config.boardPositionFromResolution.y + (config.height + 0.8f) * config.scale);
+
+        character.transform.position = newPosition;
+        character.transform.localScale *= config.scale;
     }
 }
