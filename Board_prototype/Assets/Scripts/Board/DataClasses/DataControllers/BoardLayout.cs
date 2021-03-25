@@ -246,7 +246,12 @@ public class BoardLayout : MonoBehaviour
             {
                 foundMatchesHandler();
             }
-            else isBlocked = false;
+            else
+            {
+                signalBus.Fire<CheracterAttackSignal>();
+                isBlocked = false;
+
+            }
         }
     }
 

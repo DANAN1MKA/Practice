@@ -14,7 +14,7 @@ public class BoardInstaller : MonoInstaller
         Container.DeclareSignal<MoveManagerSwipeSignal>();
         Container.DeclareSignal<MoveManagerDropSignal>();
         Container.DeclareSignal<RenderLineSignal>();
-
+        Container.DeclareSignal <CheracterAttackSignal>();
 
         Container.Bind<BoardLayout>().FromComponentInHierarchy().AsSingle().NonLazy();
         Container.BindInterfacesAndSelfTo<BoardTimeController>().AsSingle().NonLazy();

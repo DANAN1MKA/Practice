@@ -15,7 +15,7 @@ MonoBehaviour:
   width: 7
   height: 8
   time: 3
-  additionalTime: 1.5
+  additionalTime: 1
   boardPosition: {x: -3, y: -5.5}
   boardPositionFromResolution: {x: -3, y: -5.5}
   elementPrefab: {fileID: 7107015203056099543, guid: 3860131475175d4409ad509b9ea4d622,
@@ -29,4 +29,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: a9e9034cb2665304e9dbd01a6914bb72, type: 2}
   - {fileID: 2100000, guid: 566936c3e9fa3bc41bc6ff61dfb7722d, type: 2}
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  characterPrefab: {fileID: 173703986106095794, guid: c866d284d9f58a94289f268806d415be,
+    type: 3}
+  characterPosition: {x: -2.64, y: 3.05}
   scale: 1
