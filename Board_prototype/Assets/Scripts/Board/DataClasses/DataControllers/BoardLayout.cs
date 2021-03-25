@@ -49,7 +49,7 @@ public class BoardLayout : MonoBehaviour
 
         if (matchElementsX.Count > 2 || matchElementsY.Count > 2)
         {
-            renderLineSignalFire(element, matchElementsX, matchElementsY);
+            generateLinesList(element, matchElementsX, matchElementsY);
 
             if (matchElementsX.Count > 2) addMatches(matchElementsX);
             if (matchElementsY.Count > 2) addMatches(matchElementsY);
@@ -120,7 +120,7 @@ public class BoardLayout : MonoBehaviour
         }
     }
 
-    private void renderLineSignalFire(Element element, List<Element> _horizontalMatch, List<Element> _verticalMatch)
+    private void generateLinesList(Element element, List<Element> _horizontalMatch, List<Element> _verticalMatch)
     {
         if(_horizontalMatch.Count > 2)
         {

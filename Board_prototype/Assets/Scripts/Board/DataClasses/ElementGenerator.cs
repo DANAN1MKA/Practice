@@ -23,7 +23,11 @@ public class ElementGenerator : MonoBehaviour, IElementGenerator
         float screenWidthInUnits = screenHeightInUnits * Screen.width / Screen.height;
 
         elementScale = 2 - (defoultScreenWidthInUnits / screenWidthInUnits);
-        boardPosition = boardPosition * elementScale;
+
+        //TODO: умножаем на Х потому что боска прижата к низу экрана
+        boardPosition.x = boardPosition.x * elementScale;
+        //boardPosition = boardPosition * elementScale;
+
         config.boardPositionFromResolution = boardPosition;
         config.scale = elementScale;
     }
