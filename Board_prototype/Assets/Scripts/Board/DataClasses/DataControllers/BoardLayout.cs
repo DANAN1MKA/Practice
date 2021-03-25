@@ -20,6 +20,7 @@ public class BoardLayout : MonoBehaviour
 
     private Element[,] board;
     private List<Element> foundMatches;
+    private LiensList liensList;
 
     public void Awake()
     {
@@ -121,21 +122,18 @@ public class BoardLayout : MonoBehaviour
 
     private void renderLineSignalFire(Element element, List<Element> _horizontalMatch, List<Element> _verticalMatch)
     {
-        RenderLineSignal message = null;
-
         if(_horizontalMatch.Count > 2)
         {
             Vector3[] points = findPositionsForLine(element, _horizontalMatch);
-            message = new RenderLineSignal(points, null);
+            LiensList nextLine = liensList;
+            liensList = new LiensList(points, element.type, nextLine);
         }
         if(_verticalMatch.Count > 2)
         {
             Vector3[] points = findPositionsForLine(element, _verticalMatch);
-            RenderLineSignal nextLine = message;
-            message = new RenderLineSignal(points, nextLine);
+            LiensList nextLine = liensList;
+            liensList = new LiensList(points, element.type, nextLine);
         }
-
-        signalBus.Fire(message);
     }
 
     private Vector3[] findPositionsForLine(Element element, List<Element> match)
@@ -164,6 +162,7 @@ public class BoardLayout : MonoBehaviour
 
     public void swipeElement(SwipeElementSignal swipeElementSignal)
     {
+        liensList = null;
         //TODO: разбить на методы
         int posX = swipeElementSignal.posX;
         int posY = swipeElementSignal.posY;
@@ -210,6 +209,8 @@ public class BoardLayout : MonoBehaviour
 
             }
         }
+
+        if (liensList != null) signalBus.Fire(new RenderLineSignal(liensList));
     }
 
     private void timerSignalFire()

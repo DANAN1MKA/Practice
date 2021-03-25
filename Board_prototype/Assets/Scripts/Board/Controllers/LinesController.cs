@@ -23,27 +23,30 @@ public class LinesController : MonoBehaviour
 
     private void render(RenderLineSignal signal)
     {
-        RenderLineSignal line = signal;
+        LiensList line = signal.list;
         do
         {
             GameObject newLine = Instantiate(linePrefab);
             LineRenderer renderer = newLine.GetComponent<LineRenderer>();
 
             renderer.SetPositions(line.points);
+            renderer.material = config.pool[line.type];
+
             lines.Add(newLine);
 
-            line = signal.nextLine;
+            line = line.nextLine;
 
         } while (line != null);
     }
 
     private void clear()
     {
-        do
+        foreach(GameObject curr in lines)
         {
-            Destroy(lines[0]);
-            lines.Remove(lines[0]);
-        } while (lines.Count > 0);
+            Destroy(curr);
+        }
+
+        lines.Clear();
     }
 
 

@@ -2,14 +2,10 @@
 
 public class RenderLineSignal
 {
+    public LiensList list { get; private set; }
 
-    public Vector3[] points { get; private set; }
-
-    public RenderLineSignal nextLine { get; private set; }
-
-    public RenderLineSignal(Vector3[] _points, RenderLineSignal _nextLine)
+    public RenderLineSignal(LiensList _list)
     {
-        points = _points;
-        nextLine = _nextLine;
+        list = _list;
     }
 }
