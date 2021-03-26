@@ -22,6 +22,9 @@ public class BoardLayout : MonoBehaviour
     private List<Element> foundMatches;
     private LiensList liensList;
 
+    //TODO: characters
+    private int damageAmount;
+
     public void Awake()
     {
         signalBus.Subscribe<SwipeElementSignal>(swipeElement);
@@ -244,13 +247,17 @@ public class BoardLayout : MonoBehaviour
         {
             if (foundMatches.Count > 0)
             {
+                //TODO: characters
+                damageAmount += foundMatches.Count;
+
                 foundMatchesHandler();
             }
             else
             {
-                signalBus.Fire<CheracterAttackSignal>();
+                //TODO: characters
+                signalBus.Fire(new CheracterAttackSignal(damageAmount));
                 isBlocked = false;
-
+                damageAmount = 0;
             }
         }
     }

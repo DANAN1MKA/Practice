@@ -32,4 +32,6 @@ MonoBehaviour:
   characterPrefab: {fileID: 173703986106095794, guid: c866d284d9f58a94289f268806d415be,
     type: 3}
   characterPosition: {x: -2.64, y: 3.05}
+  enemyPrefab: {fileID: 5452045262542698410, guid: 5881f7d9e4a0e6c44905715d7e00a4a3,
+    type: 3}
   scale: 1

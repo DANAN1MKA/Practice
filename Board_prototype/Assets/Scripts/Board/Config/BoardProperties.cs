@@ -17,5 +17,8 @@ public class BoardProperties : ScriptableObject
     public GameObject characterPrefab;
     public Vector2 characterPosition;
 
+    public GameObject enemyPrefab;
+
+
     public float scale;
 }
