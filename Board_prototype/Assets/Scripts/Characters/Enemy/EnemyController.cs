@@ -15,7 +15,7 @@ public class EnemyController : MonoBehaviour
 
     Animator anim;
 
-    private int healthAmount = 50;
+    [SerializeField]private int healthAmount = 50;
 
 
     void Awake()
@@ -41,9 +41,10 @@ public class EnemyController : MonoBehaviour
     {
         anim.SetTrigger("die");
 
-        Destroy(gameObject, 3f);
+        Destroy(gameObject, 1f);
 
         signalBus.Unsubscribe<CheracterAttackSignal>(recieveDamage);
+        signalBus.Fire<IAmDeadSi>();
     }
     public void Hurt()
     {

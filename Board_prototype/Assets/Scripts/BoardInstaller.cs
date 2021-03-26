@@ -3,6 +3,7 @@
 public class BoardInstaller : MonoInstaller
 {
     public BoardProperties config;
+    public EnemiesPool enemiesPool;
 
     public override void InstallBindings()
     {
@@ -16,9 +17,18 @@ public class BoardInstaller : MonoInstaller
         Container.DeclareSignal<RenderLineSignal>();
         Container.DeclareSignal <CheracterAttackSignal>();
 
+
+        //TODO: characters
+        Container.DeclareSignal<NewEnemySignal>();
+        Container.DeclareSignal<IAmDeadSi>();
+        Container.DeclareSignal<MoveEnemyCompliteSignal>();
+
+
         Container.Bind<BoardLayout>().FromComponentInHierarchy().AsSingle().NonLazy();
         Container.BindInterfacesAndSelfTo<BoardTimeController>().AsSingle().NonLazy();
         Container.Bind<IElementGenerator>().FromComponentInHierarchy().AsSingle().NonLazy();
         Container.Bind<BoardProperties>().FromInstance(config);
+        Container.Bind<EnemiesPool>().FromInstance(enemiesPool);
+
     }
 }

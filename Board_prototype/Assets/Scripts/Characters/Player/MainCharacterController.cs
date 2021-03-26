@@ -9,10 +9,29 @@ public class MainCharacterController : MonoBehaviour
     {
         signalBus = _signalBus;
         signalBus.Subscribe<CheracterAttackSignal>(Attack);
+        signalBus.Subscribe<MoveEnemyCompliteSignal>(stopRuning);
+        signalBus.Subscribe<NewEnemySignal>(Run);
+
+        Run();
+    }
+
+    Animator anim;
+
+
+    public void stopRuning()
+    {
+        anim.SetBool("isRun", false);
+    }
+    public void Run()
+    {
+        //TODO: отладка
+        Debug.Log("ран сука");
+
+
+        anim.SetBool("isRun", true);
     }
 
 
-    Animator anim;
 
     void Awake()
     {
@@ -48,17 +67,6 @@ public class MainCharacterController : MonoBehaviour
         else
         {
             anim.SetBool("isLookUp", false);
-        }
-    }
-    public void Run()
-    {
-        if (!anim.GetBool("isRun"))
-        {
-            anim.SetBool("isRun", true);
-        }
-        else
-        {
-            anim.SetBool("isRun", false);
         }
     }
     public void Jump()
