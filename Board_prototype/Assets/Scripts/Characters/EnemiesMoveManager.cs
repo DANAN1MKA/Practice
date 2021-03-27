@@ -1,51 +1,58 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Zenject;
 
 public class EnemiesMoveManager : MonoBehaviour
 {
     [Inject] SignalBus signalBus;
 
-    private float speed = 4f;
-    private GameObject movingEnemy;
-    private Vector2 targetPosition;
+    private float speed = 30f;
+
+    MovingEnemy enemy;
+
     private bool isActive;
 
     private void Awake()
     {
         signalBus.Subscribe<NewEnemySignal>(setNewEnemy);
-        isActive = false;
+        signalBus.Subscribe<CheracterAttackSignal>(nextEnemy);
+        isActive = true;
     }
 
     void Update()
     {
-        if (isActive)
+        if (isActive && enemy != null)
         {
-            movingEnemy.transform.position = Vector2.MoveTowards(movingEnemy.transform.position, targetPosition, Time.deltaTime * speed);
+            enemy.enemy.transform.position = Vector2.MoveTowards(enemy.enemy.transform.position, enemy.targetPosition, Time.deltaTime * speed);
 
             if (isOnPosition())
             {
-                movingEnemy = null;
+                enemy.stop();
                 isActive = false;
                 signalBus.Fire<MoveEnemyCompliteSignal>();
             }
         }
 
     }
+    private void nextEnemy()
+    {
+        if (enemy.nextEnemy != null)
+        {
+            enemy = enemy.nextEnemy;
+            isActive = true;
+        }
+    }
+
     private bool isOnPosition()
     {
-        return (movingEnemy.transform.position.x == targetPosition.x &&
-                movingEnemy.transform.position.y == targetPosition.y);
+        return (enemy.enemy.transform.position.x == enemy.targetPosition.x &&
+                enemy.enemy.transform.position.y == enemy.targetPosition.y);
     }
 
     private void setNewEnemy(NewEnemySignal signal)
     {
-        //TODO: отладка
-        Debug.Log("пиздарики");
-
-        movingEnemy = signal.enemy;
-        targetPosition = signal.targetPosition;
+        //if (enemy != null) 
+        //    enemy.kill();
+        enemy = signal.enemies;
         isActive = true;
     }
 }

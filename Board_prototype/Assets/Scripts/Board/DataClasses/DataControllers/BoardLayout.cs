@@ -25,11 +25,27 @@ public class BoardLayout : MonoBehaviour
     //TODO: characters
     private int damageAmount;
 
+    public void block()
+    {
+        isBlocked = true;
+    }
+    public void unblock()
+    {
+        isBlocked = false;
+    }
+
+
+
+
+
     public void Awake()
     {
         signalBus.Subscribe<SwipeElementSignal>(swipeElement);
         signalBus.Subscribe<TimerHandlerSignal>(timerHandler);
         signalBus.Subscribe<AnimationCompletedSignal>(animationCompleted);
+
+        signalBus.Subscribe<NewEnemySignal>(block);
+        signalBus.Subscribe<MoveEnemyCompliteSignal>(unblock);
     }
 
     void Start()
@@ -238,6 +254,9 @@ public class BoardLayout : MonoBehaviour
         isBlocked = true;
         isItFirstMatch = false;
 
+        //TODO: characters
+        damageAmount += foundMatches.Count;
+
         foundMatchesHandler();
     }
 
@@ -247,16 +266,13 @@ public class BoardLayout : MonoBehaviour
         {
             if (foundMatches.Count > 0)
             {
-                //TODO: characters
-                damageAmount += foundMatches.Count;
-
                 foundMatchesHandler();
             }
             else
             {
                 //TODO: characters
-                signalBus.Fire(new CheracterAttackSignal(damageAmount));
-                isBlocked = false;
+                signalBus.Fire(new SwipeDamageSignal(damageAmount));
+                //isBlocked = false;
                 damageAmount = 0;
             }
         }
@@ -356,6 +372,5 @@ public class BoardLayout : MonoBehaviour
 
         return fallingElements;
     }
-
 
 }

@@ -8,29 +8,25 @@ public class EnemyController : MonoBehaviour
     {
         signalBus = _signalBus;
         healthAmount = _healthAmount;
-
-
-        signalBus.Subscribe<CheracterAttackSignal>(recieveDamage);
     }
 
     Animator anim;
 
-    [SerializeField]private int healthAmount = 50;
+    [SerializeField] private int healthAmount;
 
 
     void Awake()
     {
         anim = GetComponent<Animator>();
+
+        jump();
     }
 
-    private void recieveDamage(CheracterAttackSignal signal)
+    public void recieveDamage()
     {
-        //TODO: отладка
-        Debug.Log(healthAmount);
+        stopJump();
 
-        healthAmount -= signal.damageAmount;
-        if (healthAmount < 1) Die();
-        else Hurt();
+        Die();
     }
 
     public void Idle()
@@ -41,13 +37,23 @@ public class EnemyController : MonoBehaviour
     {
         anim.SetTrigger("die");
 
-        Destroy(gameObject, 1f);
-
-        signalBus.Unsubscribe<CheracterAttackSignal>(recieveDamage);
-        signalBus.Fire<IAmDeadSi>();
+        Destroy(gameObject, 0.5f);
     }
     public void Hurt()
     {
         anim.SetTrigger("hurt");
     }
+
+    public void jump()
+    {
+        anim.SetBool("isJump", true);
+    }
+    public void stopJump()
+    {
+        anim.SetBool("isJump", false);
+    }
+
 }
+
+
+

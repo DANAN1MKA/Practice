@@ -20,7 +20,7 @@ public class BoardInstaller : MonoInstaller
 
         //TODO: characters
         Container.DeclareSignal<NewEnemySignal>();
-        Container.DeclareSignal<IAmDeadSi>();
+        Container.DeclareSignal<SwipeDamageSignal>();
         Container.DeclareSignal<MoveEnemyCompliteSignal>();
 
 

@@ -10,7 +10,7 @@ public class MainCharacterController : MonoBehaviour
         signalBus = _signalBus;
         signalBus.Subscribe<CheracterAttackSignal>(Attack);
         signalBus.Subscribe<MoveEnemyCompliteSignal>(stopRuning);
-        signalBus.Subscribe<NewEnemySignal>(Run);
+        //.Subscribe<NewEnemySignal>(Run);
 
         Run();
     }
@@ -24,14 +24,8 @@ public class MainCharacterController : MonoBehaviour
     }
     public void Run()
     {
-        //TODO: отладка
-        Debug.Log("ран сука");
-
-
         anim.SetBool("isRun", true);
     }
-
-
 
     void Awake()
     {
