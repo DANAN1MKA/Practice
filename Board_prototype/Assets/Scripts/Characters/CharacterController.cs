@@ -13,6 +13,7 @@ public class CharacterController : MonoBehaviour
     private GameObject enemy;
 
     private int damageAmount;
+    private int comboScale;
 
     MovingEnemy movingEnemy = null;
 
@@ -40,24 +41,26 @@ public class CharacterController : MonoBehaviour
         character.transform.position = newPositionPlayer;
         character.transform.localScale *= config.scale;
 
-        createEnemy(new SwipeDamageSignal(1));
+        createEnemy(new SwipeDamageSignal(0));
     }
 
     private void nextEnemy()
     {
-        if (damageAmount > 3)
+        if (damageAmount > 1)
         {
             killEnemy();
             signalBus.Fire<CheracterAttackSignal>();
-            damageAmount -= 3;
+            damageAmount -= comboScale;
+            comboScale += 3;
 
         }
-        if (movingEnemy.nextEnemy == null) signalBus.Fire<KillingCompletedSignal>();
+        if (movingEnemy == null ||  movingEnemy.nextEnemy == null) signalBus.Fire<KillingCompletedSignal>();
+        Debug.Log("comboScale " + comboScale);
     }
 
     private void killEnemy()
     {
-        if (movingEnemy != null)
+        if (movingEnemy != null && movingEnemy.nextEnemy != null)
         {
             characterAtack();
             movingEnemy.kill();
@@ -68,6 +71,8 @@ public class CharacterController : MonoBehaviour
     private void createEnemy(SwipeDamageSignal signal)
     {
         killEnemy();
+        int scale = 3;
+        comboScale = 0;
 
         damageAmount = signal.damageAmount;
 
@@ -92,7 +97,10 @@ public class CharacterController : MonoBehaviour
             MovingEnemy nextEnemy = new MovingEnemy(enemy, targetPositionEnemy, movingEnemy, enemyScript.recieveDamage, enemyScript.stopJump);
             movingEnemy = nextEnemy;
 
-            i += 3;
+            i += scale;
+            scale += 3;
+            Debug.Log("scale " + scale);
+
         } while (damageAmount > i);
 
 
