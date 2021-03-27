@@ -6,6 +6,7 @@ public class BoardTimeController : ITickable, IInitializable, ITimeController
     [Inject]private BoardProperties config;
     private bool isActive = false;
     private float time;
+    private float timeScale;
 
     [Inject] private SignalBus signalBus;
 
@@ -22,12 +23,16 @@ public class BoardTimeController : ITickable, IInitializable, ITimeController
         if (isActive)
         {
             if (time + _time.time - Time.time < config.time)
-                time += _time.time;
+            {
+                time += _time.time * timeScale;
+                timeScale *= 0.6f;
+            }
             else time = Time.time + config.time;
         }
         else
         {
             isActive = true;
+            timeScale = 1;
             time = _time.time + Time.time;
         }
     }

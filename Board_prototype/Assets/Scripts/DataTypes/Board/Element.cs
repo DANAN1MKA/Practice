@@ -15,24 +15,25 @@ public class Element
 
     public GameObject piece { get; private set; }
     public SpriteRenderer spriteRenderer { get; private set; }
-    public Animator animator { get; private set; }
+    //public Animator animator { get; private set; }
 
     public Element(GameObject _piece)
     {
         setPiece(_piece);
     }
 
-    private Element(GameObject _element, SpriteRenderer _spriteRenderer, Animator _animator)
+    private Element(GameObject _element, SpriteRenderer _spriteRenderer/*, Animator _animator*/)
     {
         piece = _element;
         spriteRenderer = _spriteRenderer;
-        animator = _animator;
+        //animator = _animator;
     }
 
-    public void changeType(int _type, Material _material)
+    //TODO: material
+    public void changeType(int _type, Sprite _material)
     {
         type = _type;
-        spriteRenderer.material = _material;
+        spriteRenderer.sprite = _material;
     }
 
     public void setPosition(int _posX, int _posY, Vector2 _position)
@@ -49,7 +50,7 @@ public class Element
     {
         piece = _piece;
         spriteRenderer = piece.GetComponent<SpriteRenderer>();
-        animator = piece.GetComponent<Animator>();
+        //animator = piece.GetComponent<Animator>();
     }
 
     public void setElement(Element elem)
@@ -57,7 +58,7 @@ public class Element
         piece = elem.piece;
         type = elem.type;
         spriteRenderer = elem.spriteRenderer;
-        animator = elem.animator;
+        //animator = elem.animator;
     }
 
     public void moveHard(Vector2 move)
@@ -67,7 +68,7 @@ public class Element
 
     public Element getElement()
     {
-        Element clone = new Element(this.piece, this.spriteRenderer, this.animator);
+        Element clone = new Element(this.piece, this.spriteRenderer/*, this.animator*/);
         clone.type = this.type;
 
         return clone;
@@ -75,14 +76,14 @@ public class Element
 
     public void block()
     {
-        animator.StartPlayback();
-        animator.Play(0);
+        //animator.StartPlayback();
+        //animator.Play(0);
         isBlocked = true;
     }
 
     public void unblock()
     {
-        animator.StopPlayback();
+        //animator.StopPlayback();
 
         isBlocked = false;
     }
@@ -91,8 +92,8 @@ public class Element
 
     public void resetAnimanion()
     {
-        animator.StopPlayback();
-        animator.Play(0);
+        //animator.StopPlayback();
+        //animator.Play(0);
     }
 
 }

@@ -22,6 +22,7 @@ public class BoardInstaller : MonoInstaller
         Container.DeclareSignal<NewEnemySignal>();
         Container.DeclareSignal<SwipeDamageSignal>();
         Container.DeclareSignal<MoveEnemyCompliteSignal>();
+        Container.DeclareSignal<KillingCompletedSignal>();
 
 
         Container.Bind<BoardLayout>().FromComponentInHierarchy().AsSingle().NonLazy();

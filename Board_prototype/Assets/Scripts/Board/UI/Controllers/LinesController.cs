@@ -36,7 +36,7 @@ public class LinesController : MonoBehaviour
             LineRenderer renderer = newLine.GetComponent<LineRenderer>();
 
             renderer.SetPositions(pointsList.points);
-            renderer.material = config.pool[pointsList.type];
+            //renderer.material = config.pool[pointsList.type];
 
             lines.Add(newLine);
 
@@ -53,6 +53,7 @@ public class LinesController : MonoBehaviour
         }
 
         lines.Clear();
+        pointsList = null;
     }
 
 

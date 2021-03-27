@@ -45,7 +45,7 @@ public class BoardLayout : MonoBehaviour
         signalBus.Subscribe<AnimationCompletedSignal>(animationCompleted);
 
         signalBus.Subscribe<NewEnemySignal>(block);
-        signalBus.Subscribe<MoveEnemyCompliteSignal>(unblock);
+        signalBus.Subscribe<KillingCompletedSignal>(unblock);
     }
 
     void Start()

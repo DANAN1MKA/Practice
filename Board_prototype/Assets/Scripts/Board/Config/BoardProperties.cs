@@ -12,7 +12,8 @@ public class BoardProperties : ScriptableObject
 
     public GameObject elementPrefab;
     public GameObject linePrefab;
-    public Material[] pool;
+    //public Material[] pool;
+    public Sprite[] pool;
 
     public GameObject characterPrefab;
     public Vector2 characterPosition;

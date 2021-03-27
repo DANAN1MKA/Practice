@@ -50,7 +50,9 @@ public class CharacterController : MonoBehaviour
             killEnemy();
             signalBus.Fire<CheracterAttackSignal>();
             damageAmount -= 3;
+
         }
+        if (movingEnemy.nextEnemy == null) signalBus.Fire<KillingCompletedSignal>();
     }
 
     private void killEnemy()

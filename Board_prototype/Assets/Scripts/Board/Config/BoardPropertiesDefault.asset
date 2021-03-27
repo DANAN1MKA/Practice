@@ -18,20 +18,18 @@ MonoBehaviour:
   additionalTime: 1
   boardPosition: {x: -3, y: -5.5}
   boardPositionFromResolution: {x: -3, y: -5.5}
-  elementPrefab: {fileID: 7107015203056099543, guid: 3860131475175d4409ad509b9ea4d622,
+  elementPrefab: {fileID: 3013632192488965377, guid: 6a46ec7bcf89b5544a4cd62f608aa922,
     type: 3}
   linePrefab: {fileID: 3515915314537621480, guid: 9482c319346b556468657538f7fd5812,
     type: 3}
   pool:
-  - {fileID: 2100000, guid: b56f55d7ba855904181b7626fc54bb04, type: 2}
-  - {fileID: 2100000, guid: 1390e6374dac3e042a35827946e98418, type: 2}
-  - {fileID: 2100000, guid: a515ba4ef0707c04f97fc2c135a0778e, type: 2}
-  - {fileID: 2100000, guid: a9e9034cb2665304e9dbd01a6914bb72, type: 2}
-  - {fileID: 2100000, guid: 566936c3e9fa3bc41bc6ff61dfb7722d, type: 2}
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 21300000, guid: 277988eb895a41741aa108864a79bf3c, type: 3}
+  - {fileID: 21300000, guid: c3f1c5d2229f94843a3db230ddc3eaac, type: 3}
+  - {fileID: 21300000, guid: 004902a4a38ca0b478cf80e0942fcd73, type: 3}
+  - {fileID: 21300000, guid: 74a7dbacdd1564446806ddce21ff9ddc, type: 3}
+  - {fileID: 21300000, guid: 677959494bb50b548b2ad65e223ac6d9, type: 3}
+  - {fileID: 21300000, guid: 7c118c169ff71754d809eab3c6b139e5, type: 3}
   characterPrefab: {fileID: 173703986106095794, guid: c866d284d9f58a94289f268806d415be,
     type: 3}
   characterPosition: {x: -2.64, y: 3.05}
-  enemyPrefab: {fileID: 5452045262542698410, guid: 5881f7d9e4a0e6c44905715d7e00a4a3,
-    type: 3}
   scale: 1

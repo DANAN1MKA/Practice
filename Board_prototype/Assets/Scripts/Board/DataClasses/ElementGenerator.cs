@@ -6,7 +6,8 @@ public class ElementGenerator : MonoBehaviour, IElementGenerator
     [Inject] public BoardProperties config;
 
     private GameObject elementPrefab;
-    private Material[] pool;
+    private Sprite[] pool;
+    //private Material[] pool;
     private Vector2 boardPosition;
 
     private float defoultScreenWidthInUnits = 7.875f;
