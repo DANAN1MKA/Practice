@@ -3,11 +3,11 @@ using Zenject;
 
 public class EnemiesMoveManager : MonoBehaviour
 {
-    [Inject] SignalBus signalBus;
+    [Inject] private SignalBus signalBus;
 
-    private float speed = 30f;
+    [SerializeField] private float speed = 30f;
 
-    MovingEnemy enemy;
+    private MovingEnemy enemy;
 
     private bool isActive;
 
@@ -50,8 +50,6 @@ public class EnemiesMoveManager : MonoBehaviour
 
     private void setNewEnemy(NewEnemySignal signal)
     {
-        //if (enemy != null) 
-        //    enemy.kill();
         enemy = signal.enemies;
         isActive = true;
     }

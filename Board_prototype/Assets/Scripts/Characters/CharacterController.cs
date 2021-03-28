@@ -57,7 +57,6 @@ public class CharacterController : MonoBehaviour
         characterAtack();
         movingEnemy.kill();
         movingEnemy = movingEnemy.nextEnemy;
-
     }
 
     private void createEnemy(SwipeDamageSignal signal)
@@ -88,7 +87,7 @@ public class CharacterController : MonoBehaviour
         EnemyController enemyScript = enemy.GetComponent<EnemyController>();
 
         Vector3 newPositionEnemy = new Vector3(config.characterPosition.x * config.scale * -1 + 5,
-                                       config.boardPositionFromResolution.y + (config.height + 1.8f) * config.scale + 5, 1);
+                                               config.boardPositionFromResolution.y + (config.height + 1.8f) * config.scale + 5, 1);
 
         Vector2 targetPositionEnemy = new Vector2(config.characterPosition.x * config.scale * -1,
                                config.boardPositionFromResolution.y + (config.height + 1.8f) * config.scale);
@@ -100,6 +99,5 @@ public class CharacterController : MonoBehaviour
 
         MovingEnemy nextEnemy = new MovingEnemy(enemy, targetPositionEnemy, movingEnemy, enemyScript.die, enemyScript.stopJump);
         movingEnemy = nextEnemy;
-
     }
 }

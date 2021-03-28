@@ -9,8 +9,6 @@ public class Element
 
     public Vector2 position { get; private set; }
 
-
-    //TODO: new move system
     public PersonalGemMover gemMover { get; private set; }
     public bool isMoving{ get; private set; }
 
@@ -18,8 +16,6 @@ public class Element
     {
         isMoving = false;
     }
-
-
 
     private bool isBlocked;
 
@@ -31,15 +27,16 @@ public class Element
     {
         setPiece(_piece);
         isMoving = false;
-
     }
 
     private Element(GameObject _element, SpriteRenderer _spriteRenderer/*, Animator _animator*/, PersonalGemMover _gemMover)
     {
         piece = _element;
         spriteRenderer = _spriteRenderer;
+
         gemMover = _gemMover;
         gemMover.setNewHost(movingFinished);
+
         isMoving = false;
         //animator = _animator;
     }
@@ -66,6 +63,7 @@ public class Element
         piece = _piece;
         spriteRenderer = piece.GetComponent<SpriteRenderer>();
         //animator = piece.GetComponent<Animator>();
+
         gemMover = _piece.GetComponent<PersonalGemMover>();
         gemMover.setNewHost(movingFinished);
 
@@ -76,6 +74,7 @@ public class Element
         piece = elem.piece;
         type = elem.type;
         spriteRenderer = elem.spriteRenderer;
+
         gemMover = elem.gemMover;
         gemMover.setNewHost(movingFinished);
         //animator = elem.animator;
