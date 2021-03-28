@@ -2,7 +2,6 @@
 using UnityEngine;
 using Zenject;
 
-
 public class LinesController : MonoBehaviour
 {
     [Inject] SignalBus signalBus;
@@ -41,7 +40,6 @@ public class LinesController : MonoBehaviour
             lines.Add(newLine);
 
             pointsList = pointsList.nextLine;
-
         } 
     }
 

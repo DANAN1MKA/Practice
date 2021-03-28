@@ -24,8 +24,6 @@ public class BoardInstaller : MonoInstaller
         Container.DeclareSignal<MoveEnemyCompliteSignal>();
         Container.DeclareSignal<KillingCompletedSignal>();
 
-
-        Container.Bind<BoardLayout>().FromComponentInHierarchy().AsSingle().NonLazy();
         Container.BindInterfacesAndSelfTo<BoardTimeController>().AsSingle().NonLazy();
         Container.Bind<IElementGenerator>().FromComponentInHierarchy().AsSingle().NonLazy();
         Container.Bind<BoardProperties>().FromInstance(config);

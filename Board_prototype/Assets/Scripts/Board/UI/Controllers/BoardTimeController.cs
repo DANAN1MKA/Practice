@@ -25,7 +25,7 @@ public class BoardTimeController : ITickable, IInitializable, ITimeController
             if (time + _time.time - Time.time < config.time)
             {
                 time += _time.time * timeScale;
-                timeScale *= 0.6f;
+                timeScale *= 0.7f;
             }
             else time = Time.time + config.time;
         }

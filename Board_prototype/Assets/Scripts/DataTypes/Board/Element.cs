@@ -2,14 +2,24 @@
 
 public class Element
 {
-    private float speed = 6f;
-
     public int type { get; private set; }
 
     public int posX { get; private set; }
     public int posY { get; private set; }
 
     public Vector2 position { get; private set; }
+
+
+    //TODO: new move system
+    public PersonalGemMover gemMover { get; private set; }
+    public bool isMoving{ get; private set; }
+
+    private void movingFinished()
+    {
+        isMoving = false;
+    }
+
+
 
     private bool isBlocked;
 
@@ -20,12 +30,17 @@ public class Element
     public Element(GameObject _piece)
     {
         setPiece(_piece);
+        isMoving = false;
+
     }
 
-    private Element(GameObject _element, SpriteRenderer _spriteRenderer/*, Animator _animator*/)
+    private Element(GameObject _element, SpriteRenderer _spriteRenderer/*, Animator _animator*/, PersonalGemMover _gemMover)
     {
         piece = _element;
         spriteRenderer = _spriteRenderer;
+        gemMover = _gemMover;
+        gemMover.setNewHost(movingFinished);
+        isMoving = false;
         //animator = _animator;
     }
 
@@ -51,6 +66,9 @@ public class Element
         piece = _piece;
         spriteRenderer = piece.GetComponent<SpriteRenderer>();
         //animator = piece.GetComponent<Animator>();
+        gemMover = _piece.GetComponent<PersonalGemMover>();
+        gemMover.setNewHost(movingFinished);
+
     }
 
     public void setElement(Element elem)
@@ -58,17 +76,20 @@ public class Element
         piece = elem.piece;
         type = elem.type;
         spriteRenderer = elem.spriteRenderer;
+        gemMover = elem.gemMover;
+        gemMover.setNewHost(movingFinished);
         //animator = elem.animator;
     }
 
-    public void moveHard(Vector2 move)
+    public void move(Vector2 move)
     {
-        piece.transform.position = Vector2.MoveTowards(piece.transform.position, move, Time.deltaTime * speed);
+        gemMover.setNewPosition(move);
+        isMoving = true;
     }
 
     public Element getElement()
     {
-        Element clone = new Element(this.piece, this.spriteRenderer/*, this.animator*/);
+        Element clone = new Element(this.piece, this.spriteRenderer/*, this.animator*/, gemMover);
         clone.type = this.type;
 
         return clone;

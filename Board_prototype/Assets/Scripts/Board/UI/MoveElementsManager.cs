@@ -49,24 +49,22 @@ public class MoveElementsManager : MonoBehaviour
         {
             for (int i = 0; i < movingElemenets.Count; i++)
             {
-                movingElemenets[i].elem.moveHard(movingElemenets[i].endPosition);
 
-                if (isOnPosition(i))
-                    if (movingElemenets[i].nextPosition != null) movingElemenets[i] = movingElemenets[i].nextPosition;
+                if (!movingElemenets[i].elem.isMoving) 
+                {
+                    if (movingElemenets[i].nextPosition != null)
+                    {
+                        movingElemenets[i] = movingElemenets[i].nextPosition;
+                        movingElemenets[i].elem.move(movingElemenets[i].endPosition);
+                    }
                     else
-                    { 
+                    {
                         movingElemenets.Remove(movingElemenets[i]);
                         i--;
                     }
+                }
             }
             if (movingElemenets.Count == 0) signalBus.Fire<AnimationCompletedSignal>();
         }
     }
-
-    private bool isOnPosition(int count)
-    {
-        return (movingElemenets[count].elem.piece.transform.position.x == movingElemenets[count].endPosition.x &&
-                movingElemenets[count].elem.piece.transform.position.y == movingElemenets[count].endPosition.y);
-    }
-
 }

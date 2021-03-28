@@ -35,9 +35,6 @@ public class BoardLayout : MonoBehaviour
     }
 
 
-
-
-
     public void Awake()
     {
         signalBus.Subscribe<SwipeElementSignal>(swipeElement);
@@ -222,7 +219,8 @@ public class BoardLayout : MonoBehaviour
                     swipe(board[posX, posY], 
                           board[posX + dirX, posY + dirY]);
                 }
-
+                elemTouched.elem.move(elemTouched.endPosition);
+                elemNeighbour.elem.move(elemNeighbour.endPosition);
 
                 signalBus.Fire(new MoveManagerSwipeSignal(elemTouched, elemNeighbour));
 
@@ -266,6 +264,9 @@ public class BoardLayout : MonoBehaviour
         {
             if (foundMatches.Count > 0)
             {
+                //TODO: characters
+                damageAmount += foundMatches.Count;
+
                 foundMatchesHandler();
             }
             else
@@ -310,6 +311,11 @@ public class BoardLayout : MonoBehaviour
         handleBlockedElements();
 
         List<MovingElement> fallingElements = moveBlockedElementsUp();
+
+        foreach(MovingElement curr in fallingElements)
+        {
+            curr.elem.move(curr.endPosition);
+        }
 
         signalBus.Fire(new MoveManagerDropSignal(fallingElements));
 
