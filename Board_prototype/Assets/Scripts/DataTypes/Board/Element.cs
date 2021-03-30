@@ -116,4 +116,14 @@ public class Element
         //animator.Play(0);
     }
 
+
+    public void hide()
+    {
+        piece.SetActive(false);
+    }
+    public void show()
+    {
+        piece.SetActive(true);
+    }
+
 }

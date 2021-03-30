@@ -56,6 +56,9 @@ public class BoardLayout : MonoBehaviour
 
         board = elementGenerator.generateBoard(width, heigth);
         foundMatches = new List<Element>();
+
+        //TODO: запуск логера
+        signalBus.Fire(new StartBoardStateSignal(board));
     }
 
     private bool isItMatch(Element element)
@@ -351,6 +354,10 @@ public class BoardLayout : MonoBehaviour
 
     private List<MovingElement> moveBlockedElementsUp()
     {
+        //TODO: запоминаем товые типы элементов
+        List<int> newGemsType = new List<int>();
+
+
         List<MovingElement> fallingElements = new List<MovingElement>();
 
         int[] countForColumn = new int[width];
@@ -365,6 +372,14 @@ public class BoardLayout : MonoBehaviour
 
                 if (board[j, i].getState())
                 {
+
+
+                    //TODO: запоминаем товые типы элементов
+                    newGemsType.Add(board[j, i].type);
+
+
+
+
                     board[j, i].piece.transform.position = new Vector2(boardPosition.x + board[j, i].posX * scale,
                                                                        boardPosition.y + (heigth + countForColumn[j]) * scale);
 
@@ -375,6 +390,10 @@ public class BoardLayout : MonoBehaviour
                 board[j, i].resetAnimanion();
             }
         }
+
+        //TODO: отправляем данные в логер
+        signalBus.Fire(new NewGemsSignal(newGemsType));
+
 
         return fallingElements;
     }
