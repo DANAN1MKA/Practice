@@ -18,6 +18,8 @@ public class BoardLayout : MonoBehaviour
     private bool isBlocked;
     private bool isItFirstMatch = false;
 
+    private bool isReplayPlayed = false;
+
     private Element[,] board;
     private List<Element> foundMatches;
     private LiensList liensList;
@@ -41,8 +43,9 @@ public class BoardLayout : MonoBehaviour
         signalBus.Subscribe<TimerHandlerSignal>(timerHandler);
         signalBus.Subscribe<AnimationCompletedSignal>(animationCompleted);
 
-        signalBus.Subscribe<NewEnemySignal>(block);
-        signalBus.Subscribe<KillingCompletedSignal>(unblock);
+        //signalBus.Subscribe<NewEnemySignal>(block);
+        signalBus.Subscribe<KillingCompletedSignal>(startReplay);
+        signalBus.Subscribe<ReplayCompliteSignal>(replayComplite);
     }
 
     void Start()
@@ -57,74 +60,17 @@ public class BoardLayout : MonoBehaviour
         board = elementGenerator.generateBoard(width, heigth);
         foundMatches = new List<Element>();
 
+
+        //TODO: replay
+        damageAmount = 0;
+        isReplayPlayed = false;
+
+
         //TODO: запуск логера
         signalBus.Fire(new StartBoardStateSignal(board));
     }
 
-    private bool isItMatch(Element element)
-    {
-        List<Element> matchElementsX = findHorizontalMatch(element);
-        List<Element> matchElementsY = findVerticalMatch(element);
 
-        if (matchElementsX.Count > 2 || matchElementsY.Count > 2)
-        {
-            generateLinesList(element, matchElementsX, matchElementsY);
-
-            if (matchElementsX.Count > 2) addMatches(matchElementsX);
-            if (matchElementsY.Count > 2) addMatches(matchElementsY);
-
-            return true;
-        }
-        else return false;
-    }
-
-    private List<Element> findHorizontalMatch(Element element)
-    {
-        List<Element> matchElementsX = new List<Element>();
-        matchElementsX.Add(element);
-
-        Element neighbourLeft = element; bool leftIsDone = false;
-        Element neighbourRight = element; bool rightIsDone = false;
-
-        do
-        {
-            if (neighbourLeft.posX > 0) neighbourLeft = board[neighbourLeft.posX - 1, neighbourLeft.posY];
-            else leftIsDone = true;
-
-            if (neighbourRight.posX < width - 1) neighbourRight = board[neighbourRight.posX + 1, neighbourRight.posY];
-            else rightIsDone = true;
-
-            if (!leftIsDone && neighbourLeft.type == element.type) matchElementsX.Add(neighbourLeft); else leftIsDone = true;
-            if (!rightIsDone && neighbourRight.type == element.type) matchElementsX.Add(neighbourRight); else rightIsDone = true;
-        }
-        while (!leftIsDone || !rightIsDone);
-
-        return matchElementsX;
-    }
-
-    private List<Element> findVerticalMatch(Element element)
-    {
-        List<Element> matchElementsY = new List<Element>();
-        matchElementsY.Add(element);
-
-        Element neighbourDown = element; bool DownIsDone = false;
-        Element neighbourUp = element; bool UpIsDone = false;
-
-        do
-        {
-            if (neighbourDown.posY > 0) neighbourDown = board[neighbourDown.posX, neighbourDown.posY - 1];
-            else DownIsDone = true;
-
-            if (neighbourUp.posY < heigth - 1) neighbourUp = board[neighbourUp.posX, neighbourUp.posY + 1];
-            else UpIsDone = true;
-
-            if (!DownIsDone && neighbourDown.type == element.type) matchElementsY.Add(neighbourDown); else DownIsDone = true;
-            if (!UpIsDone && neighbourUp.type == element.type) matchElementsY.Add(neighbourUp); else UpIsDone = true;
-        }
-        while (!UpIsDone || !DownIsDone);
-
-        return matchElementsY;
-    }
 
     private void addMatches(List<Element> _from)
     {
@@ -263,7 +209,7 @@ public class BoardLayout : MonoBehaviour
 
     public void animationCompleted()
     {
-        if (isBlocked)
+        if (isBlocked && !isReplayPlayed)
         {
             if (foundMatches.Count > 0)
             {
@@ -274,10 +220,11 @@ public class BoardLayout : MonoBehaviour
             }
             else
             {
-                //TODO: characters
+                //TODO: characters / stop replay recording
                 signalBus.Fire(new SwipeDamageSignal(damageAmount));
+                block();
+
                 //isBlocked = false;
-                damageAmount = 0;
             }
         }
     }
@@ -398,4 +345,106 @@ public class BoardLayout : MonoBehaviour
         return fallingElements;
     }
 
+    private bool isItMatch(Element element)
+    {
+        List<Element> matchElementsX = findHorizontalMatch(element);
+        List<Element> matchElementsY = findVerticalMatch(element);
+
+        if (matchElementsX.Count > 2 || matchElementsY.Count > 2)
+        {
+            generateLinesList(element, matchElementsX, matchElementsY);
+
+            if (matchElementsX.Count > 2) addMatches(matchElementsX);
+            if (matchElementsY.Count > 2) addMatches(matchElementsY);
+
+            return true;
+        }
+        else return false;
+    }
+
+    private List<Element> findHorizontalMatch(Element element)
+    {
+        List<Element> matchElementsX = new List<Element>();
+        matchElementsX.Add(element);
+
+        Element neighbourLeft = element; bool leftIsDone = false;
+        Element neighbourRight = element; bool rightIsDone = false;
+
+        do
+        {
+            if (neighbourLeft.posX > 0) neighbourLeft = board[neighbourLeft.posX - 1, neighbourLeft.posY];
+            else leftIsDone = true;
+
+            if (neighbourRight.posX < width - 1) neighbourRight = board[neighbourRight.posX + 1, neighbourRight.posY];
+            else rightIsDone = true;
+
+            if (!leftIsDone && neighbourLeft.type == element.type) matchElementsX.Add(neighbourLeft); else leftIsDone = true;
+            if (!rightIsDone && neighbourRight.type == element.type) matchElementsX.Add(neighbourRight); else rightIsDone = true;
+        }
+        while (!leftIsDone || !rightIsDone);
+
+        return matchElementsX;
+    }
+
+    private List<Element> findVerticalMatch(Element element)
+    {
+        List<Element> matchElementsY = new List<Element>();
+        matchElementsY.Add(element);
+
+        Element neighbourDown = element; bool DownIsDone = false;
+        Element neighbourUp = element; bool UpIsDone = false;
+
+        do
+        {
+            if (neighbourDown.posY > 0) neighbourDown = board[neighbourDown.posX, neighbourDown.posY - 1];
+            else DownIsDone = true;
+
+            if (neighbourUp.posY < heigth - 1) neighbourUp = board[neighbourUp.posX, neighbourUp.posY + 1];
+            else UpIsDone = true;
+
+            if (!DownIsDone && neighbourDown.type == element.type) matchElementsY.Add(neighbourDown); else DownIsDone = true;
+            if (!UpIsDone && neighbourUp.type == element.type) matchElementsY.Add(neighbourUp); else UpIsDone = true;
+        }
+        while (!UpIsDone || !DownIsDone);
+
+        return matchElementsY;
+    }
+
+    private void startReplay()
+    {
+        if (!isReplayPlayed && damageAmount != 0)
+        {
+            isReplayPlayed = true;
+            hide();
+            block();
+        }
+    }
+
+    public void replayComplite()
+    {
+        show();
+        unblock();
+
+        //TODO: запуск логера
+        signalBus.Fire(new StartBoardStateSignal(board));
+        isReplayPlayed = false;
+        damageAmount = 0;
+    }
+
+    public void show()
+    {
+        for (int i = 0; i < config.width; i++)
+            for (int j = 0; j < config.height; j++)
+            {
+                board[i, j].show();
+            }
+    }
+    public void hide()
+    {
+        for (int i = 0; i < config.width; i++)
+            for (int j = 0; j < config.height; j++)
+            {
+                board[i, j].hide();
+            }
+    }
 }

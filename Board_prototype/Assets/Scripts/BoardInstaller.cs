@@ -27,6 +27,8 @@ public class BoardInstaller : MonoInstaller
         //TODO: server
         Container.DeclareSignal<StartBoardStateSignal>();
         Container.DeclareSignal<NewGemsSignal>();
+        Container.DeclareSignal<NewReplaySignal>();
+        Container.DeclareSignal<ReplayCompliteSignal>();
 
         Container.BindInterfacesAndSelfTo<BoardTimeController>().AsSingle().NonLazy();
         Container.Bind<IElementGenerator>().FromComponentInHierarchy().AsSingle().NonLazy();

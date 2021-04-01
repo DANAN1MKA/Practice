@@ -17,6 +17,7 @@ public class LinesController : MonoBehaviour
         signalBus.Subscribe<TimerHandlerSignal>(clear);
         signalBus.Subscribe<RenderLineSignal>(getPoints);
         signalBus.Subscribe<AnimationCompletedSignal>(render);
+        signalBus.Subscribe<ReplayCompliteSignal>(clear);
 
         linePrefab = config.linePrefab;
         lines = new List<GameObject>();
@@ -24,7 +25,17 @@ public class LinesController : MonoBehaviour
 
     private void getPoints(RenderLineSignal signal)
     {
-        pointsList = signal.list;
+        if (pointsList == null) pointsList = signal.list;
+        else
+        {
+            LiensList current = pointsList;
+            while (current != null && current.nextLine != null)
+            {
+                current = current.nextLine;
+            }
+
+            current.nextLine = signal.list;
+        }
     }
 
     private void render()

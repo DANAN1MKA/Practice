@@ -6,7 +6,7 @@ public class LiensList
 
     public int type { get; private set; }
 
-    public LiensList nextLine { get; private set; }
+    public LiensList nextLine { get; set; }
 
     public LiensList(Vector3[] _points, int _type, LiensList _nextLine)
     {

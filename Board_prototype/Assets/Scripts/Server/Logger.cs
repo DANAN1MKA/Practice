@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
@@ -19,7 +18,6 @@ public class Logger : MonoBehaviour
     [Inject] BoardProperties config;
 
     private LiteElemet[,] boardStartState;
-
 
     private void startLogger(StartBoardStateSignal signal)
     {
@@ -50,6 +48,7 @@ public class Logger : MonoBehaviour
             lastSwipe.posX = signal.posX;
             lastSwipe.posY = signal.posY;
             lastSwipe.direction = signal.direction;
+            if(isVerifyed) swipeHistory.Add(lastSwipe);
             isVerifyed = false;
         }
     }
@@ -59,7 +58,6 @@ public class Logger : MonoBehaviour
         if(signal.element1.nextPosition == null && 
            signal.element2.nextPosition == null)
         {
-            swipeHistory.Add(lastSwipe);
             isVerifyed = true;
         }
     }
@@ -73,10 +71,15 @@ public class Logger : MonoBehaviour
 
     private void generateJSON()
     {
+        //TODO: отладка
+        Debug.Log("SwipeCounter " + swipeHistory.Count);
+
         BoardHistory json = new BoardHistory();
         json.board = boardStartState;
         json.swipeHistory = swipeHistory;
         json.newGemsType = newGemsType;
+
+        signalBus.Fire(new NewReplaySignal(json));
     }
 
 

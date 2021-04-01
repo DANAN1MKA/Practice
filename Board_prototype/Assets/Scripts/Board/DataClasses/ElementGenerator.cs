@@ -39,6 +39,11 @@ public class ElementGenerator : MonoBehaviour, IElementGenerator
         element.changeType(newType, pool[newType]);
     }
 
+    public void changeTypeCommon(Element element, int type)
+    {
+        element.changeType(type, pool[type]);
+    }
+
     public void changeTypeSpecial(Element element)
     {
         throw new System.NotImplementedException();
@@ -65,6 +70,26 @@ public class ElementGenerator : MonoBehaviour, IElementGenerator
         return newElement;
     }
 
+    public Element createReplayPiece(Transform repalayTransform, int _posX, int _posY)
+    {
+        Vector2 position = new Vector2(boardPosition.x + _posX * elementScale,
+                               boardPosition.y + _posY * elementScale);
+
+        GameObject newPiece = Instantiate(elementPrefab);
+        Vector3 scale = new Vector3(elementScale, elementScale, elementScale);
+        newPiece.transform.localScale = scale;
+        newPiece.transform.parent = repalayTransform;
+
+        Element newElement = new Element(newPiece);
+
+        newElement.piece.name = "rep ( " + _posX + "," + _posY + " )";
+
+        newElement.setPosition(_posX, _posY, position);
+
+        return newElement;
+
+    }
+
     public Element createSpecialPiece()
     {
         throw new System.NotImplementedException();
@@ -85,6 +110,22 @@ public class ElementGenerator : MonoBehaviour, IElementGenerator
                     changeTypeCommon(newElement);
                 } while (isItInitMatch(board, newElement));
 
+                board[i, j] = newElement;
+            }
+        }
+
+        return board;
+    }
+
+    public Element[,] generateReplayBoard(Transform repalayTransform, int _width, int _heigth)
+    {
+        Element[,] board = new Element[_width, _heigth];
+
+        for (int i = 0; i < _width; i++)
+        {
+            for (int j = 0; j < _heigth; j++)
+            {
+                Element newElement = createReplayPiece(repalayTransform, i, j);
                 board[i, j] = newElement;
             }
         }

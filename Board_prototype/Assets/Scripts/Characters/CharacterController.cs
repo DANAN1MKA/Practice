@@ -45,11 +45,22 @@ public class CharacterController : MonoBehaviour
     {
         if (comboCount > 0)
         {
-            if (movingEnemy.nextEnemy != null) killEnemy();
-            signalBus.Fire<CheracterAttackSignal>();
-            comboCount--;
+            if (movingEnemy.nextEnemy != null)
+            {
+                killEnemy();
+                signalBus.Fire<CheracterAttackSignal>();
+                comboCount--;
+            }
+            else
+            if (movingEnemy.nextEnemy == null)
+            {
+                //TODO: убийства завершены сигнал
+                Debug.Log("убийства завершены сигнал");
+
+                signalBus.Fire<KillingCompletedSignal>();
+            }
+
         }
-        if (movingEnemy.nextEnemy == null) signalBus.Fire<KillingCompletedSignal>();
     }
 
     private void killEnemy()
