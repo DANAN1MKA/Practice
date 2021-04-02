@@ -54,9 +54,6 @@ public class CharacterController : MonoBehaviour
             else
             if (movingEnemy.nextEnemy == null)
             {
-                //TODO: убийства завершены сигнал
-                Debug.Log("убийства завершены сигнал");
-
                 signalBus.Fire<KillingCompletedSignal>();
             }
 

@@ -6,6 +6,8 @@ public class Logger : MonoBehaviour
 {
     [Inject] SignalBus signalBus;
 
+    private bool isActive;
+
     private void Awake()
     {
         signalBus.Subscribe<StartBoardStateSignal>(startLogger);
@@ -34,6 +36,8 @@ public class Logger : MonoBehaviour
                 newElement.type = signal.startState[i, j].type;
                 boardStartState[i, j] = newElement;
             }
+
+        isActive = true;
     }
 
     private SwipeData lastSwipe;
@@ -42,7 +46,7 @@ public class Logger : MonoBehaviour
 
     private void rememberSwipe(SwipeElementSignal signal)
     {
-        if (isVerifyed)
+        if (isActive && isVerifyed)
         {
             lastSwipe = new SwipeData();
             lastSwipe.posX = signal.posX;
@@ -55,8 +59,9 @@ public class Logger : MonoBehaviour
 
     private void verifySwipe(MoveManagerSwipeSignal signal)
     {
-        if(signal.element1.nextPosition == null && 
-           signal.element2.nextPosition == null)
+        if(isActive && 
+            signal.element1.nextPosition == null && 
+            signal.element2.nextPosition == null)
         {
             isVerifyed = true;
         }
@@ -71,8 +76,7 @@ public class Logger : MonoBehaviour
 
     private void generateJSON()
     {
-        //TODO: отладка
-        Debug.Log("SwipeCounter " + swipeHistory.Count);
+        isActive = false;
 
         BoardHistory json = new BoardHistory();
         json.board = boardStartState;

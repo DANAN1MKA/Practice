@@ -50,10 +50,8 @@ public class BoardReplayLayout : MonoBehaviour
     {
         if (history != null)
         {
-            //TODO: реплей запуск
-            Debug.Log("реплей запуск");
-
             swipeCounter = 0;
+            newGemsTypeCounter = 0;
             isActive = true;
             show();
 
@@ -71,6 +69,13 @@ public class BoardReplayLayout : MonoBehaviour
                 if (liensList != null) signalBus.Fire(new RenderLineSignal(liensList));
                 swipeElement(history.swipeHistory[swipeCounter]);
                 swipeCounter++;
+            }
+            else
+            if(newGemsTypeCounter < history.newGemsType.Count)
+            {
+                foundMatchesHandler();
+                //сбрасываем линии
+                signalBus.Fire<TimerHandlerSignal>();
             }
             else
             {
@@ -200,6 +205,116 @@ public class BoardReplayLayout : MonoBehaviour
         element1.setElement(element2);
         element2.setElement(tmp);
     }
+
+
+    private int newGemsTypeCounter;
+
+    private void foundMatchesHandler()
+    {
+        handleBlockedElements();
+
+        List<MovingElement> fallingElements = moveBlockedElementsUp();
+
+        foreach (MovingElement curr in fallingElements)
+        {
+            curr.elem.move(curr.endPosition);
+        }
+
+        signalBus.Fire(new MoveManagerDropSignal(fallingElements));
+
+        matchCascad();
+    }
+
+    private void matchCascad()
+    {
+
+        /*
+         на поле проверяем только элементы помеченые единицой
+         * 1 * * 1 * *
+         1 * * 1 * * 1
+         * * 1 * * 1 *
+         * 1 * * 1 * *
+         1 * * 1 * * 1
+         * * 1 * * 1 *
+         * 1 * * 1 * *
+         1 * * 1 * * 1
+         */
+        int shiftCounter = 0;
+        for (int j = 0; j < config.height; j++)
+        {
+            for (int i = shiftCounter; i < config.width; i += 3)
+            {
+                isItMatch(board[i, j]);
+            }
+            shiftCounter = shiftCounter < 2 ? shiftCounter + 1 : 0;
+        }
+    }
+
+
+    private void handleBlockedElements()
+    {
+        for (int i = 0; i < config.height; i++)
+        {
+            for (int j = 0; j < config.width; j++)
+            {
+                if (board[j, i].getState())
+                {
+
+                    int count = board[j, i].posY;
+
+                    while (count < config.height - 1 && board[j, count].getState()) count++;
+
+                    if (!board[j, count].getState())
+                    {
+                        swipe(board[j, i], board[j, count]);
+
+                        board[j, i].unblock();
+                        board[j, count].block();
+
+                    }
+                }
+            }
+        }
+    }
+
+    private List<MovingElement> moveBlockedElementsUp()
+    {
+
+        List<MovingElement> fallingElements = new List<MovingElement>();
+
+        int[] countForColumn = new int[config.width];
+
+        for (int i = 0; i < config.height; i++)
+        {
+            for (int j = 0; j < config.width; j++)
+            {
+                Vector2 endPosition = board[j, i].position;
+
+                fallingElements.Add(new MovingElement(board[j, i], endPosition, null));
+
+                if (board[j, i].getState())
+                {
+                    elementGenerator.changeTypeCommon(board[j, i], history.newGemsType[newGemsTypeCounter]);
+                    newGemsTypeCounter++;
+
+
+                    board[j, i].piece.transform.position = new Vector2(config.boardPositionFromResolution.x + board[j, i].posX * config.scale,
+                                                                       config.boardPositionFromResolution.y + (config.height + countForColumn[j]) * config.scale);
+
+                    board[j, i].unblock();
+                    countForColumn[j]++;
+                }
+
+                board[j, i].resetAnimanion();
+            }
+        }
+
+        return fallingElements;
+    }
+
+
+
+
 
 
     private void generateLinesList(Element element, List<Element> _horizontalMatch, List<Element> _verticalMatch)

@@ -198,13 +198,16 @@ public class BoardLayout : MonoBehaviour
 
     public void timerHandler()
     {
-        isBlocked = true;
-        isItFirstMatch = false;
+        if (!isReplayPlayed)
+        {
+            isBlocked = true;
+            isItFirstMatch = false;
 
-        //TODO: characters
-        damageAmount += foundMatches.Count;
+            //TODO: characters
+            damageAmount += foundMatches.Count;
 
-        foundMatchesHandler();
+            foundMatchesHandler();
+        }
     }
 
     public void animationCompleted()
@@ -281,7 +284,6 @@ public class BoardLayout : MonoBehaviour
                 if (board[j, i].getState())
                 {
 
-                    elementGenerator.changeTypeCommon(board[j, i]);
                     int count = board[j, i].posY;
 
                     while (count < heigth - 1 && board[j, count].getState()) count++;
@@ -319,12 +321,11 @@ public class BoardLayout : MonoBehaviour
 
                 if (board[j, i].getState())
                 {
+                    elementGenerator.changeTypeCommon(board[j, i]);
 
 
                     //TODO: запоминаем товые типы элементов
                     newGemsType.Add(board[j, i].type);
-
-
 
 
                     board[j, i].piece.transform.position = new Vector2(boardPosition.x + board[j, i].posX * scale,
