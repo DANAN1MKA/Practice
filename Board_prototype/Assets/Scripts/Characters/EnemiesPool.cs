@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(menuName = "Characters/Enemies")]
+[CreateAssetMenu(menuName = "Characters/CommonEnemiesPool")]
 
 public class EnemiesPool : ScriptableObject
 {

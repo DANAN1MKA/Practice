@@ -43,20 +43,15 @@ public class CharacterController : MonoBehaviour
 
     private void nextEnemy()
     {
-        if (comboCount > 0)
+        if (comboCount > 1)
         {
-            if (movingEnemy.nextEnemy != null)
-            {
-                killEnemy();
-                signalBus.Fire<CheracterAttackSignal>();
-                comboCount--;
-            }
-            else
-            if (movingEnemy.nextEnemy == null)
-            {
-                signalBus.Fire<KillingCompletedSignal>();
-            }
-
+            killEnemy();
+            signalBus.Fire<CheracterAttackSignal>();
+            comboCount--;
+        }
+        else
+        {
+            signalBus.Fire<KillingCompletedSignal>();
         }
     }
 
@@ -70,7 +65,6 @@ public class CharacterController : MonoBehaviour
     private void createEnemy(SwipeDamageSignal signal)
     {
         if(movingEnemy != null) killEnemy();
-        int scale = 3;
         comboCount = 0;
 
         damageAmount = signal.damageAmount;
@@ -80,8 +74,7 @@ public class CharacterController : MonoBehaviour
         {
             instantiateEnemy();
 
-            i += scale;
-            scale += 3;
+            i += 3;
             comboCount++;
 
         } while (damageAmount > i);

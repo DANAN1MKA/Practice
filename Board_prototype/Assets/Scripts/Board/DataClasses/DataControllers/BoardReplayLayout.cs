@@ -294,7 +294,9 @@ public class BoardReplayLayout : MonoBehaviour
 
                 if (board[j, i].getState())
                 {
+
                     elementGenerator.changeTypeCommon(board[j, i], history.newGemsType[newGemsTypeCounter]);
+
                     newGemsTypeCounter++;
 
 
@@ -311,10 +313,6 @@ public class BoardReplayLayout : MonoBehaviour
 
         return fallingElements;
     }
-
-
-
-
 
 
     private void generateLinesList(Element element, List<Element> _horizontalMatch, List<Element> _verticalMatch)
