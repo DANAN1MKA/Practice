@@ -36,6 +36,7 @@ public class BoardInstaller : MonoInstaller
 
         Container.BindInterfacesAndSelfTo<BoardTimeController>().AsSingle().NonLazy();
         Container.Bind<IElementGenerator>().FromComponentInHierarchy().AsSingle().NonLazy();
+        Container.Bind<ICheracterController>().FromComponentInHierarchy().AsSingle().NonLazy();
         Container.Bind<BoardProperties>().FromInstance(config);
         Container.Bind<EnemiesPool>().FromInstance(enemiesPool);
         Container.Bind<PlayerData>().FromInstance(playerData);

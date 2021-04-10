@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5797313522276511206}
   - component: {fileID: 4494235840052639892}
   - component: {fileID: 6500283360851967169}
+  - component: {fileID: 7454818075867696876}
   m_Layer: 0
   m_Name: ScoreText
   m_TagString: Untagged
@@ -91,3 +92,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af291fb18345e6e4e92f7a86d2984b16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!111 &7454818075867696876
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5441853880168326194}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 922f3783308702d428d7f03e4fe23250, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: 922f3783308702d428d7f03e4fe23250, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0

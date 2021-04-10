@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Zenject;
 
-public class CharacterController : MonoBehaviour
+public class CharacterController : MonoBehaviour, ICheracterController
 {
     [Inject] private SignalBus signalBus;
     [Inject] private BoardProperties config;
@@ -10,6 +10,15 @@ public class CharacterController : MonoBehaviour
     private GameObject character;
     private delegate void CharacterAtack();
     private CharacterAtack characterAtack;
+
+
+    //TODO: boss progress UI updater
+    public delegate void UpdateState(float value);
+    private UpdateState bossProgressUIUpdate;
+
+    private int bossProgressEnemyCounter;
+    [SerializeField]private int bossRequiredEnemyAmount;
+
 
     private GameObject enemy;
 
@@ -39,6 +48,9 @@ public class CharacterController : MonoBehaviour
         character.transform.localScale *= config.scale;
 
         createEnemy(new SwipeDamageSignal(0));
+
+
+        bossProgressEnemyCounter = 0;
     }
 
     private void nextEnemy()
@@ -48,6 +60,10 @@ public class CharacterController : MonoBehaviour
             killEnemy();
             signalBus.Fire<CheracterAttackSignal>();
             comboCount--;
+
+            //TODO: boss progress
+            bossProgressEnemyCounter = bossProgressEnemyCounter < bossRequiredEnemyAmount ? bossProgressEnemyCounter + 1 : 0;
+            bossProgressUIUpdate((float)bossProgressEnemyCounter / (float)bossRequiredEnemyAmount);
         }
         else
         {
@@ -100,5 +116,10 @@ public class CharacterController : MonoBehaviour
 
         MovingEnemy nextEnemy = new MovingEnemy(enemy, targetPositionEnemy, movingEnemy, enemyScript.die, enemyScript.stopJump);
         movingEnemy = nextEnemy;
+    }
+
+    public void setUI(UpdateState callback)
+    {
+        bossProgressUIUpdate = callback;
     }
 }
