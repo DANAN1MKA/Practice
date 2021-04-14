@@ -21,6 +21,10 @@ public class BoardInstaller : MonoInstaller
         //TODO: UI
         Container.DeclareSignal<AddScoreSignal>();
 
+        //TODO: buttons
+        Container.DeclareSignal<ShowBossButton>();
+        Container.DeclareSignal<BossStartedSignal>();
+
 
         //TODO: characters
         Container.DeclareSignal<NewEnemySignal>();
@@ -34,6 +38,7 @@ public class BoardInstaller : MonoInstaller
         Container.DeclareSignal<NewReplaySignal>();
         Container.DeclareSignal<ReplayCompliteSignal>();
 
+        Container.BindInterfacesAndSelfTo<StorageController>().AsSingle().NonLazy();
         Container.BindInterfacesAndSelfTo<BoardTimeController>().AsSingle().NonLazy();
         Container.Bind<IElementGenerator>().FromComponentInHierarchy().AsSingle().NonLazy();
         Container.Bind<ICheracterController>().FromComponentInHierarchy().AsSingle().NonLazy();

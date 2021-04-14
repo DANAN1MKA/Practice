@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Script : MonoBehaviour
+public class ExitButton : MonoBehaviour
 {
     public void ExitMethod()
     {

@@ -31,6 +31,15 @@ public class CharacterController : MonoBehaviour, ICheracterController
     {
         signalBus.Subscribe<SwipeDamageSignal>(createEnemy);
         signalBus.Subscribe<MoveEnemyCompliteSignal>(nextEnemy);
+
+        signalBus.Subscribe<BossStartedSignal>(dropStreak);
+
+    }
+
+    public void dropStreak()
+    {
+        bossProgressEnemyCounter = 0;
+        bossProgressUIUpdate(0.001f);
     }
 
     public void Start()
@@ -62,8 +71,17 @@ public class CharacterController : MonoBehaviour, ICheracterController
             comboCount--;
 
             //TODO: boss progress
-            bossProgressEnemyCounter = bossProgressEnemyCounter < bossRequiredEnemyAmount ? bossProgressEnemyCounter + 1 : 0;
-            bossProgressUIUpdate((float)bossProgressEnemyCounter / (float)bossRequiredEnemyAmount);
+            bossProgressEnemyCounter++;
+
+            if (bossProgressEnemyCounter >= bossRequiredEnemyAmount)
+            {
+                signalBus.Fire<ShowBossButton>();
+                bossProgressUIUpdate(1);
+            }
+            else
+            {
+                bossProgressUIUpdate((float)bossProgressEnemyCounter / (float)bossRequiredEnemyAmount);
+            }
         }
         else
         {

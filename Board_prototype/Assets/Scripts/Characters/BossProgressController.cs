@@ -22,9 +22,6 @@ public class BossProgressController : MonoBehaviour
     {
         if(value > 0 && value <= 1)
             slider.value = value;
-
-        //TODO: отладка
-        Debug.Log(value);
     }
 
 }
