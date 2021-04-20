@@ -1,13 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 
 [Serializable]
 public class StorageClass
 {
     [SerializeField]
-    public int score;
+    public System.UInt64 score;
     [SerializeField]
-    public int money;
+    public System.UInt64 money;
 }

@@ -5,6 +5,8 @@ public class BoardInstaller : MonoInstaller
     public BoardProperties config;
     public EnemiesPool enemiesPool;
     public PlayerData playerData;
+    public PlayerItems playerItems;
+
 
     public override void InstallBindings()
     {
@@ -19,6 +21,7 @@ public class BoardInstaller : MonoInstaller
         Container.DeclareSignal<CheracterAttackSignal>();
 
         //TODO: UI
+        Container.DeclareSignal<UpdateTextUISignal>();
         Container.DeclareSignal<AddScoreSignal>();
 
         //TODO: buttons
@@ -38,13 +41,15 @@ public class BoardInstaller : MonoInstaller
         Container.DeclareSignal<NewReplaySignal>();
         Container.DeclareSignal<ReplayCompliteSignal>();
 
-        Container.BindInterfacesAndSelfTo<StorageController>().AsSingle().NonLazy();
+        //Container.BindInterfacesAndSelfTo<StorageController>().AsSingle().NonLazy();
         Container.BindInterfacesAndSelfTo<BoardTimeController>().AsSingle().NonLazy();
         Container.Bind<IElementGenerator>().FromComponentInHierarchy().AsSingle().NonLazy();
         Container.Bind<ICheracterController>().FromComponentInHierarchy().AsSingle().NonLazy();
         Container.Bind<BoardProperties>().FromInstance(config);
         Container.Bind<EnemiesPool>().FromInstance(enemiesPool);
         Container.Bind<PlayerData>().FromInstance(playerData);
+        Container.Bind<PlayerItems>().FromInstance(playerItems);
+
 
 
     }

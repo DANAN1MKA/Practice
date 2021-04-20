@@ -4,7 +4,11 @@
 public class PlayerData : ScriptableObject
 {
     public GameObject currentHeroPrefab;
-    public int score;
-    public int money;
-    public float coefficient;
+    public System.UInt64 score;
+    public System.UInt64 money;
+
+    private void Awake()
+    {
+       // DontDestroyOnLoad()
+    }
 }

@@ -1,12 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Zenject;
 
 public class ScoreController : MonoBehaviour
 {
     [Inject] private SignalBus signalBus;
     [Inject] private PlayerData playerData;
+    [Inject] private PlayerItems playerItems;
+
 
     private int currentDamage;
 
@@ -23,9 +23,19 @@ public class ScoreController : MonoBehaviour
 
     private void sendScoreMoney()
     {
-        signalBus.Fire(new AddScoreSignal(228, 4));
-        playerData.score += 228;
+        System.UInt64 score = 1;
+
+        for(int i = 0; i < DefaultCoef.itemsData.Length; i++)
+        {
+            if(playerItems.itemData[i].isBought)
+                score += playerItems.itemData[i].baseGrowthRate;
+        }
+
+        playerData.score += score;
         playerData.money += 4;
+
+        signalBus.Fire(new AddScoreSignal(score, 4));
+        signalBus.Fire<UpdateTextUISignal>();
     }
 
 

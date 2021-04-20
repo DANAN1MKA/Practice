@@ -1,10 +1,10 @@
 ﻿
 public class AddScoreSignal
 {
-    public int score { get; private set; }
-    public int money { get; private set; }
+    public System.UInt64 score { get; private set; }
+    public System.UInt64 money { get; private set; }
 
-    public AddScoreSignal(int _score, int _money)
+    public AddScoreSignal(System.UInt64 _score, System.UInt64 _money)
     {
         score = _score;
         money = _money;
