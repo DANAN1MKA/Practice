@@ -11,6 +11,7 @@ public class ScroleBarInit : MonoBehaviour
     }
     private void Start()
     {
+        //TODO: не прокручивает вверх при старте сцены
         scrollbar.value = 1f;
     }
 

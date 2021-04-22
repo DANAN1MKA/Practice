@@ -5,8 +5,8 @@ using Zenject;
 public class ItemsInstaller : MonoInstaller
 {
 
-    public PlayerData playerData;
-    public PlayerItems playerItems;
+    //public PlayerData playerData;
+    //public PlayerItems playerItems;
 
     public override void InstallBindings()
     {
@@ -15,7 +15,7 @@ public class ItemsInstaller : MonoInstaller
 
 
 
-        Container.Bind<PlayerData>().FromInstance(playerData);
-        Container.Bind<PlayerItems>().FromInstance(playerItems);
+        //Container.Bind<PlayerData>().FromInstance(playerData);
+        //Container.Bind<PlayerItems>().FromInstance(playerItems);
     }
 }

@@ -60,8 +60,6 @@ public class ItemController: MonoBehaviour
                 itemData.baseCoast = (System.UInt64)(itemData.baseCoast * 1.07f);
                 itemData.baseGrowthRate = DefaultCoef.itemsData[ID].baseGrowthRate * (System.UInt64)itemData.level;
 
-                //TODO: otladka
-                Debug.Log("DefaultCoef:" + DefaultCoef.itemsData[ID].baseGrowthRate + " level:" + itemData.level);
             }
             updateUI();
             updateUIcb();
