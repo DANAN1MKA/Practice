@@ -15,4 +15,3 @@ MonoBehaviour:
   currentHeroPrefab: {fileID: 0}
   score: 0
   money: 0
-  coefficient: 0

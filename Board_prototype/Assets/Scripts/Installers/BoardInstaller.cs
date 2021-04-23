@@ -4,9 +4,6 @@ public class BoardInstaller : MonoInstaller
 {
     public BoardProperties config;
     public EnemiesPool enemiesPool;
-    //public PlayerData playerData;
-    //public PlayerItems playerItems;
-
 
     public override void InstallBindings()
     {
@@ -47,10 +44,5 @@ public class BoardInstaller : MonoInstaller
         Container.Bind<ICheracterController>().FromComponentInHierarchy().AsSingle().NonLazy();
         Container.Bind<BoardProperties>().FromInstance(config);
         Container.Bind<EnemiesPool>().FromInstance(enemiesPool);
-        //Container.Bind<PlayerData>().FromInstance(playerData);
-        //Container.Bind<PlayerItems>().FromInstance(playerItems);
-
-
-
     }
 }

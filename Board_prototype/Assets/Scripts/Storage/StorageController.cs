@@ -8,10 +8,8 @@ using System;
 
 public class StorageController : IInitializable, IDisposable
 {
-    //[Inject] SignalBus signalBus;
     [Inject] PlayerData playerData;
     [Inject] PlayerItems playerItems;
-    //Player
 
     FileStream file;
     StorageClass storage;
@@ -23,17 +21,6 @@ public class StorageController : IInitializable, IDisposable
 
         if (File.Exists(Application.persistentDataPath + "/Storage.dat"))
         {
-            //    bf = new BinaryFormatter();
-            //    file = File.Create(Application.persistentDataPath + "/Storage.dat");
-            //    storage = new StorageClass();
-            //    storage.score = 0;
-            //    storage.money = 0;
-
-            //    bf.Serialize(file, storage);
-            //    Debug.Log("File created!");
-            //}
-            //else
-            //{
             bf = new BinaryFormatter();
             file = File.Open(Application.persistentDataPath + "/Storage.dat", FileMode.Open);
             storage = new StorageClass();
@@ -43,10 +30,23 @@ public class StorageController : IInitializable, IDisposable
             playerData.money = storage.money;
             playerItems.itemData = storage.itemsData.ToArray();
 
-            file.Close();
-
             Debug.Log("File data loaded!");
         }
+        else
+        {
+            setup();
+            bf = new BinaryFormatter();
+            file = File.Create(Application.persistentDataPath + "/Storage.dat");
+            storage = new StorageClass();
+            storage.score = 0;
+            storage.money = 0;
+            storage.itemsData = new List<ItemData>(playerItems.itemData);
+
+            bf.Serialize(file, storage);
+            Debug.Log("File created!");
+
+        }
+        file.Close();
 
     }
 
@@ -82,4 +82,20 @@ public class StorageController : IInitializable, IDisposable
     private void saveData()
     {
     }
+
+    public void setup()
+    {
+        playerItems.itemData = new ItemData[DefaultCoef.itemsData.Length];
+        //Array.Copy(DefaultCoef.itemsData, playerItems.itemData, DefaultCoef.itemsData.Length);
+        for (int i = 0; i < DefaultCoef.itemsData.Length; i++)
+        {
+            playerItems.itemData[i] = new ItemData();
+            playerItems.itemData[i].itemName = DefaultCoef.itemsData[i].itemName;
+            playerItems.itemData[i].baseCoast = 0 + DefaultCoef.itemsData[i].baseCoast;
+            playerItems.itemData[i].baseGrowthRate = 0 + DefaultCoef.itemsData[i].baseGrowthRate;
+            playerItems.itemData[i].isBought = false;
+            playerItems.itemData[i].level = 0;
+        }
+    }
+
 }

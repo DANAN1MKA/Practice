@@ -200,10 +200,10 @@ RectTransform:
   m_Father: {fileID: 1146623567}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 328.29, y: 571.67}
-  m_SizeDelta: {x: 131.50026, y: 68.89384}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -71.70999, y: -139.33002}
+  m_SizeDelta: {x: 131.50024, y: 68.89386}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &245028700
 MonoBehaviour:
@@ -845,8 +845,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   config: {fileID: 11400000, guid: 888559d8e4b1bd446961f0fd06d490c8, type: 2}
   enemiesPool: {fileID: 11400000, guid: 834feee805bb8d64ab2ef1c6ddbcaf1a, type: 2}
-  playerData: {fileID: 11400000, guid: 4e775d5c60069404eaa7f1b9bdf394be, type: 2}
-  playerItems: {fileID: 11400000, guid: 3694e43ecdee6ef4a9e66a7ad2381ca7, type: 2}
 --- !u!114 &911267684
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2390,7 +2388,7 @@ PrefabInstance:
     - target: {fileID: 5152114182765615162, guid: cabb376080586af49a4d8cf36134b6bd,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 84.15088
+      value: 85.07544
       objectReference: {fileID: 0}
     - target: {fileID: 5152114182765615162, guid: cabb376080586af49a4d8cf36134b6bd,
         type: 3}
@@ -2435,7 +2433,7 @@ PrefabInstance:
     - target: {fileID: 5152114182765615162, guid: cabb376080586af49a4d8cf36134b6bd,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 43
+      value: 42.538
       objectReference: {fileID: 0}
     - target: {fileID: 5152114182765615162, guid: cabb376080586af49a4d8cf36134b6bd,
         type: 3}
