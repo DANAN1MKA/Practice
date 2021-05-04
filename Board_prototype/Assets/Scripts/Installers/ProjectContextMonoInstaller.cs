@@ -8,7 +8,8 @@ public class ProjectContextMonoInstaller : MonoInstaller
 
     public override void InstallBindings()
     {
-        Container.BindInterfacesAndSelfTo<OdinStorageController>().AsSingle().NonLazy();
+        //TODO: OdinStorageController
+        Container.BindInterfacesAndSelfTo<StorageController>().AsSingle().NonLazy();
 
         Container.Bind<PlayerData>().FromInstance(playerData);
         Container.Bind<PlayerItems>().FromInstance(playerItems);

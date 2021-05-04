@@ -35,11 +35,14 @@ public class MoveElementsManager : MonoBehaviour
         }
     }
 
-    void Start()
+    private void Awake()
     {
         signalBus.Subscribe<MoveManagerSwipeSignal>(addElement);
         signalBus.Subscribe<MoveManagerDropSignal>(dropElements);
+    }
 
+    void Start()
+    {
         movingElemenets = new List<MovingElement>();
     }
 

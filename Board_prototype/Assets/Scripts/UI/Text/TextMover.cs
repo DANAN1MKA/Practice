@@ -10,7 +10,8 @@ public class TextMover : MonoBehaviour
     public void setup(System.UInt64 scoreValue)
     {
         GetComponent<Text>().text = "+" + scoreValue;
-        direction = Vector2.up * 150;
+        float x = Random.Range(0.5f, -0.5f);
+        direction = new Vector2(x, 1) * 150;
         isActive = true;
     }
 

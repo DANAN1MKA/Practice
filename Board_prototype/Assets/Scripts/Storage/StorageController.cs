@@ -24,30 +24,43 @@ public class StorageController : IInitializable, IDisposable
             bf = new BinaryFormatter();
             file = File.Open(Application.persistentDataPath + "/Storage.dat", FileMode.Open);
             storage = new StorageClass();
-            storage = (StorageClass)bf.Deserialize(file);
 
-            playerData.score = storage.score;
-            playerData.money = storage.money;
-            playerItems.itemData = storage.itemsData.ToArray();
+            try
+            { 
+                storage = (StorageClass)bf.Deserialize(file);
+                playerData.score = storage.score;
+                playerData.money = storage.money;
+                playerItems.itemData = storage.itemsData.ToArray();
 
-            Debug.Log("File data loaded!");
+                Debug.Log("File data loaded!");
+
+            }
+            catch
+            {
+                File.Delete(Application.persistentDataPath + "/Storage.dat");
+                initializeStorage();
+            }
         }
         else
         {
-            setup();
-            bf = new BinaryFormatter();
-            file = File.Create(Application.persistentDataPath + "/Storage.dat");
-            storage = new StorageClass();
-            storage.score = 0;
-            storage.money = 0;
-            storage.itemsData = new List<ItemData>(playerItems.itemData);
-
-            bf.Serialize(file, storage);
-            Debug.Log("File created!");
-
+            initializeStorage();
         }
         file.Close();
 
+    }
+
+    private void initializeStorage()
+    {
+        setup();
+        bf = new BinaryFormatter();
+        file = File.Create(Application.persistentDataPath + "/Storage.dat");
+        storage = new StorageClass();
+        storage.score = 0;
+        storage.money = 0;
+        storage.itemsData = new List<ItemData>(playerItems.itemData);
+
+        bf.Serialize(file, storage);
+        Debug.Log("File created!");
     }
 
     public void Dispose()

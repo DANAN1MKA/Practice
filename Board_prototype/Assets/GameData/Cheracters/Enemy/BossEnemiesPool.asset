@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1da1ce8bec8ece4786ccc6f2ff6b1f6, type: 3}
+  m_Name: BossEnemiesPool
+  m_EditorClassIdentifier: 
+  pool:
+  - {fileID: 6893016606672211817, guid: f56e4b362818de1488c5e472b28d6585, type: 3}
+  - {fileID: 2235079632287880786, guid: b53132ba39ee93041a355b0f29206c75, type: 3}
+  - {fileID: 1409044366208847548, guid: 2ea5788e2e47e4e488e27bbb1d99fe33, type: 3}
+  - {fileID: 2566765157876993224, guid: 905678ed4e3bc10449f663b0e614c400, type: 3}

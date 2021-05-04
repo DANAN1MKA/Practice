@@ -14,7 +14,7 @@ public class CharacterController : MonoBehaviour, ICheracterController
 
     //TODO: boss progress UI updater
     public delegate void UpdateState(float value);
-    private UpdateState bossProgressUIUpdate;
+    private UpdateState bossProgressUIUpdate = null;
 
     private int bossProgressEnemyCounter;
     [SerializeField]private int bossRequiredEnemyAmount;
@@ -38,8 +38,11 @@ public class CharacterController : MonoBehaviour, ICheracterController
 
     public void dropStreak()
     {
-        bossProgressEnemyCounter = 0;
-        bossProgressUIUpdate(0.001f);
+        if (bossProgressUIUpdate != null)
+        {
+            bossProgressEnemyCounter = 0;
+            bossProgressUIUpdate(0.001f);
+        }
     }
 
     public void Start()
@@ -70,17 +73,21 @@ public class CharacterController : MonoBehaviour, ICheracterController
             signalBus.Fire<CheracterAttackSignal>();
             comboCount--;
 
-            //TODO: boss progress
-            bossProgressEnemyCounter++;
 
-            if (bossProgressEnemyCounter >= bossRequiredEnemyAmount)
+            //TODO: boss progress
+            if (bossProgressUIUpdate != null)
             {
-                signalBus.Fire<ShowBossButton>();
-                bossProgressUIUpdate(1);
-            }
-            else
-            {
-                bossProgressUIUpdate((float)bossProgressEnemyCounter / (float)bossRequiredEnemyAmount);
+                bossProgressEnemyCounter++;
+
+                if (bossProgressEnemyCounter >= bossRequiredEnemyAmount)
+                {
+                    signalBus.Fire<ShowBossButton>();
+                    bossProgressUIUpdate(1);
+                }
+                else
+                {
+                    bossProgressUIUpdate((float)bossProgressEnemyCounter / (float)bossRequiredEnemyAmount);
+                }
             }
         }
         else
