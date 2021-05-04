@@ -16,14 +16,17 @@ public class AttackController : MonoBehaviour
     private float targetValue = 1f;
     [SerializeField] private float raySpeed;
     private bool isActive = false;
+    private bool fightToggle = true;
 
     [SerializeField] private GameObject playerAttack;
     [SerializeField] private GameObject enemyAttack;
+    [SerializeField] private GameObject sparks;
 
 
     private void Awake()
     {
-        //signalBus.Subscribe<CheracterAttackSignal>(attack);
+        signalBus.Subscribe<MoveManagerSwipeSignal>(start);
+
 
         //TODO: временно
         signalBus.Subscribe<SwipeDamageSignal>(attack);
@@ -31,58 +34,75 @@ public class AttackController : MonoBehaviour
 
     private void Start()
     {
-        playerAttack.transform.position = new Vector3((1.75f / 2), transform.position.y, 0);
-        playerAttack.transform.localScale = new Vector3(4.76f / 2, 1, 1);
+        playerAttack.transform.localPosition = new Vector3((maxPositionValue / 2), 0, 0);
+        playerAttack.transform.localScale = new Vector3(maxScaleValue / 2, 0.4f, 1);
 
-        enemyAttack.transform.position = new Vector3((-1.75f / 2), transform.position.y, 0);
-        enemyAttack.transform.localScale = new Vector3(-4.76f / 2, 1, 1);
+        enemyAttack.transform.localPosition = new Vector3((-maxPositionValue / 2), 0, 0);
+        enemyAttack.transform.localScale = new Vector3(-maxScaleValue / 2, 0.4f, 1);
+
+        sparks.transform.localPosition = new Vector2(0, 0);
     }
 
     private void newValue()
     {
-        playerAttack.transform.position = new Vector3((1.75f / 2) * currentValue, transform.position.y, 0);
-        playerAttack.transform.localScale = new Vector3((4.76f / 2) * (2 - currentValue), 1, 1);
+        playerAttack.transform.localPosition = new Vector3((maxPositionValue / 2) * currentValue, 0, 0);
+        playerAttack.transform.localScale = new Vector3((maxScaleValue / 2) * (2 - currentValue), 0.4f, 1);
 
-        enemyAttack.transform.position = new Vector3((-1.75f / 2) * (2 - currentValue), transform.position.y, 0);
-        enemyAttack.transform.localScale = new Vector3((-4.76f / 2) * currentValue, 1, 1);
+        enemyAttack.transform.localPosition = new Vector3((-maxPositionValue / 2) * (2 - currentValue), 0, 0);
+        enemyAttack.transform.localScale = new Vector3((-maxScaleValue / 2) * currentValue, 0.4f, 1);
+
+        float sparkPositionCoef = (1f - currentValue) * -1;
+
+        sparks.transform.localPosition = new Vector2(maxPositionValue * sparkPositionCoef, 0);
     }
     
     private void attack(SwipeDamageSignal signal)
     {
         float coef = (float)signal.damageAmount / 20f;
 
+        //TODO: отладка
         Debug.Log("damage amount " + signal.damageAmount + "\n" +
                   "coef " + coef);
 
 
         targetValue = currentValue + (0.5f * coef);
         isActive = true;
-        //value = value >= 2f ? 0.1f : value + 0.1f;
-        //newValue();
+    }
+
+    private void start()
+    {
+        fightToggle = false;
+
+        signalBus.Unsubscribe<MoveManagerSwipeSignal>(start);
     }
 
  
 
     private void Update()
     {
-            //if (isActive) 
-            if (isActive)
-            {
-                currentValue = currentValue < targetValue ? currentValue + (raySpeed * 6) : currentValue - raySpeed;
+        if (fightToggle) return;
 
-                if (currentValue >= targetValue)
-                {
-                    isActive = false;
-                    if (currentValue >= 2) signalBus.Fire(new VictorySignal(true));
-                    else signalBus.Fire<KillingCompletedSignal>();
+        if (isActive)
+        {
+            currentValue = currentValue < targetValue ? currentValue + (raySpeed * 6) : currentValue - raySpeed;
+
+            if (currentValue >= targetValue)
+            {
+                isActive = false;
+                if (currentValue >= 2) 
+                { 
+                    signalBus.Fire(new VictorySignal(true));
+                    fightToggle = true;
                 }
+                else signalBus.Fire<KillingCompletedSignal>();
             }
-            else
-            {
-                currentValue = currentValue < targetValue ? currentValue - raySpeed : currentValue - raySpeed;
+        }
+        else
+        {
+            currentValue = currentValue < targetValue ? currentValue - raySpeed : currentValue - raySpeed;
 
-                if (currentValue <= 0) signalBus.Fire(new VictorySignal(false));
-            }
+            if (currentValue <= 0) signalBus.Fire(new VictorySignal(false));
+        }
         if (currentValue > 0 && currentValue < 2f) newValue();
         
     }

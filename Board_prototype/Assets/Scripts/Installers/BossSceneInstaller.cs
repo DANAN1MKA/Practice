@@ -18,7 +18,6 @@ public class BossSceneInstaller : MonoInstaller
         Container.DeclareSignal<MoveManagerSwipeSignal>();
         Container.DeclareSignal<MoveManagerDropSignal>();
         Container.DeclareSignal<RenderLineSignal>();
-        Container.DeclareSignal<CheracterAttackSignal>();
 
         //TODO: UI
         Container.DeclareSignal<UpdateTextUISignal>();
