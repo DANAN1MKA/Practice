@@ -104,6 +104,5 @@ public class AttackController : MonoBehaviour
             if (currentValue <= 0) signalBus.Fire(new VictorySignal(false));
         }
         if (currentValue > 0 && currentValue < 2f) newValue();
-        
     }
 }

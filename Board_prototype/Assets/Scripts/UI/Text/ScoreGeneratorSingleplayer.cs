@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Zenject;
 
-public class ScoreGenerator: MonoBehaviour
+public class ScoreGeneratorSingleplayer : MonoBehaviour
 {
     [Inject] private SignalBus signalBus;
     [Inject] private BoardProperties config;
