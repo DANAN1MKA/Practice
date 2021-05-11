@@ -6,6 +6,7 @@ public class CharacterController : MonoBehaviour, ICheracterController
     [Inject] private SignalBus signalBus;
     [Inject] private BoardProperties config;
     [Inject] private EnemiesPool enemiesPull;
+    [Inject] private PlayerData playerData;
 
     private GameObject character;
     private delegate void CharacterAtack();
@@ -48,7 +49,7 @@ public class CharacterController : MonoBehaviour, ICheracterController
     public void Start()
     {
 
-        character = Instantiate(config.characterPrefab);
+        character = Instantiate(playerData.currentHeroPrefab);
         MainCharacterController characterScript = character.GetComponent<MainCharacterController>();
 
         characterAtack = characterScript.attack;

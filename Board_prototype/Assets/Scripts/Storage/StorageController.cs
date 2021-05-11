@@ -65,6 +65,12 @@ public class StorageController : IInitializable, IDisposable
 
     public void Dispose()
     {
+        saveData();
+    }
+
+
+    public void saveData()
+    {
         if (File.Exists(Application.persistentDataPath + "/Storage.dat"))
         {
             file = File.Open(Application.persistentDataPath + "/Storage.dat", FileMode.Open);
@@ -89,11 +95,7 @@ public class StorageController : IInitializable, IDisposable
         file.Close();
 
         Debug.Log("Data Saved!");
-    }
 
-
-    private void saveData()
-    {
     }
 
     public void setup()

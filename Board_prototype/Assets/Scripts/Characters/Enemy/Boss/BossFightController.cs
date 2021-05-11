@@ -9,6 +9,7 @@ public class BossFightController : MonoBehaviour
     [Inject] private SignalBus signalBus;
     [Inject] private BoardProperties config;
     [Inject] private EnemiesPool enemiesPull;
+    [Inject] private PlayerData playerData;
 
     private GameObject character;
     private GameObject enemy;
@@ -42,7 +43,7 @@ public class BossFightController : MonoBehaviour
 
     private void setupScene()
     {
-        character = Instantiate(config.characterPrefab);
+        character = Instantiate(playerData.currentHeroPrefab);
         MainCharacterController characterScript = character.GetComponent<MainCharacterController>();
 
         Vector2 newPositionPlayer = new Vector2(config.characterPosition.x * config.scale,

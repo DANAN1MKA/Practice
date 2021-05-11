@@ -23,6 +23,9 @@ public class ScoreGeneratorBoss : MonoBehaviour
     private float timer;
     [SerializeField] private float timeStep;
 
+
+    //TODO: валюта
+    [SerializeField] private int moneyPerTimestep;
     //TODO: попробуем
     [SerializeField] private GameObject anchor;
 
@@ -86,12 +89,12 @@ public class ScoreGeneratorBoss : MonoBehaviour
         GameObject newTextMoney = Instantiate(moneyTextPrefab, this.transform);
         newTextMoney.transform.position = newPositionMoney;
         TextMover scriptMoney = newTextMoney.GetComponent<TextMover>();
-        scriptMoney.setup(score);
+        scriptMoney.setup((System.UInt64)moneyPerTimestep);
 
         Destroy(newTextMoney, 3f);
 
         playerData.score += score;
-        playerData.money += money;
+        playerData.money += (System.UInt64)moneyPerTimestep;
 
     }
 
@@ -104,7 +107,7 @@ public class ScoreGeneratorBoss : MonoBehaviour
         }
 
         score += score;
-        money += 4;
+        money += (System.UInt64)moneyPerTimestep;
     }
 
 

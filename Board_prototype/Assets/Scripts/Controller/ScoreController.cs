@@ -7,6 +7,8 @@ public class ScoreController : MonoBehaviour
     [Inject] private PlayerData playerData;
     [Inject] private PlayerItems playerItems;
 
+    [SerializeField] private int moneyPerKill;
+
 
     private int currentDamage;
 
@@ -32,9 +34,9 @@ public class ScoreController : MonoBehaviour
         }
 
         playerData.score += score;
-        playerData.money += 4;
+        playerData.money += (System.UInt64)moneyPerKill;
 
-        signalBus.Fire(new AddScoreSignal(score, 4));
+        signalBus.Fire(new AddScoreSignal(score, (System.UInt64)moneyPerKill));
         signalBus.Fire<UpdateTextUISignal>();
     }
 
