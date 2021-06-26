@@ -5,7 +5,7 @@ public class ItemsListController : MonoBehaviour
 {
     [Inject] SignalBus signalBus;
 
-    [Inject] private PlayerItems playerItems;
+    [Inject] private ItemsDataSObj playerItems;
     [Inject] private PlayerData playerData;
 
     private ItemController[] items;
@@ -23,7 +23,7 @@ public class ItemsListController : MonoBehaviour
             item.transform.localScale = new Vector3(1,1,1);
 
             items[i] = item.GetComponent<ItemController>();
-            items[i].setupItem(i, playerItems.itemData[i], playerData);
+            items[i].setupItem(i, playerItems, playerData);
             items[i].updateUIcb = updateUI;
         }
     }

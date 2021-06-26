@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fb45fb94cdea394cb7e785f14774314, type: 3}
+  m_Name: New Items Data S Obj
+  m_EditorClassIdentifier: 
+  itemListPrefab: {fileID: 1473107255543224176, guid: 032f5a4ae4619684487de278e579b1d9,
+    type: 3}
+  itemName:
+  - "\u0421\u0430\u043F\u043E\u0433\u0438"
+  - "\u041C\u0430\u043D\u0442\u0438\u044F"
+  - "\u0428\u0442\u0430\u043D\u044B"
+  - "\u0428\u043B\u044F\u043F\u0430"
+  - "\u0410\u043C\u0443\u043B\u0435\u0442"
+  - "\u041F\u0435\u0440\u0441\u0442\u0435\u043D\u044C"
+  - "\u041F\u043E\u0441\u043E\u0445"
+  - "\u041B\u0435\u0433\u0435\u043D\u0434\u0430\u0440\u043D\u0430\u044F \u0440\u0443\u043D\u0430"
+  baseCoast: 43000000000000003001000000000000e2040000000000006a180000000000001c7a0000000000005a62020000000000cceb0b0000000000ca9a3b0000000000
+  baseGrowthRate: 01000000000000000500000000000000190000000000000078000000000000005802000000000000300c0000000000008c3c000000000000b030010000000000
+  level: 0000000000000000000000000000000000000000000000000000000000000000
+  isBought: 0000000000000000
+  sprite:
+  - {fileID: 21300000, guid: 5ee8071639efec4478fe0435585eb19d, type: 3}
+  - {fileID: 21300000, guid: 1d175f35203c94c42b1aaf0cd686c940, type: 3}
+  - {fileID: 21300000, guid: c0ec57fd235b2074694ed5f344a834a9, type: 3}
+  - {fileID: 21300000, guid: f3998357b3464594c85ed37bd8f14b0c, type: 3}
+  - {fileID: 21300000, guid: 93742bc7cf9edae46a5554cc2ed2b447, type: 3}
+  - {fileID: 21300000, guid: 4cc5632553e0e0544b3650a41327a8a6, type: 3}
+  - {fileID: 21300000, guid: bb8a8b21b593c1648af4f20ed27cb2b8, type: 3}
+  - {fileID: 21300000, guid: aa525cb0e32764440b51771c476a679e, type: 3}

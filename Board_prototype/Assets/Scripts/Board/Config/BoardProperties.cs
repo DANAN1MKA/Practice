@@ -15,8 +15,6 @@ public class BoardProperties : ScriptableObject
     //public Material[] pool;
     public Sprite[] pool;
 
-    //TODO: перенести в отдельный объект
-    public GameObject characterPrefab;
     public Vector2 characterPosition;
 
     public float scale;

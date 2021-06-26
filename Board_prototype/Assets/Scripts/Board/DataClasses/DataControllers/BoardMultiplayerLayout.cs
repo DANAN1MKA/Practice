@@ -19,6 +19,7 @@ public class BoardMultiplayerLayout : MonoBehaviour
     private bool isItFirstMatch = false;
 
     private bool isReplayPlayed = false;
+    private bool swipeReplayComplite = false;
 
     private Element[,] board;
     private List<Element> foundMatches;
@@ -43,9 +44,12 @@ public class BoardMultiplayerLayout : MonoBehaviour
         signalBus.Subscribe<TimerHandlerSignal>(timerHandler);
         signalBus.Subscribe<AnimationCompletedSignal>(animationCompleted);
 
-        //signalBus.Subscribe<NewEnemySignal>(block);
-        signalBus.Subscribe<KillingCompletedSignal>(startReplay);
+        signalBus.Subscribe<ServerReplaySignal>(startReplay);
         signalBus.Subscribe<ReplayCompliteSignal>(replayComplite);
+        signalBus.Subscribe<KillingCompletedSignal>(killingComplite);
+
+
+        signalBus.Subscribe<IsGameReadySignal>(checkGameState);
     }
 
     void Start()
@@ -68,9 +72,17 @@ public class BoardMultiplayerLayout : MonoBehaviour
 
         //TODO: запуск логера
         signalBus.Fire(new StartBoardStateSignal(board));
+        block();
     }
 
 
+    private void checkGameState(IsGameReadySignal signal)
+    {
+        if(signal.status == true)
+        {
+            unblock();
+        }
+    }
 
     private void addMatches(List<Element> _from)
     {
@@ -423,13 +435,23 @@ public class BoardMultiplayerLayout : MonoBehaviour
 
     public void replayComplite()
     {
-        show();
-        unblock();
+        swipeReplayComplite = true;
+        killingComplite();
+    }
 
-        //TODO: запуск логера
-        signalBus.Fire(new StartBoardStateSignal(board));
-        isReplayPlayed = false;
-        damageAmount = 0;
+    private void killingComplite()
+    {
+        //if (swipeReplayComplite) 
+        //{
+            show();
+            unblock();
+
+            //TODO: запуск логера
+            signalBus.Fire(new StartBoardStateSignal(board));
+            isReplayPlayed = false;
+            damageAmount = 0;
+            swipeReplayComplite = false;
+        //}
     }
 
     public void show()

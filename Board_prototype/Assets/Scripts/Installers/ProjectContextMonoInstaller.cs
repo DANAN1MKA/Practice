@@ -4,8 +4,9 @@ using Zenject;
 public class ProjectContextMonoInstaller : MonoInstaller
 {
     public PlayerData playerData;
-    public PlayerItems playerItems;
+    public ItemsDataSObj playerItems;
     public HeroPool heroPool;
+    //public ItemsDataSObj 
 
     public override void InstallBindings()
     {
@@ -13,7 +14,7 @@ public class ProjectContextMonoInstaller : MonoInstaller
         Container.BindInterfacesAndSelfTo<StorageController>().AsSingle().NonLazy();
 
         Container.Bind<PlayerData>().FromInstance(playerData);
-        Container.Bind<PlayerItems>().FromInstance(playerItems);
+        Container.Bind<ItemsDataSObj>().FromInstance(playerItems);
         Container.Bind<HeroPool>().FromInstance(heroPool);
 
 

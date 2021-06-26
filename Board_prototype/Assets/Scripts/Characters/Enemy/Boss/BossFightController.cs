@@ -10,6 +10,7 @@ public class BossFightController : MonoBehaviour
     [Inject] private BoardProperties config;
     [Inject] private EnemiesPool enemiesPull;
     [Inject] private PlayerData playerData;
+    [Inject] private HeroPool heroPool;
 
     private GameObject character;
     private GameObject enemy;
@@ -68,10 +69,7 @@ public class BossFightController : MonoBehaviour
         enemy.transform.position = targetPositionEnemy;
         enemy.transform.localScale *= config.scale;
 
-
         //подрубаем анимауию атаки
         //characterScript.attack();
     }
-
-
 }

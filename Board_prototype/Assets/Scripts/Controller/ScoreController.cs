@@ -5,7 +5,7 @@ public class ScoreController : MonoBehaviour
 {
     [Inject] private SignalBus signalBus;
     [Inject] private PlayerData playerData;
-    [Inject] private PlayerItems playerItems;
+    [Inject] private ItemsDataSObj playerItems;
 
     [SerializeField] private int moneyPerKill;
 
@@ -29,8 +29,8 @@ public class ScoreController : MonoBehaviour
 
         for(int i = 0; i < DefaultCoef.itemsData.Length; i++)
         {
-            if(playerItems.itemData[i].isBought)
-                score += playerItems.itemData[i].baseGrowthRate;
+            if(playerItems.isBought[i])
+                score += playerItems.baseGrowthRate[i];
         }
 
         playerData.score += score;

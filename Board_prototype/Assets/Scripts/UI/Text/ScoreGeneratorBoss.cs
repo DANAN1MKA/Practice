@@ -7,7 +7,7 @@ public class ScoreGeneratorBoss : MonoBehaviour
 {
     [Inject] private SignalBus signalBus;
     [Inject] private BoardProperties config;
-    [Inject] private PlayerItems playerItems;
+    [Inject] private ItemsDataSObj playerItems;
     [Inject] private PlayerData playerData;
 
 
@@ -102,8 +102,8 @@ public class ScoreGeneratorBoss : MonoBehaviour
     {
         for (int i = 0; i < DefaultCoef.itemsData.Length; i++)
         {
-            if (playerItems.itemData[i].isBought)
-                score += playerItems.itemData[i].baseGrowthRate;
+            if (playerItems.isBought[i])
+                score += playerItems.baseGrowthRate[i];
         }
 
         score += score;

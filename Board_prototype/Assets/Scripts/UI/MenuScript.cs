@@ -9,7 +9,7 @@ public class MenuScript : MonoBehaviour
 
     [Inject] private StorageController storageController;
     [Inject] private PlayerData playerData;
-    [Inject] private PlayerItems playerItems;
+    [Inject] private ItemsDataSObj playerItems;
     [Inject] private HeroPool heroPool;
 
 
@@ -45,16 +45,14 @@ public class MenuScript : MonoBehaviour
 
     private void resetItems()
     {
-        playerItems.itemData = new ItemData[DefaultCoef.itemsData.Length];
+        //playerItems. = new ItemData[DefaultCoef.itemsData.Length];
         //Array.Copy(DefaultCoef.itemsData, playerItems.itemData, DefaultCoef.itemsData.Length);
         for (int i = 0; i < DefaultCoef.itemsData.Length; i++)
         {
-            playerItems.itemData[i] = new ItemData();
-            playerItems.itemData[i].itemName = DefaultCoef.itemsData[i].itemName;
-            playerItems.itemData[i].baseCoast = 0 + DefaultCoef.itemsData[i].baseCoast;
-            playerItems.itemData[i].baseGrowthRate = 0 + DefaultCoef.itemsData[i].baseGrowthRate;
-            playerItems.itemData[i].isBought = false;
-            playerItems.itemData[i].level = 0;
+            playerItems.baseCoast[i] = 0 + DefaultCoef.itemsData[i].baseCoast;
+            playerItems.baseGrowthRate[i] = 0 + DefaultCoef.itemsData[i].baseGrowthRate;
+            playerItems.isBought[i] = false;
+            playerItems.level[i] = 0;
         }
     }
 

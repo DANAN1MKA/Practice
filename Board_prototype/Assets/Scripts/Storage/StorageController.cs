@@ -9,7 +9,7 @@ using System;
 public class StorageController : IInitializable, IDisposable
 {
     [Inject] PlayerData playerData;
-    [Inject] PlayerItems playerItems;
+    [Inject] ItemsDataSObj playerItems;
 
     FileStream file;
     StorageClass storage;
@@ -30,7 +30,14 @@ public class StorageController : IInitializable, IDisposable
                 storage = (StorageClass)bf.Deserialize(file);
                 playerData.score = storage.score;
                 playerData.money = storage.money;
-                playerItems.itemData = storage.itemsData.ToArray();
+                for(int i = 0; i < storage.itemsData.Count; i++)
+                {
+                    playerItems.baseCoast[i] = storage.itemsData[i].baseCoast;
+                    playerItems.baseGrowthRate[i] = storage.itemsData[i].baseGrowthRate;
+                    playerItems.level[i] = storage.itemsData[i].level;
+                    playerItems.isBought[i] = storage.itemsData[i].isBought;
+                }
+                //playerItems.itemData = storage.itemsData.ToArray();
 
                 Debug.Log("File data loaded!");
 
@@ -51,13 +58,24 @@ public class StorageController : IInitializable, IDisposable
 
     private void initializeStorage()
     {
-        setup();
+        //setup();
         bf = new BinaryFormatter();
         file = File.Create(Application.persistentDataPath + "/Storage.dat");
         storage = new StorageClass();
         storage.score = 0;
         storage.money = 0;
-        storage.itemsData = new List<ItemData>(playerItems.itemData);
+
+        ItemData[] items = new ItemData[playerItems.isBought.Length];
+        for(int i = 0; i < items.Length; i++)
+        {
+            items[i] = new ItemData(playerItems.itemName[i], 
+                                    playerItems.baseCoast[i], 
+                                    playerItems.baseGrowthRate[i], 
+                                    playerItems.level[i], 
+                                    playerItems.isBought[i]);
+        }
+
+        storage.itemsData = new List<ItemData>(items);
 
         bf.Serialize(file, storage);
         Debug.Log("File created!");
@@ -89,7 +107,20 @@ public class StorageController : IInitializable, IDisposable
 
         storage.score = playerData.score;
         storage.money = playerData.money;
-        storage.itemsData = new List<ItemData>(playerItems.itemData);
+
+        ItemData[] items = new ItemData[playerItems.isBought.Length];
+        for (int i = 0; i < items.Length; i++)
+        {
+            items[i] = new ItemData(playerItems.itemName[i],
+                                    playerItems.baseCoast[i],
+                                    playerItems.baseGrowthRate[i],
+                                    playerItems.level[i],
+                                    playerItems.isBought[i]);
+        }
+
+        storage.itemsData = new List<ItemData>(items);
+
+
 
         bf.Serialize(file, storage);
         file.Close();
@@ -98,19 +129,19 @@ public class StorageController : IInitializable, IDisposable
 
     }
 
-    public void setup()
-    {
-        playerItems.itemData = new ItemData[DefaultCoef.itemsData.Length];
-        //Array.Copy(DefaultCoef.itemsData, playerItems.itemData, DefaultCoef.itemsData.Length);
-        for (int i = 0; i < DefaultCoef.itemsData.Length; i++)
-        {
-            playerItems.itemData[i] = new ItemData();
-            playerItems.itemData[i].itemName = DefaultCoef.itemsData[i].itemName;
-            playerItems.itemData[i].baseCoast = 0 + DefaultCoef.itemsData[i].baseCoast;
-            playerItems.itemData[i].baseGrowthRate = 0 + DefaultCoef.itemsData[i].baseGrowthRate;
-            playerItems.itemData[i].isBought = false;
-            playerItems.itemData[i].level = 0;
-        }
-    }
+    //public void setup()
+    //{
+    //    playerItems.itemData = new ItemData[DefaultCoef.itemsData.Length];
+    //    //Array.Copy(DefaultCoef.itemsData, playerItems.itemData, DefaultCoef.itemsData.Length);
+    //    for (int i = 0; i < DefaultCoef.itemsData.Length; i++)
+    //    {
+    //        playerItems.itemData[i] = new ItemData();
+    //        playerItems.itemData[i].itemName = DefaultCoef.itemsData[i].itemName;
+    //        playerItems.itemData[i].baseCoast = 0 + DefaultCoef.itemsData[i].baseCoast;
+    //        playerItems.itemData[i].baseGrowthRate = 0 + DefaultCoef.itemsData[i].baseGrowthRate;
+    //        playerItems.itemData[i].isBought = false;
+    //        playerItems.itemData[i].level = 0;
+    //    }
+    //}
 
 }

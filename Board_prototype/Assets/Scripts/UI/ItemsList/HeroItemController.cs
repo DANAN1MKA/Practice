@@ -60,6 +60,7 @@ public class HeroItemController : MonoBehaviour
     public void updateUI()
     {
         heroName.text = heroPool.name[ID];
+        portrait.sprite = heroPool.portrait[ID];
         if (heroPool.isBought[ID])
         {
             if (playerData.currentHeroID != ID)
